@@ -152,22 +152,18 @@ sub_county_no_sett<-st_difference(host_sub_county,st_union(a1_sett))
 
 host_modifier <- tibble::tribble(
                    ~"sb_cnt__1", ~"smpl_sz",
-                        "arw",      25,
-                        "bwe",      74,
-                        "itl",     218,
-                        "kyg",     218,
-                        "lob",     218,
-                        "mut",     146,
-                        "nkm",      96,
-                        "odp",      81,
-                       "pbkl",      82,
+                        "arw",      27,
+                        "bwe",      73,
+                        "itl",     226,
+                        "kbz",     61,
+                        "kyg",     217,
+                        "lob",     220,
+                        "mpr",     91,
+                        "nkm",      98,
                         "pgm",      86,
-                        "pkl",      66,
-                        "pog",      54,
-                        "rgb",     264,
-                        "rhc",     105,
-                        "rom",      40,
-                        "urm",      49
+                        "rgb",     3264,
+                        "rhc",     106,
+                        "rom",      41
                    )
 
 sframe_host<- sub_county_no_sett %>% 
@@ -192,44 +188,31 @@ problematic_host <- host_modifier %>% pull(sb_cnt__1)
 st_write(sub_county_no_sett %>% filter(sb_cnt__1 %in% problematic_host), "outputs", "problematic_subcounty_no_settlement", driver = "ESRI Shapefile", append = FALSE)
 
 
-
-# test host output compared to expected -----------------------------------
-
-host_data_2 <- as_tibble(sampledrawn_host) %>% 
-  dplyr::select(-geometry) %>% 
-  tidyr::separate(Description, c("new_desc", "new_sample"), "_", remove= FALSE, extra = "drop") %>% 
-  group_by(new_desc) %>% 
-  summarise(
-    max_sample = max(as.integer(new_sample) )
-  )
-
-write_csv(host_data_2, "outputs/host_samples_check_second_run.csv")
-
-
 # Settlements -------------------------------------------------------------
 
 settlement_modifier <- tibble::tribble(
   ~"sttlmn__1", ~"smpl_sz",
-  "bid_zon5",      51,
-  "bse_cmp",     130,
-  "buk",       8,
-  "bul",      17,
+  "alr",      7,
+  "bse_cmp",     129,
+  "bya",      39,
   "bwz",      31,
   "dong_west",      47,
-  "imv_zon1",     101,
-  "imv_zon2",      82,
-  "ita",      31,
-  "kya",     217,
-  "lob_zon_a",     100,
-  "lob_zon_b",     108,
-  "muk",      30,
-  "oru",     212,
-  "pal_zon_vb",      58,
+  "imv_zon1",     102,
+  "jur",     37,
+  "kabo",     14,
+  "kak",     19,
+  "kya",     219,
+  "lob_zon_a",     113,
+  "lob_zon_b",     113,
+  "mor",      62,
+  "oru",     220,
+  "pal_zon_vb",      56,
   "pal_zon_vii",      43,
   "ran_37",     104,
-  "ran_i",     116,
+  "ran_i",     120,
+  "rub",     58,
   "rwa",     215,
-  "swe",      44
+  "swe",      45
 )
 
 sframe_settlements <- settlement_zone %>% 
@@ -237,7 +220,7 @@ sframe_settlements <- settlement_zone %>%
   mutate(
     smpl_sz.x = ifelse(!is.na(smpl_sz.y), smpl_sz.y, smpl_sz.x ) ,
     samplesize = smpl_sz.x,
-    desc =str_replace_all(sttlmn__1, "_", ".")  
+    desc = sttlmn__1  
   )
 
 
@@ -248,7 +231,7 @@ sampledrawn_settlements<-probsel(sample_frame=sframe_settlements,
                      prob_raster=probraster ,
                      inhab_mask = inhab_mask)
 
-st_write(sampledrawn_settlements, "outputs", "dfa_sample_settlements_desc", driver = "ESRI Shapefile", append = FALSE)
+st_write(sampledrawn_settlements, "outputs", "dfa_sample_settlements", driver = "ESRI Shapefile", append = FALSE)
 
 # write out settlement features with challenges
 problematic_settlement <- settlement_modifier %>% pull(sttlmn__1)
@@ -257,14 +240,3 @@ st_write(settlement_zone %>% filter(sttlmn__1 %in% problematic_settlement), "out
 
 
 
-# test settlement output compared to expected -----------------------------
-
-settlement_data_2 <- as_tibble(sampledrawn_settlements) %>% 
-  dplyr::select(-geometry) %>% 
-  tidyr::separate(Description, c("new_desc", "new_sample"), "_", remove= FALSE, extra = "drop") %>% 
-  group_by(new_desc) %>% 
-  summarise(
-    max_sample = max(as.integer(new_sample) )
-  )
-
-write_csv(settlement_data_2, "outputs/settlement_samples_check_second_run.csv")
