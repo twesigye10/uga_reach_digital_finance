@@ -63,6 +63,8 @@ probsel<-function(sample_frame,
     r_vals<-getValues(r_masked_temp)# extract raster values
     
     r_vals[is.na(r_vals)]<-0  # turn all NA to 0 probability
+    # to reproduce same results
+    set.seed(i)
     
     samp<-sample(nrow(r_masked_temp)*ncol(r_masked_temp), size=samp_size_temp, prob=r_vals, replace=T)
     # get indices of all raster vals
@@ -162,7 +164,7 @@ host_modifier <- tibble::tribble(
                         "pgm",      86,
                         "pkl",      66,
                         "pog",      54,
-                        "rgb",     164,
+                        "rgb",     264,
                         "rhc",     105,
                         "rom",      40,
                         "urm",      49
