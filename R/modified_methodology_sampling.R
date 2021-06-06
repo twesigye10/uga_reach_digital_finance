@@ -44,7 +44,7 @@ probsel<-function(sample_frame,
   
   sp_list<-list() # list to fill with sample point sets
   for(i in seq_along(sframe[[strata_label_col]])){
-    # print(paste(i, ":  Desc: ", strata_label_col, ":  SamplSize: ", strata_num_col))
+    # print(i)
     sframe_temp<-sframe %>% slice(i)
     samp_size_temp<- sframe_temp[[strata_num_col]]
     sframe_name_temp<- sframe_temp[[strata_label_col]]
@@ -83,7 +83,18 @@ probsel<-function(sample_frame,
     sp_temp<-rasterToPoints(r_sampled_temp, fun=function(x){x==1}) %>% data.frame()
     sp_temp_sf<-st_as_sf(sp_temp,coords=c("x", "y"), crs=crs_use)
     
-    print(paste(i, ":  Desc: ", sframe_temp %>% pull(strata_label_col), ":  SamplSize: ", sframe_temp%>% pull(strata_num_col), ":  no_points: ", nrow(sp_temp_sf)))
+    processing_pt_dec <- sframe_temp %>% pull(strata_label_col)
+    processing_pt_sample_size <- sframe_temp %>% pull(strata_num_col)
+    output_pt_nos <- nrow(sp_temp_sf)
+    pt_no_differences <- processing_pt_sample_size - output_pt_nos
+    
+    print(paste(i, 
+                ":  Desc: ", processing_pt_dec, 
+                ":  SamplSize: ", processing_pt_sample_size, 
+                ":  no_points: ", output_pt_nos, 
+                ":  pt_no_diff: ", pt_no_differences
+                )
+          )
     
     # jitter final points by half cell resolution
     sp_temp_sf_jit<- st_jitter(x = sp_temp_sf,amount = jitter_val)
@@ -171,12 +182,12 @@ sampledrawn_host <- probsel(sample_frame = sframe_host,
                      prob_raster = probraster ,
                      inhab_mask = inhab_mask)
 
-st_write(sampledrawn_host, "outputs", "dfa_sample_host_desc", driver = "ESRI Shapefile", append = FALSE)
+st_write(sampledrawn_host, "outputs", "dfa_sample_host", driver = "ESRI Shapefile", append = FALSE)
 
 # write out subcounty host features with challenges
 problematic_host <- host_modifier %>% pull(sb_cnt__1)
 
-st_write(sub_county_no_sett %>% filter(sb_cnt__1 %in% problematic_host), "outputs", "problematic_subcounty_no_host", driver = "ESRI Shapefile", append = FALSE)
+st_write(sub_county_no_sett %>% filter(sb_cnt__1 %in% problematic_host), "outputs", "problematic_subcounty_no_settlement", driver = "ESRI Shapefile", append = FALSE)
 
 
 
@@ -237,6 +248,11 @@ sampledrawn_settlements<-probsel(sample_frame=sframe_settlements,
 
 st_write(sampledrawn_settlements, "outputs", "dfa_sample_settlements_desc", driver = "ESRI Shapefile", append = FALSE)
 
+# write out settlement features with challenges
+problematic_settlement <- settlement_modifier %>% pull(sttlmn__1)
+
+st_write(settlement_zone %>% filter(sttlmn__1 %in% problematic_settlement), "outputs", "problematic_settlemets", driver = "ESRI Shapefile", append = FALSE)
+
 
 
 # test settlement output compared to expected -----------------------------
@@ -250,9 +266,3 @@ settlement_data_2 <- as_tibble(sampledrawn_settlements) %>%
   )
 
 write_csv(settlement_data_2, "outputs/settlement_samples_check_second_run.csv")
-
-# write out settlement features with challenges
-problematic_settlement <- settlement_modifier %>% pull(sttlmn__1)
-
-st_write(settlement_zone %>% filter(sttlmn__1 %in% problematic_settlement), "outputs", "problematic_settlemets", driver = "ESRI Shapefile", append = FALSE)
-
