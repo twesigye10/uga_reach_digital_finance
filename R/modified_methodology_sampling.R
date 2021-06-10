@@ -20,7 +20,17 @@ a1_sett <- a1_sett %>%
 
 # settlements with zones
 settlement_zone <- st_read("inputs/UGA_Refugee_settlement_samples","UGA_Refugee_settlement_samples_dfa",quiet=T)
-  
+
+# read in regions for regional sampling
+subcounty_codes <- read_csv("inputs/UGA_Refugee_hosting_subcounties.csv") %>% 
+  dplyr::select(ADM4_EN, sub_county_code)
+
+southwestern_region <- st_read("inputs/Host_region_samples_dfa","host_southwest_region_sample_dfa",quiet=T) %>% 
+  left_join(subcounty_codes, by = c("ADM4_EN"))
+
+westnile_region <- st_read("inputs/Host_region_samples_dfa","host_westnile_region_sample_dfa",quiet=T) %>% 
+  left_join(subcounty_codes, by = c("ADM4_EN"))
+
 
 # Create Sampling Function & Sample ---------------------------------------
 
@@ -144,11 +154,12 @@ probraster<- raster("inputs/kde_fb_osm_1000_20.tif", quiet=T)
 
 
 
+
+# HOST community ----------------------------------------------------------
+
 # put hole in polygon using new dataset of host sub county with sample size
 sub_county_no_sett<-st_difference(host_sub_county,st_union(a1_sett))
 
-
-# HOST community ----------------------------------------------------------
 
 host_modifier <- tibble::tribble(
                    ~"sb_cnt__1", ~"smpl_sz",
@@ -237,6 +248,57 @@ st_write(sampledrawn_settlements, "outputs", "dfa_sample_settlements", driver = 
 problematic_settlement <- settlement_modifier %>% pull(sttlmn__1)
 
 st_write(settlement_zone %>% filter(sttlmn__1 %in% problematic_settlement), "outputs", "problematic_settlemets", driver = "ESRI Shapefile", append = FALSE)
+
+
+
+
+
+# Regional sampling -------------------------------------------------------------
+
+### South western  
+# put hole in polygon using new dataset of host region with sample size
+southwestern_region_no_settlement<-st_difference(southwestern_region,st_union(a1_sett))
+
+sframe_southwestern_host<- southwestern_region_no_settlement %>% 
+  mutate(
+    samplesize = smpl_sz,
+    desc = sub_county_code
+  )
+
+# sampling host
+sampledrawn_southwestern_host <- probsel(sample_frame = sframe_southwestern_host,
+                            strata_label_col = "desc",
+                            strata_num_col = "samplesize",
+                            prob_raster = probraster ,
+                            inhab_mask = inhab_mask)
+
+st_write(sampledrawn_southwestern_host, "outputs", "dfa_southwestern_sample_host", driver = "ESRI Shapefile", append = FALSE)
+
+
+### westnile  
+# put hole in polygon using new dataset of host region with sample size
+
+host_modifier <- tibble::tribble(
+  ~"sub_county_code", ~"smpl_sz",
+  "arw",      9
+)
+
+westnile_region_no_settlement<-st_difference(westnile_region,st_union(a1_sett))
+
+sframe_westnile_host<- westnile_region_no_settlement %>% 
+  mutate(
+    samplesize = smpl_sz,
+    desc = sub_county_code
+  )
+
+# sampling host
+sampledrawn_westnile_host <- probsel(sample_frame = sframe_westnile_host,
+                            strata_label_col = "desc",
+                            strata_num_col = "samplesize",
+                            prob_raster = probraster ,
+                            inhab_mask = inhab_mask)
+
+st_write(sampledrawn_westnile_host, "outputs", "dfa_westnile_sample_host", driver = "ESRI Shapefile", append = FALSE)
 
 
 
