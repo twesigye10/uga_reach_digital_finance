@@ -278,7 +278,7 @@ st_write(sampledrawn_southwestern_host, "outputs", "dfa_southwestern_sample_host
 ### westnile  
 # put hole in polygon using new dataset of host region with sample size
 
-host_modifier <- tibble::tribble(
+regional_host_modifier <- tibble::tribble(
   ~"sub_county_code", ~"smpl_sz",
   "arw",      9
 )
@@ -286,8 +286,9 @@ host_modifier <- tibble::tribble(
 westnile_region_no_settlement<-st_difference(westnile_region,st_union(a1_sett))
 
 sframe_westnile_host<- westnile_region_no_settlement %>% 
+  left_join(regional_host_modifier, by=c("sub_county_code")) %>% 
   mutate(
-    samplesize = smpl_sz,
+    samplesize =  as.integer(ifelse(!is.na(smpl_sz.y), smpl_sz.y, smpl_sz.x )),
     desc = sub_county_code
   )
 
