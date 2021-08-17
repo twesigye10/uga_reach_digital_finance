@@ -5,3 +5,4 @@
 inputs/*
 outputs/*
 support_files/*
+!/**/.gitkeep
