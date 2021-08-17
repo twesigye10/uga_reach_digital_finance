@@ -5,8 +5,8 @@ library(lubridate)
 
 # read data 
 df_tool_data <- readxl::read_excel("inputs/data_digital_finance.xlsx")
-df_survey <- readxl::read_excel("inputs/tool.xlsx", sheet = "survey")
-df_choices <- readxl::read_excel("inputs/tool.xlsx", sheet = "choices")
+df_survey <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx", sheet = "survey")
+df_choices <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx", sheet = "choices")
 
 
 # Anyone who selected "ugandan" and previously answered community_type = refugee, should be checked.
