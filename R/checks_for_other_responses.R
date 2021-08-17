@@ -1,7 +1,7 @@
 library(tidyverse)
 library(lubridate)
 
-# read data ---------------------------------------------------------------
+# read data 
 df_tool_data <- readxl::read_excel("inputs/data_digital_finance.xlsx")
 df_survey <- readxl::read_excel("inputs/tool.xlsx", sheet = "survey")
 df_choices <- readxl::read_excel("inputs/tool.xlsx", sheet = "choices")
@@ -30,3 +30,20 @@ df_data_arranged <- df_other_response_data %>%
 df_grouped_choices <- df_choices %>% 
   group_by(list_name) %>% 
   summarise(choice_options = paste(name, collapse = " : "))
+
+# extract parent question and join survey for extracting list_name
+df_data_parent_qns <- df_data_arranged %>% 
+  mutate(
+    parent_qn = str_replace_all(name, "/.*", ""),
+    parent_qn = str_replace_all(parent_qn, "_other", "")
+  ) %>% 
+  left_join(df_survey %>% select(name, type), by = c("parent_qn"="name")) %>% 
+  separate(col = type, into = c("select_type", "list_name"), sep =" ", remove = TRUE, extra = "drop" )
+
+# join other responses with choice options based on list_name
+
+df_join_other_response_with_choices <- df_data_parent_qns %>% 
+  left_join(df_grouped_choices, by = "list_name")
+
+# output the resulting data frame
+write_csv(x = df_join_other_response_with_choices, file = paste0("outputs/others_responses_",as_date(today()),"_", hour(now()) ,".csv"), na = "")
