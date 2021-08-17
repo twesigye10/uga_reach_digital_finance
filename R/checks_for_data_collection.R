@@ -1,5 +1,14 @@
 # logical checks
 
+library(tidyverse)
+library(lubridate)
+
+# read data 
+df_tool_data <- readxl::read_excel("inputs/data_digital_finance.xlsx")
+df_survey <- readxl::read_excel("inputs/tool.xlsx", sheet = "survey")
+df_choices <- readxl::read_excel("inputs/tool.xlsx", sheet = "choices")
+
+
 # Anyone who selected "ugandan" and previously answered community_type = refugee, should be checked.
 
 # Anyone who selected host for "type of community" and answers "refugee ID" or "beneficiary ID" should be checked.
@@ -16,9 +25,9 @@
  
 # Do you currently use mobile internet (social media, apps, and websites like WhatsApp, Messenger, Facebook, <other locally relevant>, etc)?
  
-# If respondents who previouslysaid they DO NOT have access to a feature phone or smart phone are now selecting uses for their phones that can only be done online (e.g. social media, access to information online etc.), survey needs to be checked
+# If respondents who previously said they DO NOT have access to a feature phone or smart phone are now selecting uses for their phones that can only be done online (e.g. social media, access to information online etc.), survey needs to be checked
 
-# If respondents who previouslysaid they DO NOT have access to a feature phone or smart phone are now selecting reasons for using their phones that can only be done online (e.g. online education; looking for specific information etc.), survey needs to be checked
+# If respondents who previously said they DO NOT have access to a feature phone or smart phone are now selecting reasons for using their phones that can only be done online (e.g. online education; looking for specific information etc.), survey needs to be checked
  
 
 # If in previous qn "why do you want to have  a mobile money account?" they answered "it is safer than keeping cash at home" and they now asnwered "the system is not safe i am concerned that my money will disappear", survey needs to be checked
