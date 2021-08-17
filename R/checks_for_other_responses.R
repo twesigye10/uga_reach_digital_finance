@@ -25,3 +25,8 @@ for (cln in others_colnames) {
 # arrange the data
 df_data_arranged <- df_other_response_data %>% 
   arrange(today, `_uuid`)
+
+# get choices to add to the _other responses extracted
+df_grouped_choices <- df_choices %>% 
+  group_by(list_name) %>% 
+  summarise(choice_options = paste(name, collapse = " : "))
