@@ -30,6 +30,7 @@ df_c_survey_time <-  df_tool_data %>%
            TRUE ~ "normal_survey_time" ),
          i.check.type = NA,
          i.check.name = NA,
+         i.check.current_value = NA,
          i.check.value = NA,
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
@@ -53,6 +54,7 @@ df_c_time_btn_survey <- df_tool_data %>%
   mutate(i.check.identified_issue = "less_time_btn_surveys",
          i.check.type = NA,
          i.check.name = NA,
+         i.check.current_value = NA,
          i.check.value = NA,
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
@@ -68,6 +70,7 @@ df_c_nationality <- df_tool_data %>%
   mutate(i.check.identified_issue = "un_expected_response",
          i.check.type = NA,
          i.check.name = "nationality",
+         i.check.current_value = NA,
          i.check.value = nationality,
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
@@ -81,7 +84,8 @@ df_c_id_type <- df_tool_data %>%
   mutate(i.check.identified_issue = "un_expected_response",
          i.check.type = NA,
          i.check.name = "id_type",
-         i.check.value = id_type,
+         i.check.current_value = id_type,
+         i.check.value = NA,
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
          i.check.comment = NA) %>% 
@@ -94,7 +98,8 @@ df_c_language <- df_tool_data %>%
   mutate(i.check.identified_issue = "un_expected_response",
          i.check.type = NA,
          i.check.name = "id_type",
-         i.check.value = id_type,
+         i.check.current_value = id_type,
+         i.check.value = NA,
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
          i.check.comment = NA) %>% 
@@ -131,4 +136,4 @@ df_c_language <- df_tool_data %>%
 
 # duplicate point numbers
 # missing sample point numbers from the dataset(few data points from particular area)
-
+# pt id does not exist in sample
