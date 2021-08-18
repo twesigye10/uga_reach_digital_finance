@@ -13,7 +13,10 @@ df_tool_data <- readxl::read_excel("inputs/data_digital_finance.xlsx") %>%
 df_survey <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx", sheet = "survey")
 df_choices <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx", sheet = "choices")
 
-# Time interval for the survey --------------------------------------------
+
+# Time checks -------------------------------------------------------------
+
+# Time interval for the survey
 
 min_time_of_survey <- 40
 max_time_of_survey <- 120
@@ -36,7 +39,7 @@ df_c_survey_time <-  df_tool_data %>%
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 
-# check the time between surveys ------------------------------------------
+# check the time between surveys
 
 min_time_btn_surveys <- 5
 
@@ -53,10 +56,27 @@ df_c_time_btn_survey <- df_tool_data %>%
          i.check.value = NA,
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
-         i.check.comment = NA )
+         i.check.comment = NA ) %>% 
+  select(starts_with("i.check"))%>% 
+  rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
+
+
+# Logical checks ----------------------------------------------------------
 
 # Anyone who selected "ugandan" and previously answered community_type = refugee, should be checked.
 df_c_nationality <- df_tool_data %>% 
+  filter(status == "refugee", nationality == "ugandan") %>% 
+  mutate(i.check.identified_issue = "value_outside_limits",
+         i.check.type = NA,
+         i.check.name = "nationality",
+         i.check.value = nationality,
+         i.check.checked_by = "Mathias",
+         i.check.checked_date = as_date(today()),
+         i.check.comment = NA) %>% 
+  select(starts_with("i.check"))%>% 
+  rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
+
+
   # Anyone who selected host for "type of community" and answers "refugee ID" or "beneficiary ID" should be checked.
   
   # If respondents have selected a language but have NOT selected the same language that they previously selected for their main language, we need to check the survye.
@@ -83,3 +103,12 @@ df_c_nationality <- df_tool_data %>%
 
 
 # if in previous question 'Why do you want to have a pre-paid or smart card?' answered "it will allow me to securely store my money" and they now chose "the system is not safe i am concerned that my money will disappear", check survey
+
+
+
+
+# spatial checks ----------------------------------------------------------
+
+# duplicate point numbers
+# missing sample point numbers from the dataset(few data points from particular area)
+
