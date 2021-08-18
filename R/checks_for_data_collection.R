@@ -4,13 +4,18 @@ library(tidyverse)
 library(lubridate)
 
 # read data 
-df_tool_data <- readxl::read_excel("inputs/data_digital_finance.xlsx")
+df_tool_data <- readxl::read_excel("inputs/data_digital_finance.xlsx") %>% 
+  mutate(
+    i.check.uuid = `_uuid`,
+    i.check.today = today,
+    i.check.enumerator_id = enumerator_id
+  )
 df_survey <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx", sheet = "survey")
 df_choices <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx", sheet = "choices")
 
 
 # Anyone who selected "ugandan" and previously answered community_type = refugee, should be checked.
-
+df_c_nationality <- df_tool_data %>% 
 # Anyone who selected host for "type of community" and answers "refugee ID" or "beneficiary ID" should be checked.
 
 # If respondents have selected a language but have NOT selected the same language that they previously selected for their main language, we need to check the survye.
