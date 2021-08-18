@@ -38,13 +38,15 @@ df_c_survey_time <-  df_tool_data %>%
 
 # check the time between surveys ------------------------------------------
 
+min_time_btn_surveys <- 5
+
 df_c_time_btn_survey <- df_tool_data %>%
   group_by( today, enumerator_id) %>%
   arrange(start, .by_group = TRUE) %>% 
   mutate(int.t_between_survey = (start - lag(end, default=first(start))),
          int.time_between_survey = make_difftime(int.t_between_survey, units = "mins"),
          int.time_between_survey = round(int.time_between_survey,2)) %>%
-  filter(int.time_between_survey !=0 & int.time_between_survey < 5) %>%
+  filter(int.time_between_survey !=0 & int.time_between_survey < min_time_btn_surveys) %>%
   mutate(i.check.identified_issue = "less_time_btn_surveys",
          i.check.type = NA,
          i.check.name = NA,
