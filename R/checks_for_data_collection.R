@@ -13,6 +13,29 @@ df_tool_data <- readxl::read_excel("inputs/data_digital_finance.xlsx") %>%
 df_survey <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx", sheet = "survey")
 df_choices <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx", sheet = "choices")
 
+# Time interval for the survey --------------------------------------------
+
+min_time_of_survey <- 40
+max_time_of_survey <- 120
+
+df_c_survey_time <-  df_tool_data %>% 
+  mutate(
+    int.survey_time_interval = difftime(end,start, units = "mins"),
+    int.survey_time_interval = round(int.survey_time_interval,2),
+    i.check.identified_issue = case_when(
+      int.survey_time_interval < min_time_of_survey ~ "less_survey_time",
+      int.survey_time_interval > max_time_of_survey ~ "more_survey_time",
+      TRUE ~ "normal_survey_time" ),
+    i.check.type = NA,
+    i.check.name = NA,
+    i.check.value = NA,
+    i.check.checked_by = "Mathias",
+    i.check.checked_date = as_date(today()),
+    i.check.comment = NA
+  )%>% 
+  filter(i.check.identified_issue %in% c("less_survey_time", "more_survey_time")) %>% 
+  select(starts_with("i.check"))%>% 
+  rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 # Anyone who selected "ugandan" and previously answered community_type = refugee, should be checked.
 df_c_nationality <- df_tool_data %>% 
