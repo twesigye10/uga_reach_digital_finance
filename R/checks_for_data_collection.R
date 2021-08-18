@@ -111,7 +111,7 @@ df_c_language <- df_tool_data %>%
 
 df_c_type_phone_owned <- df_tool_data %>% 
   rowwise() %>% 
-  mutate(int.owned_phone_types_count = sum(c_across(starts_with("type_phone_owned/")))) %>% 
+  mutate(int.owned_phone_types_count = sum(c_across(starts_with("type_phone_owned/")), na.rm = TRUE)) %>% 
   ungroup() %>% 
   mutate(i.check.identified_issue = ifelse(int.owned_phone_types_count > 1 & "type_phone_owned/none" == 1, "un_expected_response", "expected_response"),
          i.check.type = NA,
@@ -163,6 +163,10 @@ df_c_internet_awareness <- df_tool_data %>%
 # If respondents who previously said they DO NOT have access to a feature phone or smart phone are now selecting uses for their phones that can only be done online (e.g. social media, access to information online etc.), survey needs to be checked
 # mobile_phone_use
 df_c_mobile_phone_use <- df_tool_data %>% 
+  rowwise() %>% 
+  mutate(int.mobile_phone_use = sum(c_across(starts_with("phone_use/")), na.rm = TRUE)) %>% 
+  ungroup() %>%
+  filter(int.mobile_phone_use > 0) %>% 
   mutate(i.check.identified_issue = ifelse("type_phone_owned/none" == 1 | "type_phone_owned/basic_phone" == 1, "un_expected_response", "expected_response"),
          i.check.type = NA,
          i.check.name = "mobile_phone_use",
@@ -178,6 +182,10 @@ df_c_mobile_phone_use <- df_tool_data %>%
 # If respondents who previously said they DO NOT have access to a feature phone or smart phone are now selecting reasons for using their phones that can only be done online (e.g. online education; looking for specific information etc.), survey needs to be checked
 # phone_use
 df_c_phone_use <- df_tool_data %>% 
+  rowwise() %>% 
+  mutate(int.phone_use_count = sum(c_across(starts_with("phone_use/")), na.rm = TRUE)) %>% 
+  ungroup() %>%
+  filter(int.phone_use_count > 0) %>% 
   mutate(i.check.identified_issue = ifelse("type_phone_owned/none" == 1 | "type_phone_owned/basic_phone" == 1, "un_expected_response", "expected_response"),
          i.check.type = NA,
          i.check.name = "phone_use",
