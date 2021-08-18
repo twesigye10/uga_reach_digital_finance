@@ -129,7 +129,7 @@ df_c_language <- df_tool_data %>%
 # walk_top_up
 
 df_c_walk_top_up <- df_tool_data %>% 
-  filter(walk_top_up %in% c("no_need_to_walk", "regularly_walk", "walk_specifically") & no_phones_hh_owns == 0) %>% 
+  filter(walk_top_up %in% c("no_need_to_walk", "regularly_walk", "walk_specifically") , no_phones_hh_owns == 0) %>% 
   mutate(i.check.identified_issue = "un_expected_response",
          i.check.type = NA,
          i.check.name = "walk_top_up",
@@ -142,6 +142,20 @@ df_c_walk_top_up <- df_tool_data %>%
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 # If they previously selected "yes" to having mobile internet coverage (Q56) and now replied "no", the survey needs to be checked.
+# mobile_internet == "yes" and internet_awareness == "no"
+
+df_c_internet_awareness <- df_tool_data %>% 
+  filter(mobile_internet == "yes", internet_awareness == "no") %>% 
+  mutate(i.check.identified_issue = "un_expected_response",
+         i.check.type = NA,
+         i.check.name = "walk_top_up",
+         i.check.current_value = walk_top_up,
+         i.check.value = NA,
+         i.check.checked_by = "Mathias",
+         i.check.checked_date = as_date(today()),
+         i.check.comment = NA) %>% 
+  select(starts_with("i.check"))%>% 
+  rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 # Do you currently use mobile internet (social media, apps, and websites like WhatsApp, Messenger, Facebook, <other locally relevant>, etc)?
 
