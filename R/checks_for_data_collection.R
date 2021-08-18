@@ -177,6 +177,18 @@ df_c_mobile_phone_use <- df_tool_data %>%
 
 # If respondents who previously said they DO NOT have access to a feature phone or smart phone are now selecting reasons for using their phones that can only be done online (e.g. online education; looking for specific information etc.), survey needs to be checked
 # phone_use
+df_c_phone_use <- df_tool_data %>% 
+  mutate(i.check.identified_issue = ifelse("type_phone_owned/none" == 1 | "type_phone_owned/basic_phone" == 1, "un_expected_response", "expected_response"),
+         i.check.type = NA,
+         i.check.name = "phone_use",
+         i.check.current_value = NA,
+         i.check.value = NA,
+         i.check.checked_by = "Mathias",
+         i.check.checked_date = as_date(today()),
+         i.check.comment = NA) %>% 
+  filter(i.check.identified_issue == "un_expected_response") %>% 
+  select(starts_with("i.check"))%>% 
+  rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 # If in previous qn "why do you want to have  a mobile money account?" they answered "it is safer than keeping cash at home" and they now asnwered "the system is not safe i am concerned that my money will disappear", survey needs to be checked
 
