@@ -126,7 +126,20 @@ df_c_language <- df_tool_data %>%
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 # If previously selected "0" in response to "how many mobile phone numbers do you have" the survye needs to be checked.
+# walk_top_up
 
+df_c_walk_top_up <- df_tool_data %>% 
+  filter(walk_top_up %in% c("no_need_to_walk", "regularly_walk", "walk_specifically") & no_phones_hh_owns == 0) %>% 
+  mutate(i.check.identified_issue = "un_expected_response",
+         i.check.type = NA,
+         i.check.name = "walk_top_up",
+         i.check.current_value = walk_top_up,
+         i.check.value = NA,
+         i.check.checked_by = "Mathias",
+         i.check.checked_date = as_date(today()),
+         i.check.comment = NA) %>% 
+  select(starts_with("i.check"))%>% 
+  rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 # If they previously selected "yes" to having mobile internet coverage (Q56) and now replied "no", the survey needs to be checked.
 
