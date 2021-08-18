@@ -5,11 +5,11 @@ library(lubridate)
 
 # read data 
 df_tool_data <- readxl::read_excel("inputs/data_digital_finance.xlsx") %>% 
-  mutate(
-    i.check.uuid = `_uuid`,
-    i.check.today = today,
-    i.check.enumerator_id = enumerator_id
-  )
+  mutate(i.check.uuid = `_uuid`,
+         i.check.today = today,
+         i.check.enumerator_id = enumerator_id) %>% 
+  filter(consent=="yes", today > as_date("2021-08-23"))
+
 df_survey <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx", sheet = "survey")
 df_choices <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx", sheet = "choices")
 
@@ -60,7 +60,6 @@ df_c_time_btn_survey <- df_tool_data %>%
   select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
-
 # Logical checks ----------------------------------------------------------
 
 # Anyone who selected "ugandan" and previously answered community_type = refugee, should be checked.
@@ -90,6 +89,17 @@ df_c_id_type <- df_tool_data %>%
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 # If respondents have selected a language but have NOT selected the same language that they previously selected for their main language, we need to check the survye.
+df_c_language <- df_tool_data %>% 
+  filter(status == "host_community", id_type %in% c("unhcr_refugee_id", "ug_refugee_id", "benef_id_not_unhcr")) %>% 
+  mutate(i.check.identified_issue = "un_expected_response",
+         i.check.type = NA,
+         i.check.name = "id_type",
+         i.check.value = id_type,
+         i.check.checked_by = "Mathias",
+         i.check.checked_date = as_date(today()),
+         i.check.comment = NA) %>% 
+  select(starts_with("i.check"))%>% 
+  rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 
 # If respondent has selected "none" in addition to another option, the survey needs to be checked.
