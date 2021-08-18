@@ -94,8 +94,7 @@ df_c_id_type <- df_tool_data %>%
 
 # If respondents have selected a language but have NOT selected the same language that they previously selected for their main language, we need to check the survye.
 df_c_language <- df_tool_data %>% 
-  filter(status == "host_community", id_type %in% c("unhcr_refugee_id", "ug_refugee_id", "benef_id_not_unhcr")) %>% 
-  mutate(i.check.identified_issue = "un_expected_response",
+  mutate(i.check.identified_issue = ifelse(glue::glue("language_understand/{main_language}") == 0, "un_expected_response", "main_language_also_understood"),
          i.check.type = NA,
          i.check.name = "id_type",
          i.check.current_value = id_type,
@@ -103,6 +102,7 @@ df_c_language <- df_tool_data %>%
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
          i.check.comment = NA) %>% 
+  filter(i.check.identified_issue == "un_expected_response") %>% 
   select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
