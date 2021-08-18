@@ -96,8 +96,8 @@ df_c_id_type <- df_tool_data %>%
 df_c_language <- df_tool_data %>% 
   mutate(i.check.identified_issue = ifelse(glue::glue("language_understand/{main_language}") == 0, "un_expected_response", "main_language_also_understood"),
          i.check.type = NA,
-         i.check.name = "id_type",
-         i.check.current_value = id_type,
+         i.check.name = "language_understand",
+         i.check.current_value = NA,
          i.check.value = NA,
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
@@ -106,9 +106,23 @@ df_c_language <- df_tool_data %>%
   select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
-
 # If respondent has selected "none" in addition to another option, the survey needs to be checked.
+# type_phone_owned
 
+df_c_language <- df_tool_data %>% 
+  rowwise() %>% 
+  mutate(int.owned_phone_types_count = sum(c_across(starts_with("type_phone_owned/")))) %>%   
+  mutate(i.check.identified_issue = ifelse(int.owned_phone_types_count > 1 & "type_phone_owned/none" == 1, "un_expected_response", "expected_response"),
+         i.check.type = NA,
+         i.check.name = "type_phone_owned",
+         i.check.current_value = NA,
+         i.check.value = NA,
+         i.check.checked_by = "Mathias",
+         i.check.checked_date = as_date(today()),
+         i.check.comment = NA) %>% 
+  filter(i.check.identified_issue == "un_expected_response") %>% 
+  select(starts_with("i.check"))%>% 
+  rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 # If previously selected "0" in response to "how many mobile phone numbers do you have" the survye needs to be checked.
 
 
