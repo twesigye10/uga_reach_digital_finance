@@ -109,7 +109,7 @@ df_c_language <- df_tool_data %>%
 # If respondent has selected "none" in addition to another option, the survey needs to be checked.
 # type_phone_owned
 
-df_c_language <- df_tool_data %>% 
+df_c_type_phone_owned <- df_tool_data %>% 
   rowwise() %>% 
   mutate(int.owned_phone_types_count = sum(c_across(starts_with("type_phone_owned/")))) %>% 
   ungroup() %>% 
@@ -158,11 +158,25 @@ df_c_internet_awareness <- df_tool_data %>%
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 # Do you currently use mobile internet (social media, apps, and websites like WhatsApp, Messenger, Facebook, <other locally relevant>, etc)?
+# can be constrained in the tool
 
 # If respondents who previously said they DO NOT have access to a feature phone or smart phone are now selecting uses for their phones that can only be done online (e.g. social media, access to information online etc.), survey needs to be checked
+# mobile_phone_use
+df_c_mobile_phone_use <- df_tool_data %>% 
+  mutate(i.check.identified_issue = ifelse("type_phone_owned/none" == 1 | "type_phone_owned/basic_phone" == 1, "un_expected_response", "expected_response"),
+         i.check.type = NA,
+         i.check.name = "mobile_phone_use",
+         i.check.current_value = NA,
+         i.check.value = NA,
+         i.check.checked_by = "Mathias",
+         i.check.checked_date = as_date(today()),
+         i.check.comment = NA) %>% 
+  filter(i.check.identified_issue == "un_expected_response") %>% 
+  select(starts_with("i.check"))%>% 
+  rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 # If respondents who previously said they DO NOT have access to a feature phone or smart phone are now selecting reasons for using their phones that can only be done online (e.g. online education; looking for specific information etc.), survey needs to be checked
-
+# phone_use
 
 # If in previous qn "why do you want to have  a mobile money account?" they answered "it is safer than keeping cash at home" and they now asnwered "the system is not safe i am concerned that my money will disappear", survey needs to be checked
 
