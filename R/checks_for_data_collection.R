@@ -95,7 +95,7 @@ df_c_id_type <- df_tool_data %>%
 
 # If respondents have selected a language but have NOT selected the same language that they previously selected for their main language, we need to check the survye.
 df_c_language <- df_tool_data %>% 
-  mutate(i.check.identified_issue = ifelse(!main_language %in% language_understand, "un_expected_response", "main_language_also_understood"),
+  mutate(i.check.identified_issue = ifelse(str_detect(string = language_understand, pattern = main_language, negate = TRUE) , "un_expected_response", "main_language_also_understood"),
          i.check.type = NA,
          i.check.name = "language_understand",
          i.check.current_value = NA,
