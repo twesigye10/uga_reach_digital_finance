@@ -81,7 +81,7 @@ df_c_nationality <- df_tool_data %>%
 
 # Anyone who selected host for "type of community" and answers "refugee ID" or "beneficiary ID" should be checked.
 df_c_id_type <- df_tool_data %>% 
-  filter(status == "host_community", (`id_type/unhcr_refugee_id` == 1 | `id_type/ug_refugee_id` == 1 | `id_type/benef_id_not_unhcr` == 1)) %>% 
+  filter(status == "host_community", str_detect(string = id_type, pattern = "unhcr_refugee_id|ug_refugee_id|benef_id_not_unhcr")) %>% 
   mutate(i.check.identified_issue = "un_expected_response",
          i.check.type = NA,
          i.check.name = "id_type",
