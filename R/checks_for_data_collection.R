@@ -8,7 +8,8 @@ df_tool_data <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_A
   mutate(i.check.uuid = `_uuid`,
          i.check.today = today,
          i.check.enumerator_id = enumerator_id) %>% 
-  filter(consent=="yes", today > as_date("2021-08-23"))
+  filter(consent=="yes", today > as_date("2021-08-18")) %>% 
+  mutate(across(contains("/"), .fns = ~as.numeric(.x)))
 
 df_survey <- readxl::read_excel("inputs/UGA2103_Digital_Finace_HH_Tool_June2021.xlsx", sheet = "survey")
 df_choices <- readxl::read_excel("inputs/UGA2103_Digital_Finace_HH_Tool_June2021.xlsx", sheet = "choices")
@@ -18,7 +19,7 @@ df_choices <- readxl::read_excel("inputs/UGA2103_Digital_Finace_HH_Tool_June2021
 
 # Time interval for the survey
 
-min_time_of_survey <- 40
+min_time_of_survey <- 10
 max_time_of_survey <- 120
 
 df_c_survey_time <-  df_tool_data %>% 
@@ -94,10 +95,7 @@ df_c_id_type <- df_tool_data %>%
 
 # If respondents have selected a language but have NOT selected the same language that they previously selected for their main language, we need to check the survye.
 df_c_language <- df_tool_data %>% 
-  rowwise() %>% 
-  mutate(int.language_understand = sum(c_across(starts_with(glue::glue("language_understand/{main_language}"))), na.rm = TRUE)) %>% 
-  ungroup() %>% 
-  mutate(i.check.identified_issue = ifelse(int.language_understand == 0, "un_expected_response", "main_language_also_understood"),
+  mutate(i.check.identified_issue = ifelse(!main_language %in% language_understand, "un_expected_response", "main_language_also_understood"),
          i.check.type = NA,
          i.check.name = "language_understand",
          i.check.current_value = NA,
