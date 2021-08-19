@@ -201,7 +201,7 @@ df_c_phone_use <- df_tool_data %>%
 # If in previous qn "why do you want to have  a mobile money account?" they answered "it is safer than keeping cash at home" and they now asnwered "the system is not safe i am concerned that my money will disappear", survey needs to be checked
 # reason_want_mm_acc/safer_than_home == 1 and reason_not_open_mm_acc/unsafe_system
 df_c_reason_not_open_mm_acc <- df_tool_data %>% 
-  filter("reason_want_mm_acc/safer_than_home" == 1, "reason_not_open_mm_acc/unsafe_system" == 1) %>% 
+  filter(`reason_want_mm_acc/safer_than_home` == 1, `reason_not_open_mm_acc/unsafe_system` == 1) %>% 
   mutate(i.check.identified_issue = "un_expected_response",
          i.check.type = NA,
          i.check.name = "reason_not_open_mm_acc",
