@@ -263,5 +263,23 @@ df_c_duplicate_pt_nos <- df_tool_data %>%
   select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
-# missing sample point numbers from the dataset(few data points from particular area)
 # pt id does not exist in sample
+
+sample_pt_nos <- df_sample_data %>% 
+  pull(point_number) %>% 
+  unique()
+
+df_c_pt_not_in_sample <- df_tool_data %>% 
+  filter(!point_number %in% sample_pt_nos) %>% 
+  mutate(i.check.identified_issue = "pt_no_not_in_sample",
+         i.check.type = NA,
+         i.check.name = "point_number",
+         i.check.current_value = NA,
+         i.check.value = NA,
+         i.check.checked_by = "Amos",
+         i.check.checked_date = as_date(today()),
+         i.check.comment = NA) %>% 
+  select(starts_with("i.check"))%>% 
+  rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
+
+# threshold distance exceeded
