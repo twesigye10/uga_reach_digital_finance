@@ -36,7 +36,7 @@ df_c_survey_time <-  df_tool_data %>%
          i.check.checked_date = as_date(today()),
          i.check.comment = NA)%>% 
   filter(i.check.identified_issue %in% c("less_survey_time", "more_survey_time")) %>% 
-  select(starts_with("i.check"))%>% 
+  dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 
@@ -59,7 +59,7 @@ df_c_time_btn_survey <- df_tool_data %>%
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
          i.check.comment = NA ) %>% 
-  select(starts_with("i.check"))%>% 
+  dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 # Logical checks ----------------------------------------------------------
@@ -75,7 +75,7 @@ df_c_nationality <- df_tool_data %>%
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
          i.check.comment = NA) %>% 
-  select(starts_with("i.check"))%>% 
+  dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 # Anyone who selected host for "type of community" and answers "refugee ID" or "beneficiary ID" should be checked.
@@ -89,7 +89,7 @@ df_c_id_type <- df_tool_data %>%
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
          i.check.comment = NA) %>% 
-  select(starts_with("i.check"))%>% 
+  dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 # If respondents have selected a language but have NOT selected the same language that they previously selected for their main language, we need to check the survye.
@@ -106,7 +106,7 @@ df_c_language <- df_tool_data %>%
          i.check.checked_date = as_date(today()),
          i.check.comment = NA) %>% 
   filter(i.check.identified_issue == "un_expected_response") %>% 
-  select(starts_with("i.check"))%>% 
+  dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 # If respondent has selected "none" in addition to another option, the survey needs to be checked.
@@ -125,7 +125,7 @@ df_c_type_phone_owned <- df_tool_data %>%
          i.check.checked_date = as_date(today()),
          i.check.comment = NA) %>% 
   filter(i.check.identified_issue == "un_expected_response") %>% 
-  select(starts_with("i.check"))%>% 
+  dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 # If previously selected "0" in response to "how many mobile phone numbers do you have" the survye needs to be checked.
@@ -141,7 +141,7 @@ df_c_walk_top_up <- df_tool_data %>%
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
          i.check.comment = NA) %>% 
-  select(starts_with("i.check"))%>% 
+  dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 # If they previously selected "yes" to having mobile internet coverage (Q56) and now replied "no", the survey needs to be checked.
@@ -157,7 +157,7 @@ df_c_internet_awareness <- df_tool_data %>%
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
          i.check.comment = NA) %>% 
-  select(starts_with("i.check"))%>% 
+  dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 # Do you currently use mobile internet (social media, apps, and websites like WhatsApp, Messenger, Facebook, <other locally relevant>, etc)?
@@ -179,7 +179,7 @@ df_c_mobile_phone_use <- df_tool_data %>%
          i.check.checked_date = as_date(today()),
          i.check.comment = NA) %>% 
   filter(i.check.identified_issue == "un_expected_response") %>% 
-  select(starts_with("i.check"))%>% 
+  dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 # If respondents who previously said they DO NOT have access to a feature phone or smart phone are now selecting reasons for using their phones that can only be done online (e.g. online education; looking for specific information etc.), survey needs to be checked
@@ -198,7 +198,7 @@ df_c_phone_use <- df_tool_data %>%
          i.check.checked_date = as_date(today()),
          i.check.comment = NA) %>% 
   filter(i.check.identified_issue == "un_expected_response") %>% 
-  select(starts_with("i.check"))%>% 
+  dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 # If in previous qn "why do you want to have  a mobile money account?" they answered "it is safer than keeping cash at home" and they now asnwered "the system is not safe i am concerned that my money will disappear", survey needs to be checked
@@ -213,7 +213,7 @@ df_c_reason_not_open_mm_acc <- df_tool_data %>%
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
          i.check.comment = NA) %>% 
-  select(starts_with("i.check"))%>% 
+  dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 # if in previous question 'why do you want to have a bank account? ' is "Yes, it will allow me to securely store my money" and they now answered "the system isnt safe i am concerned that my money will disappear", survey needs to be checked
@@ -228,7 +228,7 @@ df_c_reason_not_open_bank_acc <- df_tool_data %>%
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
          i.check.comment = NA) %>% 
-  select(starts_with("i.check"))%>% 
+  dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 # if in previous question 'Why do you want to have a pre-paid or smart card?' answered "it will allow me to securely store my money" and they now chose "the system is not safe i am concerned that my money will disappear", check survey
@@ -243,7 +243,7 @@ df_c_reason_not_want_card <- df_tool_data %>%
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
          i.check.comment = NA) %>% 
-  select(starts_with("i.check"))%>% 
+  dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 
@@ -263,7 +263,7 @@ df_c_duplicate_pt_nos <- df_tool_data %>%
          i.check.checked_by = "Amos",
          i.check.checked_date = as_date(today()),
          i.check.comment = NA) %>% 
-  select(starts_with("i.check"))%>% 
+  dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 # pt id does not exist in sample
@@ -283,7 +283,7 @@ df_c_pt_not_in_sample <- df_tool_data %>%
          i.check.checked_by = "Amos",
          i.check.checked_date = as_date(today()),
          i.check.comment = NA) %>% 
-  select(starts_with("i.check"))%>% 
+  dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 # threshold distance exceeded
