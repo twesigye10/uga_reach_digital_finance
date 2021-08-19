@@ -229,7 +229,19 @@ df_c_reason_not_open_bank_acc <- df_tool_data %>%
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 # if in previous question 'Why do you want to have a pre-paid or smart card?' answered "it will allow me to securely store my money" and they now chose "the system is not safe i am concerned that my money will disappear", check survey
-
+# reason_want_card/safe_storage and reason_not_want_card/unsafe_system
+df_c_reason_not_want_card <- df_tool_data %>% 
+  filter("reason_want_card/safe_storage" == 1, "reason_not_want_card/unsafe_system" == 1) %>% 
+  mutate(i.check.identified_issue = "un_expected_response",
+         i.check.type = NA,
+         i.check.name = "reason_not_want_card",
+         i.check.current_value = NA,
+         i.check.value = NA,
+         i.check.checked_by = "Mathias",
+         i.check.checked_date = as_date(today()),
+         i.check.comment = NA) %>% 
+  select(starts_with("i.check"))%>% 
+  rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 
 
