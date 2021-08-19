@@ -167,7 +167,7 @@ df_c_mobile_phone_use <- df_tool_data %>%
   mutate(int.mobile_phone_use = sum(c_across(starts_with("phone_use/")), na.rm = TRUE)) %>% 
   ungroup() %>%
   filter(int.mobile_phone_use > 0) %>% 
-  mutate(i.check.identified_issue = ifelse("type_phone_owned/none" == 1 | "type_phone_owned/basic_phone" == 1, "un_expected_response", "expected_response"),
+  mutate(i.check.identified_issue = ifelse(`type_phone_owned/none` == 1 | `type_phone_owned/basic_phone` == 1, "un_expected_response", "expected_response"),
          i.check.type = NA,
          i.check.name = "mobile_phone_use",
          i.check.current_value = NA,
