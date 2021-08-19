@@ -164,11 +164,9 @@ df_c_internet_awareness <- df_tool_data %>%
 # If respondents who previously said they DO NOT have access to a feature phone or smart phone are now selecting uses for their phones that can only be done online (e.g. social media, access to information online etc.), survey needs to be checked
 # mobile_phone_use
 df_c_mobile_phone_use <- df_tool_data %>% 
-  rowwise() %>% 
-  mutate(int.mobile_phone_use = sum(c_across(starts_with("phone_use/")), na.rm = TRUE)) %>% 
-  ungroup() %>%
-  filter(int.mobile_phone_use > 0) %>% 
-  mutate(i.check.identified_issue = ifelse(`type_phone_owned/none` == 1 | `type_phone_owned/basic_phone` == 1, "un_expected_response", "expected_response"),
+  filter(str_detect(string = type_phone_owned, pattern = "none|basic_phone")) %>% 
+  mutate(i.check.identified_issue = ifelse(str_detect(string = mobile_phone_use, 
+                                                      pattern = "social_media|online_inform_access|mobile_cash_voucher|mobile_banking|contactless_mobile_pay"), "un_expected_response", "expected_response"),
          i.check.type = NA,
          i.check.name = "mobile_phone_use",
          i.check.current_value = NA,
@@ -183,11 +181,10 @@ df_c_mobile_phone_use <- df_tool_data %>%
 # If respondents who previously said they DO NOT have access to a feature phone or smart phone are now selecting reasons for using their phones that can only be done online (e.g. online education; looking for specific information etc.), survey needs to be checked
 # phone_use
 df_c_phone_use <- df_tool_data %>% 
-  rowwise() %>% 
-  mutate(int.phone_use_count = sum(c_across(starts_with("phone_use/")), na.rm = TRUE)) %>% 
-  ungroup() %>%
-  filter(int.phone_use_count > 0) %>% 
-  mutate(i.check.identified_issue = ifelse(`type_phone_owned/none` == 1 | `type_phone_owned/basic_phone` == 1, "un_expected_response", "expected_response"),
+  filter(str_detect(string = type_phone_owned, pattern = "none|basic_phone")) %>% 
+  mutate(i.check.identified_issue = ifelse(str_detect(string = phone_use, 
+                                                      pattern = "talking_messaging|social_media|for_security|weather_forecast|receive_aid_information|provide_feedback"), 
+                                           "un_expected_response", "expected_response"),
          i.check.type = NA,
          i.check.name = "phone_use",
          i.check.current_value = NA,
