@@ -4,14 +4,14 @@ library(tidyverse)
 library(lubridate)
 
 # read data 
-df_tool_data <- readxl::read_excel("inputs/data_digital_finance.xlsx") %>% 
+df_tool_data <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx") %>% 
   mutate(i.check.uuid = `_uuid`,
          i.check.today = today,
          i.check.enumerator_id = enumerator_id) %>% 
   filter(consent=="yes", today > as_date("2021-08-23"))
 
-df_survey <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx", sheet = "survey")
-df_choices <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx", sheet = "choices")
+df_survey <- readxl::read_excel("inputs/UGA2103_Digital_Finace_HH_Tool_June2021.xlsx", sheet = "survey")
+df_choices <- readxl::read_excel("inputs/UGA2103_Digital_Finace_HH_Tool_June2021.xlsx", sheet = "choices")
 
 
 # Time checks -------------------------------------------------------------
