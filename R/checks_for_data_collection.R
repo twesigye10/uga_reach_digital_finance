@@ -264,7 +264,8 @@ df_c_duplicate_pt_nos <- df_tool_data %>%
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 # pt id does not exist in sample
-
+# host community
+# settlement
 sample_pt_nos <- df_sample_data %>% 
   pull(point_number) %>% 
   unique()
