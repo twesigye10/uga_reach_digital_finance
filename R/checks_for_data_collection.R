@@ -113,7 +113,7 @@ df_c_type_phone_owned <- df_tool_data %>%
   rowwise() %>% 
   mutate(int.owned_phone_types_count = sum(c_across(starts_with("type_phone_owned/")), na.rm = TRUE)) %>% 
   ungroup() %>% 
-  mutate(i.check.identified_issue = ifelse(int.owned_phone_types_count > 1 & "`type_phone_owned/none`" == 1, "un_expected_response", "expected_response"),
+  mutate(i.check.identified_issue = ifelse(int.owned_phone_types_count > 1 & `type_phone_owned/none` == 1, "un_expected_response", "expected_response"),
          i.check.type = NA,
          i.check.name = "type_phone_owned",
          i.check.current_value = NA,
