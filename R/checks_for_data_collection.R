@@ -233,14 +233,14 @@ df_c_reason_not_open_bank_acc <- df_tool_data %>%
 # reason_want_card/safe_storage and reason_not_want_card/unsafe_system
 df_c_reason_not_want_card <- df_tool_data %>% 
   filter(`reason_want_card/safe_storage` == 1, `reason_not_want_card/unsafe_system` == 1) %>% 
-  mutate(i.check.issue_id = "un_expected_response",
-         i.check.type = NA,
+  mutate(i.check.issue_id = "logic_c_reason_not_want_card",
+         i.check.type = "remove_option",
          i.check.name = "reason_not_want_card",
-         i.check.current_value = NA,
-         i.check.value = NA,
+         i.check.current_value = "unsafe_system",
+         i.check.value = "unsafe_system",
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
-         i.check.comment = NA) %>% 
+         i.check.comment = "reason_want_card: safer_than_home but reason_not_want_card: unsafe_system") %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
