@@ -150,14 +150,14 @@ df_c_type_phone_owned <- df_tool_data %>%
 
 df_c_internet_awareness <- df_tool_data %>% 
   filter(mobile_internet == "yes", internet_awareness == "no") %>% 
-  mutate(i.check.issue_id = "un_expected_response",
-         i.check.type = NA,
-         i.check.name = "walk_top_up",
-         i.check.current_value = walk_top_up,
+  mutate(i.check.issue_id = "logic_c_internet_awareness",
+         i.check.type = "change_response",
+         i.check.name = "internet_awareness",
+         i.check.current_value = internet_awareness,
          i.check.value = NA,
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
-         i.check.comment = NA) %>% 
+         i.check.comment = "mobile_internet: yes but internet_awareness: no") %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
