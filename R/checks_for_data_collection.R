@@ -98,9 +98,9 @@ df_c_id_type <- df_tool_data %>%
 df_c_language <- df_tool_data %>% 
   mutate(i.check.issue_id = ifelse(str_detect(string = language_understand, pattern = main_language, negate = TRUE) , 
                                    "logic_c_main_language", "main_language_also_understood"),
-         i.check.type = NA,
+         i.check.type = "change_response",
          i.check.name = "main_language",
-         i.check.current_value = NA,
+         i.check.current_value = main_language,
          i.check.value = NA,
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
