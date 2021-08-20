@@ -82,14 +82,14 @@ df_c_nationality <- df_tool_data %>%
 # Anyone who selected host for "type of community" and answers "refugee ID" or "beneficiary ID" should be checked.
 df_c_id_type <- df_tool_data %>% 
   filter(status == "host_community", str_detect(string = id_type, pattern = "unhcr_refugee_id|ug_refugee_id|benef_id_not_unhcr")) %>% 
-  mutate(i.check.issue_id = "un_expected_response",
-         i.check.type = NA,
+  mutate(i.check.issue_id = "logic_c_status",
+         i.check.type = "change_response",
          i.check.name = "id_type",
          i.check.current_value = id_type,
          i.check.value = NA,
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
-         i.check.comment = NA) %>% 
+         i.check.comment = "status: host_community but id_type: for refugees") %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
