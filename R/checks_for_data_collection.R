@@ -294,7 +294,7 @@ df_c_pt_not_in_sample <- df_tool_data %>%
 
 # df_c_survey_time, df_c_time_btn_survey, df_c_nationality, df_c_id_type, df_c_language, df_c_type_phone_owned, df_c_internet_awareness, df_c_reason_not_open_mm_acc, df_c_reason_not_open_bank_acc, df_c_reason_not_want_card, df_c_duplicate_pt_nos, df_c_pt_not_in_sample
 
-df_combined_checks <- bind_rows(df_c_survey_time, 
+df_combined_checks <- rbind(df_c_survey_time, 
                                 # df_c_time_btn_survey, 
                                 df_c_nationality, 
                                 df_c_id_type, 
