@@ -114,17 +114,17 @@ df_c_language <- df_tool_data %>%
 
 df_c_type_phone_owned <- df_tool_data %>% 
   rowwise() %>% 
-  mutate(int.owned_phone_types_count = sum(c_across(starts_with("type_phone_owned/")), na.rm = TRUE)) %>% 
+  mutate(int.type_phone_owned_count = sum(c_across(starts_with("type_phone_owned/")), na.rm = TRUE)) %>% 
   ungroup() %>% 
-  mutate(i.check.issue_id = ifelse(int.owned_phone_types_count > 1 & `type_phone_owned/none` == 1, "un_expected_response", "expected_response"),
-         i.check.type = NA,
+  mutate(i.check.issue_id = ifelse(int.type_phone_owned_count > 1 & `type_phone_owned/none` == 1, "logic_c_type_phone_owned", "expected_response"),
+         i.check.type = "remove_option",
          i.check.name = "type_phone_owned",
-         i.check.current_value = NA,
-         i.check.value = NA,
+         i.check.current_value = "none",
+         i.check.value = "none",
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
-         i.check.comment = NA) %>% 
-  filter(i.check.issue_id == "un_expected_response") %>% 
+         i.check.comment = glue("none option selected with other options: {type_phone_owned}")) %>% 
+  filter(i.check.issue_id == "logic_c_type_phone_owned") %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
