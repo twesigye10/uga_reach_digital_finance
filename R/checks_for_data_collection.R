@@ -68,14 +68,14 @@ df_c_time_btn_survey <- df_tool_data %>%
 # Anyone who selected "ugandan" and previously answered community_type = refugee, should be checked.
 df_c_nationality <- df_tool_data %>% 
   filter(status == "refugee", nationality == "ugandan") %>% 
-  mutate(i.check.issue_id = "un_expected_response",
+  mutate(i.check.issue_id = "logic_c_nationality",
          i.check.type = "change_response",
          i.check.name = "nationality",
          i.check.current_value = nationality,
          i.check.value = NA,
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
-         i.check.comment = NA) %>% 
+         i.check.comment = "nationality: ugandan but community_type: refugee") %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
