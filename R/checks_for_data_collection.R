@@ -2,6 +2,7 @@
 
 library(tidyverse)
 library(lubridate)
+library(glue)
 
 # read data 
 df_tool_data <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx") %>% 
@@ -89,21 +90,22 @@ df_c_id_type <- df_tool_data %>%
          i.check.value = NA,
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
-         i.check.comment = "status: host_community but id_type: for refugees") %>% 
+         i.check.comment = glue("status: host_community but refugee id_type: {id_type}")) %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 # If respondents have selected a language but have NOT selected the same language that they previously selected for their main language, we need to check the survye.
 df_c_language <- df_tool_data %>% 
-  mutate(i.check.issue_id = ifelse(str_detect(string = language_understand, pattern = main_language, negate = TRUE) , "un_expected_response", "main_language_also_understood"),
+  mutate(i.check.issue_id = ifelse(str_detect(string = language_understand, pattern = main_language, negate = TRUE) , 
+                                   "logic_c_main_language", "main_language_also_understood"),
          i.check.type = NA,
-         i.check.name = "language_understand",
+         i.check.name = "main_language",
          i.check.current_value = NA,
          i.check.value = NA,
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
-         i.check.comment = NA) %>% 
-  filter(i.check.issue_id == "un_expected_response") %>% 
+         i.check.comment = glue("main_language: {main_language} not in understood languages: {language_understand}")) %>% 
+  filter(i.check.issue_id == "logic_c_main_language") %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
