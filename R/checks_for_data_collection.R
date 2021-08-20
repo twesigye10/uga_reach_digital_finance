@@ -25,7 +25,7 @@ max_time_of_survey <- 120
 df_c_survey_time <-  df_tool_data %>% 
   mutate(int.survey_time_interval = difftime(end,start, units = "mins"),
          int.survey_time_interval = round(int.survey_time_interval,2),
-         i.check.identified_issue = case_when(
+         i.check.issue_id = case_when(
            int.survey_time_interval < min_time_of_survey ~ "less_survey_time",
            int.survey_time_interval > max_time_of_survey ~ "more_survey_time",
            TRUE ~ "normal_survey_time" ),
@@ -36,7 +36,7 @@ df_c_survey_time <-  df_tool_data %>%
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
          i.check.comment = NA)%>% 
-  filter(i.check.identified_issue %in% c("less_survey_time", "more_survey_time")) %>% 
+  filter(i.check.issue_id %in% c("less_survey_time", "more_survey_time")) %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
@@ -52,7 +52,7 @@ df_c_time_btn_survey <- df_tool_data %>%
          int.time_between_survey = make_difftime(int.t_between_survey, units = "mins"),
          int.time_between_survey = round(int.time_between_survey,2)) %>%
   filter(int.time_between_survey !=0 & int.time_between_survey < min_time_btn_surveys) %>%
-  mutate(i.check.identified_issue = "less_time_btn_surveys",
+  mutate(i.check.issue_id = "less_time_btn_surveys",
          i.check.type = NA,
          i.check.name = NA,
          i.check.current_value = NA,
@@ -68,11 +68,11 @@ df_c_time_btn_survey <- df_tool_data %>%
 # Anyone who selected "ugandan" and previously answered community_type = refugee, should be checked.
 df_c_nationality <- df_tool_data %>% 
   filter(status == "refugee", nationality == "ugandan") %>% 
-  mutate(i.check.identified_issue = "un_expected_response",
-         i.check.type = NA,
+  mutate(i.check.issue_id = "un_expected_response",
+         i.check.type = "change_response",
          i.check.name = "nationality",
-         i.check.current_value = NA,
-         i.check.value = nationality,
+         i.check.current_value = nationality,
+         i.check.value = NA,
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
          i.check.comment = NA) %>% 
@@ -82,7 +82,7 @@ df_c_nationality <- df_tool_data %>%
 # Anyone who selected host for "type of community" and answers "refugee ID" or "beneficiary ID" should be checked.
 df_c_id_type <- df_tool_data %>% 
   filter(status == "host_community", str_detect(string = id_type, pattern = "unhcr_refugee_id|ug_refugee_id|benef_id_not_unhcr")) %>% 
-  mutate(i.check.identified_issue = "un_expected_response",
+  mutate(i.check.issue_id = "un_expected_response",
          i.check.type = NA,
          i.check.name = "id_type",
          i.check.current_value = id_type,
@@ -95,7 +95,7 @@ df_c_id_type <- df_tool_data %>%
 
 # If respondents have selected a language but have NOT selected the same language that they previously selected for their main language, we need to check the survye.
 df_c_language <- df_tool_data %>% 
-  mutate(i.check.identified_issue = ifelse(str_detect(string = language_understand, pattern = main_language, negate = TRUE) , "un_expected_response", "main_language_also_understood"),
+  mutate(i.check.issue_id = ifelse(str_detect(string = language_understand, pattern = main_language, negate = TRUE) , "un_expected_response", "main_language_also_understood"),
          i.check.type = NA,
          i.check.name = "language_understand",
          i.check.current_value = NA,
@@ -103,7 +103,7 @@ df_c_language <- df_tool_data %>%
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
          i.check.comment = NA) %>% 
-  filter(i.check.identified_issue == "un_expected_response") %>% 
+  filter(i.check.issue_id == "un_expected_response") %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
@@ -114,7 +114,7 @@ df_c_type_phone_owned <- df_tool_data %>%
   rowwise() %>% 
   mutate(int.owned_phone_types_count = sum(c_across(starts_with("type_phone_owned/")), na.rm = TRUE)) %>% 
   ungroup() %>% 
-  mutate(i.check.identified_issue = ifelse(int.owned_phone_types_count > 1 & `type_phone_owned/none` == 1, "un_expected_response", "expected_response"),
+  mutate(i.check.issue_id = ifelse(int.owned_phone_types_count > 1 & `type_phone_owned/none` == 1, "un_expected_response", "expected_response"),
          i.check.type = NA,
          i.check.name = "type_phone_owned",
          i.check.current_value = NA,
@@ -122,7 +122,7 @@ df_c_type_phone_owned <- df_tool_data %>%
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
          i.check.comment = NA) %>% 
-  filter(i.check.identified_issue == "un_expected_response") %>% 
+  filter(i.check.issue_id == "un_expected_response") %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
@@ -131,7 +131,7 @@ df_c_type_phone_owned <- df_tool_data %>%
 
 df_c_walk_top_up <- df_tool_data %>% 
   filter(walk_top_up %in% c("no_need_to_walk", "regularly_walk", "walk_specifically") , no_phones_hh_owns == 0) %>% 
-  mutate(i.check.identified_issue = "un_expected_response",
+  mutate(i.check.issue_id = "un_expected_response",
          i.check.type = NA,
          i.check.name = "walk_top_up",
          i.check.current_value = walk_top_up,
@@ -147,7 +147,7 @@ df_c_walk_top_up <- df_tool_data %>%
 
 df_c_internet_awareness <- df_tool_data %>% 
   filter(mobile_internet == "yes", internet_awareness == "no") %>% 
-  mutate(i.check.identified_issue = "un_expected_response",
+  mutate(i.check.issue_id = "un_expected_response",
          i.check.type = NA,
          i.check.name = "walk_top_up",
          i.check.current_value = walk_top_up,
@@ -165,7 +165,7 @@ df_c_internet_awareness <- df_tool_data %>%
 # mobile_phone_use
 df_c_mobile_phone_use <- df_tool_data %>% 
   filter(str_detect(string = type_phone_owned, pattern = "none|basic_phone")) %>% 
-  mutate(i.check.identified_issue = ifelse(str_detect(string = mobile_phone_use, 
+  mutate(i.check.issue_id = ifelse(str_detect(string = mobile_phone_use, 
                                                       pattern = "social_media|online_inform_access|mobile_cash_voucher|mobile_banking|contactless_mobile_pay"), "un_expected_response", "expected_response"),
          i.check.type = NA,
          i.check.name = "mobile_phone_use",
@@ -174,7 +174,7 @@ df_c_mobile_phone_use <- df_tool_data %>%
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
          i.check.comment = NA) %>% 
-  filter(i.check.identified_issue == "un_expected_response") %>% 
+  filter(i.check.issue_id == "un_expected_response") %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
@@ -182,7 +182,7 @@ df_c_mobile_phone_use <- df_tool_data %>%
 # phone_use
 df_c_phone_use <- df_tool_data %>% 
   filter(str_detect(string = type_phone_owned, pattern = "none|basic_phone")) %>% 
-  mutate(i.check.identified_issue = ifelse(str_detect(string = phone_use, 
+  mutate(i.check.issue_id = ifelse(str_detect(string = phone_use, 
                                                       pattern = "talking_messaging|social_media|for_security|weather_forecast|receive_aid_information|provide_feedback"), 
                                            "un_expected_response", "expected_response"),
          i.check.type = NA,
@@ -192,7 +192,7 @@ df_c_phone_use <- df_tool_data %>%
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
          i.check.comment = NA) %>% 
-  filter(i.check.identified_issue == "un_expected_response") %>% 
+  filter(i.check.issue_id == "un_expected_response") %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
@@ -200,7 +200,7 @@ df_c_phone_use <- df_tool_data %>%
 # reason_want_mm_acc/safer_than_home == 1 and reason_not_open_mm_acc/unsafe_system
 df_c_reason_not_open_mm_acc <- df_tool_data %>% 
   filter(`reason_want_mm_acc/safer_than_home` == 1, `reason_not_open_mm_acc/unsafe_system` == 1) %>% 
-  mutate(i.check.identified_issue = "un_expected_response",
+  mutate(i.check.issue_id = "un_expected_response",
          i.check.type = NA,
          i.check.name = "reason_not_open_mm_acc",
          i.check.current_value = NA,
@@ -215,7 +215,7 @@ df_c_reason_not_open_mm_acc <- df_tool_data %>%
 # reason_want_bank_acc/safe_storage and reason_not_open_bank_acc/unsafe_system
 df_c_reason_not_open_bank_acc <- df_tool_data %>% 
   filter(`reason_want_bank_acc/safe_storage` == 1, `reason_not_open_bank_acc/unsafe_system` == 1) %>% 
-  mutate(i.check.identified_issue = "un_expected_response",
+  mutate(i.check.issue_id = "un_expected_response",
          i.check.type = NA,
          i.check.name = "reason_not_open_bank_acc",
          i.check.current_value = NA,
@@ -230,7 +230,7 @@ df_c_reason_not_open_bank_acc <- df_tool_data %>%
 # reason_want_card/safe_storage and reason_not_want_card/unsafe_system
 df_c_reason_not_want_card <- df_tool_data %>% 
   filter(`reason_want_card/safe_storage` == 1, `reason_not_want_card/unsafe_system` == 1) %>% 
-  mutate(i.check.identified_issue = "un_expected_response",
+  mutate(i.check.issue_id = "un_expected_response",
          i.check.type = NA,
          i.check.name = "reason_not_want_card",
          i.check.current_value = NA,
@@ -250,7 +250,7 @@ df_c_duplicate_pt_nos <- df_tool_data %>%
   group_by(district_name, sub_county_name, status, point_number) %>% 
   mutate(int.number_of_points = n()) %>% 
   filter(int.number_of_points > 1) %>% 
-  mutate(i.check.identified_issue = "duplicate_pt_no",
+  mutate(i.check.issue_id = "duplicate_pt_no",
          i.check.type = NA,
          i.check.name = "point_number",
          i.check.current_value = NA,
@@ -270,7 +270,7 @@ sample_pt_nos <- df_sample_data %>%
 
 df_c_pt_not_in_sample <- df_tool_data %>% 
   filter(!point_number %in% sample_pt_nos) %>% 
-  mutate(i.check.identified_issue = "pt_no_not_in_sample",
+  mutate(i.check.issue_id = "pt_no_not_in_sample",
          i.check.type = NA,
          i.check.name = "point_number",
          i.check.current_value = NA,
