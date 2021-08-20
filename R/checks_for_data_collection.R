@@ -253,14 +253,14 @@ df_c_duplicate_pt_nos <- df_tool_data %>%
   group_by(district_name, sub_county_name, status, point_number) %>% 
   mutate(int.number_of_points = n()) %>% 
   filter(int.number_of_points > 1) %>% 
-  mutate(i.check.issue_id = "duplicate_pt_no",
-         i.check.type = NA,
+  mutate(i.check.issue_id = "spatial_c_duplicate_pt_no",
+         i.check.type = "change_response",
          i.check.name = "point_number",
-         i.check.current_value = NA,
+         i.check.current_value = point_number,
          i.check.value = NA,
          i.check.checked_by = "Amos",
          i.check.checked_date = as_date(today()),
-         i.check.comment = NA) %>% 
+         i.check.comment = "point numbers are duplicated: check that its not a repeated survey") %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
