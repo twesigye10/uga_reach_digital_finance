@@ -164,53 +164,53 @@ df_c_internet_awareness <- df_tool_data %>%
 # Do you currently use mobile internet (social media, apps, and websites like WhatsApp, Messenger, Facebook, <other locally relevant>, etc)?
 # can be constrained in the tool
 
-# If respondents who previously said they DO NOT have access to a feature phone or smart phone are now selecting uses for their phones that can only be done online (e.g. social media, access to information online etc.), survey needs to be checked
-# mobile_phone_use
-df_c_mobile_phone_use <- df_tool_data %>% 
-  filter(str_detect(string = type_phone_owned, pattern = "none|basic_phone")) %>% 
-  mutate(i.check.issue_id = ifelse(str_detect(string = mobile_phone_use, 
-                                                      pattern = "social_media|online_inform_access|mobile_cash_voucher|mobile_banking|contactless_mobile_pay"), "un_expected_response", "expected_response"),
-         i.check.type = NA,
-         i.check.name = "mobile_phone_use",
-         i.check.current_value = NA,
-         i.check.value = NA,
-         i.check.checked_by = "Mathias",
-         i.check.checked_date = as_date(today()),
-         i.check.comment = NA) %>% 
-  filter(i.check.issue_id == "un_expected_response") %>% 
-  dplyr::select(starts_with("i.check"))%>% 
-  rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
-
-# If respondents who previously said they DO NOT have access to a feature phone or smart phone are now selecting reasons for using their phones that can only be done online (e.g. online education; looking for specific information etc.), survey needs to be checked
-# phone_use
-df_c_phone_use <- df_tool_data %>% 
-  filter(str_detect(string = type_phone_owned, pattern = "none|basic_phone")) %>% 
-  mutate(i.check.issue_id = ifelse(str_detect(string = phone_use, 
-                                                      pattern = "talking_messaging|social_media|for_security|weather_forecast|receive_aid_information|provide_feedback"), 
-                                           "un_expected_response", "expected_response"),
-         i.check.type = NA,
-         i.check.name = "phone_use",
-         i.check.current_value = NA,
-         i.check.value = NA,
-         i.check.checked_by = "Mathias",
-         i.check.checked_date = as_date(today()),
-         i.check.comment = NA) %>% 
-  filter(i.check.issue_id == "un_expected_response") %>% 
-  dplyr::select(starts_with("i.check"))%>% 
-  rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
+# # If respondents who previously said they DO NOT have access to a feature phone or smart phone are now selecting uses for their phones that can only be done online (e.g. social media, access to information online etc.), survey needs to be checked
+# # mobile_phone_use
+# df_c_mobile_phone_use <- df_tool_data %>% 
+#   filter(str_detect(string = type_phone_owned, pattern = "none|basic_phone")) %>% 
+#   mutate(i.check.issue_id = ifelse(str_detect(string = mobile_phone_use, 
+#                                                       pattern = "social_media|online_inform_access|mobile_cash_voucher|mobile_banking|contactless_mobile_pay"), "un_expected_response", "expected_response"),
+#          i.check.type = NA,
+#          i.check.name = "mobile_phone_use",
+#          i.check.current_value = NA,
+#          i.check.value = NA,
+#          i.check.checked_by = "Mathias",
+#          i.check.checked_date = as_date(today()),
+#          i.check.comment = NA) %>% 
+#   filter(i.check.issue_id == "un_expected_response") %>% 
+#   dplyr::select(starts_with("i.check"))%>% 
+#   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
+# 
+# # If respondents who previously said they DO NOT have access to a feature phone or smart phone are now selecting reasons for using their phones that can only be done online (e.g. online education; looking for specific information etc.), survey needs to be checked
+# # phone_use
+# df_c_phone_use <- df_tool_data %>% 
+#   filter(str_detect(string = type_phone_owned, pattern = "none|basic_phone")) %>% 
+#   mutate(i.check.issue_id = ifelse(str_detect(string = phone_use, 
+#                                                       pattern = "talking_messaging|social_media|for_security|weather_forecast|receive_aid_information|provide_feedback"), 
+#                                            "un_expected_response", "expected_response"),
+#          i.check.type = NA,
+#          i.check.name = "phone_use",
+#          i.check.current_value = NA,
+#          i.check.value = NA,
+#          i.check.checked_by = "Mathias",
+#          i.check.checked_date = as_date(today()),
+#          i.check.comment = NA) %>% 
+#   filter(i.check.issue_id == "un_expected_response") %>% 
+#   dplyr::select(starts_with("i.check"))%>% 
+#   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 # If in previous qn "why do you want to have  a mobile money account?" they answered "it is safer than keeping cash at home" and they now asnwered "the system is not safe i am concerned that my money will disappear", survey needs to be checked
 # reason_want_mm_acc/safer_than_home == 1 and reason_not_open_mm_acc/unsafe_system
 df_c_reason_not_open_mm_acc <- df_tool_data %>% 
   filter(`reason_want_mm_acc/safer_than_home` == 1, `reason_not_open_mm_acc/unsafe_system` == 1) %>% 
-  mutate(i.check.issue_id = "un_expected_response",
-         i.check.type = NA,
+  mutate(i.check.issue_id = "logic_c_reason_not_open_mm_acc",
+         i.check.type = "remove_option",
          i.check.name = "reason_not_open_mm_acc",
-         i.check.current_value = NA,
-         i.check.value = NA,
+         i.check.current_value = "unsafe_system",
+         i.check.value = "unsafe_system",
          i.check.checked_by = "Mathias",
          i.check.checked_date = as_date(today()),
-         i.check.comment = NA) %>% 
+         i.check.comment = "reason_want_mm_acc: safer_than_home but reason_not_open_mm_acc: unsafe_system") %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
