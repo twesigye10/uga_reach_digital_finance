@@ -43,7 +43,8 @@ df_data_parent_qns <- df_data_arranged %>%
 # join other responses with choice options based on list_name
 
 df_join_other_response_with_choices <- df_data_parent_qns %>% 
-  left_join(df_grouped_choices, by = "list_name")
+  left_join(df_grouped_choices, by = "list_name") %>% 
+  mutate(current_value = "other")
 
 # output the resulting data frame
 write_csv(x = df_join_other_response_with_choices, file = paste0("outputs/others_responses_",as_date(today()),"_", hour(now()) ,".csv"), na = "")
