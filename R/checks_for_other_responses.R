@@ -63,7 +63,8 @@ select_mu_remove_option <- df_join_other_response_with_choices %>%
 output$select_multiple <- bind_rows(select_mu_add_option, select_mu_remove_option) %>% 
   arrange(`_uuid`, today, enumerator_id, name)
 
-merged_data <- bind_rows(output)
+# merge other checks
+merged_other_checks <- bind_rows(output)
 
 # output the resulting data frame
-write_csv(x = merged_data, file = paste0("outputs/others_responses_",as_date(today()),"_", hour(now()) ,".csv"), na = "")
+write_csv(x = merged_other_checks, file = paste0("outputs/others_responses_",as_date(today()),"_", hour(now()) ,".csv"), na = "")
