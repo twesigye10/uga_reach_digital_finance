@@ -46,5 +46,23 @@ df_join_other_response_with_choices <- df_data_parent_qns %>%
   left_join(df_grouped_choices, by = "list_name") %>% 
   mutate(current_value = "other")
 
+output <- list()
+
+output$none_select_multiple <- df_join_other_response_with_choices %>% 
+  filter(select_type != "select_multiple") %>% 
+  mutate(type = "change_response")
+
+select_mu_add_option <- df_join_other_response_with_choices %>% 
+  filter(select_type == "select_multiple") %>% 
+  mutate(type = "add_option")
+select_mu_remove_option <- df_join_other_response_with_choices %>% 
+  filter(select_type == "select_multiple") %>% 
+  mutate(type = "remove_option")
+
+output$select_multiple <- bind_rows(select_mu_add_option, select_mu_remove_option) %>% 
+  arrange(`_uuid`, today, enumerator_id, name)
+
+merged_data <- bind_rows(output)
+
 # output the resulting data frame
-write_csv(x = df_join_other_response_with_choices, file = paste0("outputs/others_responses_",as_date(today()),"_", hour(now()) ,".csv"), na = "")
+write_csv(x = merged_data, file = paste0("outputs/others_responses_",as_date(today()),"_", hour(now()) ,".csv"), na = "")
