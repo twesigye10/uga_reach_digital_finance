@@ -13,7 +13,6 @@ extract_other_data <- function(input_tool_data) {
   others_colnames <-  input_tool_data %>% 
     select(ends_with("_other"), -contains("/")) %>% 
     colnames()
-  
   # data.frame for holding _other response data
   df_other_response_data <- data.frame()
   
@@ -24,12 +23,12 @@ extract_other_data <- function(input_tool_data) {
       mutate( other_name = cln, value = NA)
     df_other_response_data <- rbind(df_other_response_data, df_filtered_data)
   }
-  
   # arrange the data
-  df_data_arranged <- df_other_response_data %>% 
+  df_other_response_data %>% 
     arrange(start_date, uuid)
 }
-# arrange the data
+
+# others data
 df_data_arranged <- extract_other_data(input_tool_data = df_tool_data)
 
 # get choices to add to the _other responses extracted
