@@ -8,24 +8,29 @@ df_tool_data <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_A
 df_survey <- readxl::read_excel("inputs/UGA2103_Digital_Finace_HH_Tool_June2021.xlsx", sheet = "survey")
 df_choices <- readxl::read_excel("inputs/UGA2103_Digital_Finace_HH_Tool_June2021.xlsx", sheet = "choices")
 
-# get questions with other
-others_colnames <-  df_tool_data %>% 
-  select(ends_with("_other"), -contains("/")) %>% 
-  colnames()
-
-# data.frame for holding _other response data
-df_other_response_data <- data.frame()
-
-for (cln in others_colnames) {
-  df_filtered_data <- df_tool_data %>% 
-    select(uuid, start_date, enumerator_id, district_name, point_number, other_text = cln) %>% 
-    filter(!is.na(other_text), !other_text %in% c(" ", "NA")) %>% 
-    mutate( other_name = cln, value = NA)
-  df_other_response_data <- rbind(df_other_response_data, df_filtered_data)
+extract_other_data <- function(input_tool_data) {
+  # get questions with other
+  others_colnames <-  input_tool_data %>% 
+    select(ends_with("_other"), -contains("/")) %>% 
+    colnames()
+  
+  # data.frame for holding _other response data
+  df_other_response_data <- data.frame()
+  
+  for (cln in others_colnames) {
+    df_filtered_data <- input_tool_data %>% 
+      select(uuid, start_date, enumerator_id, district_name, point_number, other_text = cln) %>% 
+      filter(!is.na(other_text), !other_text %in% c(" ", "NA")) %>% 
+      mutate( other_name = cln, value = NA)
+    df_other_response_data <- rbind(df_other_response_data, df_filtered_data)
+  }
+  
+  # arrange the data
+  df_data_arranged <- df_other_response_data %>% 
+    arrange(start_date, uuid)
 }
 # arrange the data
-df_data_arranged <- df_other_response_data %>% 
-  arrange(start_date, uuid)
+df_data_arranged <- extract_other_data(input_tool_data = df_tool_data)
 
 # get choices to add to the _other responses extracted
 df_grouped_choices <- df_choices %>% 
