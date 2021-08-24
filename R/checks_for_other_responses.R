@@ -2,15 +2,19 @@ library(tidyverse)
 library(lubridate)
 
 # read data 
-df_tool_data <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx") %>% 
-  rename(uuid = `_uuid`) %>% 
-  mutate(start_date = as_date(start))
+df_tool_data <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx")
 df_survey <- readxl::read_excel("inputs/UGA2103_Digital_Finace_HH_Tool_June2021.xlsx", sheet = "survey")
 df_choices <- readxl::read_excel("inputs/UGA2103_Digital_Finace_HH_Tool_June2021.xlsx", sheet = "choices")
 
 extract_other_data <- function(input_tool_data, input_survey, input_choices) {
+  
+  # add and rename some columns
+  df_data <- input_tool_data %>% 
+    rename(uuid = `_uuid`) %>% 
+    mutate(start_date = as_date(start))
+  
   # get questions with other
-  others_colnames <-  input_tool_data %>% 
+  others_colnames <-  df_data %>% 
     select(ends_with("_other"), -contains("/")) %>% 
     colnames()
   
@@ -18,7 +22,7 @@ extract_other_data <- function(input_tool_data, input_survey, input_choices) {
   df_other_response_data <- data.frame()
   
   for (cln in others_colnames) {
-    df_filtered_data <- input_tool_data %>% 
+    df_filtered_data <- df_data %>% 
       select(uuid, start_date, enumerator_id, district_name, point_number, other_text = cln) %>% 
       filter(!is.na(other_text), !other_text %in% c(" ", "NA")) %>% 
       mutate( other_name = cln, value = NA)
