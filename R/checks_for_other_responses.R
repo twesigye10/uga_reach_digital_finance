@@ -48,18 +48,20 @@ df_join_other_response_with_choices <- df_data_parent_qns %>%
   left_join(df_grouped_choices, by = "list_name") %>% 
   mutate(current_value = "other", issue_id = "other_checks")
 
-# care for none select_multiple and select_multiple (change_response, add_option, remove_option)
+# care for select_one and select_multiple (change_response, add_option, remove_option)
 output <- list()
-
-output$none_select_multiple <- df_join_other_response_with_choices %>% 
-  filter(select_type != "select_multiple") %>% 
+# select_one checks
+output$select_one <- df_join_other_response_with_choices %>% 
+  filter(str_detect(select_type, c("select_one|select one"))) %>% 
   mutate(type = "change_response")
 
-select_mu_add_option <- df_join_other_response_with_choices %>% 
-  filter(select_type == "select_multiple") %>% 
+# select_multiple checks
+select_mu_data <- df_join_other_response_with_choices %>% 
+  filter(str_detect(select_type, c("select_multiple|select multiple")))
+
+select_mu_add_option <- select_mu_data %>% 
   mutate(type = "add_option")
-select_mu_remove_option <- df_join_other_response_with_choices %>% 
-  filter(select_type == "select_multiple") %>% 
+select_mu_remove_option <- select_mu_data %>% 
   mutate(type = "remove_option")
 
 output$select_multiple <- bind_rows(select_mu_add_option, select_mu_remove_option) %>% 
