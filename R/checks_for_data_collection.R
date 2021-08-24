@@ -46,7 +46,9 @@ df_c_survey_time <-  df_tool_data %>%
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 if(exists("df_c_survey_time")){
-  logic_output$df_c_survey_time <- df_c_survey_time
+  if(nrow(df_c_survey_time) > 0){
+    logic_output$df_c_survey_time <- df_c_survey_time
+  }
 }
 
 # check the time between surveys
@@ -72,7 +74,9 @@ df_c_time_btn_survey <- df_tool_data %>%
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 if(exists("df_c_time_btn_survey")){
-  logic_output$df_c_time_btn_survey <- df_c_time_btn_survey
+  if(nrow(df_c_time_btn_survey) > 0){
+    logic_output$df_c_time_btn_survey <- df_c_time_btn_survey
+  }
 }
 # Logical checks ----------------------------------------------------------
 
@@ -91,7 +95,9 @@ df_c_nationality <- df_tool_data %>%
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 if(exists("df_c_nationality")){
-  logic_output$df_c_nationality <- df_c_nationality
+  if(nrow(df_c_nationality) > 0){
+    logic_output$df_c_nationality <- df_c_nationality
+  }
 }
 
 # Anyone who selected host for "type of community" and answers "refugee ID" or "beneficiary ID" should be checked.
@@ -109,7 +115,9 @@ df_c_id_type <- df_tool_data %>%
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 if(exists("df_c_id_type")){
-  logic_output$df_c_id_type <- df_c_id_type
+  if(nrow(df_c_id_type) > 0){
+    logic_output$df_c_id_type <- df_c_id_type
+  }
 }
 
 # If respondents have selected a language but have NOT selected the same language that they previously selected for their main language, we need to check the survye.
@@ -128,7 +136,9 @@ df_c_language <- df_tool_data %>%
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 if(exists("df_c_language")){
-  logic_output$df_c_language <- df_c_language
+  if(nrow(df_c_language) > 0){
+    logic_output$df_c_language <- df_c_language
+  }
 }
 
 # If respondent has selected "none" in addition to another option, the survey needs to be checked.
@@ -151,7 +161,9 @@ df_c_type_phone_owned <- df_tool_data %>%
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 if(exists("df_c_type_phone_owned")){
-  logic_output$df_c_type_phone_owned <- df_c_type_phone_owned
+  if(nrow(df_c_type_phone_owned) > 0){
+    logic_output$df_c_type_phone_owned <- df_c_type_phone_owned
+  }
 }
 
 # If previously selected "0" in response to "how many mobile phone numbers do you have" the survye needs to be checked.
@@ -188,7 +200,9 @@ df_c_internet_awareness <- df_tool_data %>%
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 if(exists("df_c_internet_awareness")){
-  logic_output$df_c_internet_awareness <- df_c_internet_awareness
+  if(nrow(df_c_internet_awareness) > 0){
+    logic_output$df_c_internet_awareness <- df_c_internet_awareness
+    }
 }
 
 # Do you currently use mobile internet (social media, apps, and websites like WhatsApp, Messenger, Facebook, <other locally relevant>, etc)?
@@ -245,7 +259,9 @@ df_c_reason_not_open_mm_acc <- df_tool_data %>%
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 if(exists("df_c_reason_not_open_mm_acc")){
-  logic_output$df_c_reason_not_open_mm_acc <- df_c_reason_not_open_mm_acc
+  if(nrow(df_c_reason_not_open_mm_acc) > 0){
+    logic_output$df_c_reason_not_open_mm_acc <- df_c_reason_not_open_mm_acc
+  }
 }
 
 # if in previous question 'why do you want to have a bank account? ' is "Yes, it will allow me to securely store my money" and they now answered "the system isnt safe i am concerned that my money will disappear", survey needs to be checked
@@ -264,7 +280,9 @@ df_c_reason_not_open_bank_acc <- df_tool_data %>%
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 if(exists("df_c_reason_not_open_bank_acc")){
-  logic_output$df_c_reason_not_open_bank_acc <- df_c_reason_not_open_bank_acc
+  if(nrow(df_c_reason_not_open_bank_acc) > 0){
+    logic_output$df_c_reason_not_open_bank_acc <- df_c_reason_not_open_bank_acc
+  }
 }
 
 # if in previous question 'Why do you want to have a pre-paid or smart card?' answered "it will allow me to securely store my money" and they now chose "the system is not safe i am concerned that my money will disappear", check survey
@@ -283,7 +301,9 @@ df_c_reason_not_want_card <- df_tool_data %>%
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 if(exists("df_c_reason_not_want_card")){
-  logic_output$df_c_reason_not_want_card <- df_c_reason_not_want_card
+  if(nrow(df_c_reason_not_want_card) > 0){
+    logic_output$df_c_reason_not_want_card <- df_c_reason_not_want_card
+  }
 }
 
 # spatial checks ----------------------------------------------------------
@@ -305,7 +325,9 @@ df_c_duplicate_pt_nos <- df_tool_data %>%
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 if(exists("df_c_duplicate_pt_nos")){
-  logic_output$df_c_duplicate_pt_nos <- df_c_duplicate_pt_nos
+  if(nrow(df_c_duplicate_pt_nos) > 0){
+    logic_output$df_c_duplicate_pt_nos <- df_c_duplicate_pt_nos
+  }
 }
 
 # pt id does not exist in sample
@@ -329,7 +351,9 @@ df_c_pt_not_in_sample <- df_tool_data %>%
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 if(exists("df_c_pt_not_in_sample")){
-  logic_output$df_c_pt_not_in_sample <- df_c_pt_not_in_sample
+  if(nrow(df_c_pt_not_in_sample) > 0){
+    logic_output$df_c_pt_not_in_sample <- df_c_pt_not_in_sample
+  }
 }
 
 # threshold distance exceeded
@@ -340,7 +364,7 @@ if(exists("df_c_pt_not_in_sample")){
 
 # combine checks ----------------------------------------------------------
 
-df_combined_checks <- bind_rows(logic_output)
+df_combined_checks <- rbind(logic_output)
 
 # output the resulting data frame
 write_csv(x = df_combined_checks, file = paste0("outputs/logic_checks_",as_date(today()),"_", hour(now()) ,".csv"), na = "")
