@@ -2,7 +2,9 @@ library(tidyverse)
 library(lubridate)
 
 # read data 
-df_tool_data <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx")
+df_tool_data <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx") %>% 
+  rename(uuid = `_uuid`) %>% 
+  mutate(start_date = as_date(start))
 df_survey <- readxl::read_excel("inputs/UGA2103_Digital_Finace_HH_Tool_June2021.xlsx", sheet = "survey")
 df_choices <- readxl::read_excel("inputs/UGA2103_Digital_Finace_HH_Tool_June2021.xlsx", sheet = "choices")
 
@@ -16,14 +18,14 @@ df_other_response_data <- data.frame()
 
 for (cln in others_colnames) {
   df_filtered_data <- df_tool_data %>% 
-    select("_uuid", "today", "enumerator_id", other_text = cln) %>% 
+    select(uuid, start_date, enumerator_id, district_name, point_number, other_text = cln) %>% 
     filter(!is.na(other_text), !other_text %in% c(" ", "NA")) %>% 
     mutate( other_name = cln, value = NA)
   df_other_response_data <- rbind(df_other_response_data, df_filtered_data)
 }
 # arrange the data
 df_data_arranged <- df_other_response_data %>% 
-  arrange(today, `_uuid`)
+  arrange(start_date, uuid)
 
 # get choices to add to the _other responses extracted
 df_grouped_choices <- df_choices %>% 
@@ -44,7 +46,7 @@ df_data_parent_qns <- df_data_arranged %>%
 
 df_join_other_response_with_choices <- df_data_parent_qns %>% 
   left_join(df_grouped_choices, by = "list_name") %>% 
-  mutate(current_value = "other")
+  mutate(current_value = "other", issue_id = "other_checks")
 
 # care for none select_multiple and select_multiple (change_response, add_option, remove_option)
 output <- list()
@@ -61,10 +63,11 @@ select_mu_remove_option <- df_join_other_response_with_choices %>%
   mutate(type = "remove_option")
 
 output$select_multiple <- bind_rows(select_mu_add_option, select_mu_remove_option) %>% 
-  arrange(`_uuid`, today, enumerator_id, name)
+  arrange(uuid, start_date, enumerator_id, name)
 
 # merge other checks
-merged_other_checks <- bind_rows(output)
+merged_other_checks <- bind_rows(output) %>% 
+  select(uuid, start_date, enumerator_id, district_name, point_number, type, name, current_value, value, issue_id, other_text)
 
 # output the resulting data frame
 write_csv(x = merged_other_checks, file = paste0("outputs/others_responses_",as_date(today()),"_", hour(now()) ,".csv"), na = "")
