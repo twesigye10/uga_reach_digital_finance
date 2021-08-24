@@ -364,7 +364,7 @@ if(exists("df_c_pt_not_in_sample")){
 
 # combine checks ----------------------------------------------------------
 
-df_combined_checks <- rbind(logic_output)
+df_combined_checks <- bind_rows(logic_output)
 
 # output the resulting data frame
 write_csv(x = df_combined_checks, file = paste0("outputs/logic_checks_",as_date(today()),"_", hour(now()) ,".csv"), na = "")
