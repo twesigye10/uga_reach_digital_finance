@@ -46,6 +46,7 @@ df_join_other_response_with_choices <- df_data_parent_qns %>%
   left_join(df_grouped_choices, by = "list_name") %>% 
   mutate(current_value = "other")
 
+# care for none select_multiple and select_multiple (change_response, add_option, remove_option)
 output <- list()
 
 output$none_select_multiple <- df_join_other_response_with_choices %>% 
