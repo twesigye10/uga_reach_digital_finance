@@ -27,7 +27,7 @@ logic_output <- list()
 min_time_of_survey <- 10
 max_time_of_survey <- 120
 
-logic_output$df_c_survey_time <-  df_tool_data %>% 
+df_c_survey_time <-  df_tool_data %>% 
   mutate(int.survey_time_interval = difftime(end,start, units = "mins"),
          int.survey_time_interval = round(int.survey_time_interval,2),
          i.check.issue_id = case_when(
@@ -45,12 +45,15 @@ logic_output$df_c_survey_time <-  df_tool_data %>%
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
+if(exists("df_c_survey_time")){
+  logic_output$df_c_survey_time <- df_c_survey_time
+}
 
 # check the time between surveys
 
 min_time_btn_surveys <- 5
 
-logic_output$df_c_time_btn_survey <- df_tool_data %>%
+df_c_time_btn_survey <- df_tool_data %>%
   group_by( today, enumerator_id) %>%
   arrange(start, .by_group = TRUE) %>% 
   mutate(int.t_between_survey = (start - lag(end, default=first(start))),
@@ -68,10 +71,13 @@ logic_output$df_c_time_btn_survey <- df_tool_data %>%
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
+if(exists("df_c_time_btn_survey")){
+  logic_output$df_c_time_btn_survey <- df_c_time_btn_survey
+}
 # Logical checks ----------------------------------------------------------
 
 # Anyone who selected "ugandan" and previously answered community_type = refugee, should be checked.
-logic_output$df_c_nationality <- df_tool_data %>% 
+df_c_nationality <- df_tool_data %>% 
   filter(status == "refugee", nationality == "ugandan") %>% 
   mutate(i.check.issue_id = "logic_c_nationality",
          i.check.type = "change_response",
@@ -84,8 +90,12 @@ logic_output$df_c_nationality <- df_tool_data %>%
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
+if(exists("df_c_nationality")){
+  logic_output$df_c_nationality <- df_c_nationality
+}
+
 # Anyone who selected host for "type of community" and answers "refugee ID" or "beneficiary ID" should be checked.
-logic_output$df_c_id_type <- df_tool_data %>% 
+df_c_id_type <- df_tool_data %>% 
   filter(status == "host_community", str_detect(string = id_type, pattern = "unhcr_refugee_id|ug_refugee_id|benef_id_not_unhcr")) %>% 
   mutate(i.check.issue_id = "logic_c_status",
          i.check.type = "change_response",
@@ -98,8 +108,12 @@ logic_output$df_c_id_type <- df_tool_data %>%
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
+if(exists("df_c_id_type")){
+  logic_output$df_c_id_type <- df_c_id_type
+}
+
 # If respondents have selected a language but have NOT selected the same language that they previously selected for their main language, we need to check the survye.
-logic_output$df_c_language <- df_tool_data %>% 
+df_c_language <- df_tool_data %>% 
   mutate(i.check.issue_id = ifelse(str_detect(string = language_understand, pattern = main_language, negate = TRUE) , 
                                    "logic_c_main_language", "main_language_also_understood"),
          i.check.type = "change_response",
@@ -113,10 +127,14 @@ logic_output$df_c_language <- df_tool_data %>%
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
+if(exists("df_c_language")){
+  logic_output$df_c_language <- df_c_language
+}
+
 # If respondent has selected "none" in addition to another option, the survey needs to be checked.
 # type_phone_owned
 
-logic_output$df_c_type_phone_owned <- df_tool_data %>% 
+df_c_type_phone_owned <- df_tool_data %>% 
   rowwise() %>% 
   mutate(int.type_phone_owned_count = sum(c_across(starts_with("type_phone_owned/")), na.rm = TRUE)) %>% 
   ungroup() %>% 
@@ -131,6 +149,10 @@ logic_output$df_c_type_phone_owned <- df_tool_data %>%
   filter(i.check.issue_id == "logic_c_type_phone_owned") %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
+
+if(exists("df_c_type_phone_owned")){
+  logic_output$df_c_type_phone_owned <- df_c_type_phone_owned
+}
 
 # If previously selected "0" in response to "how many mobile phone numbers do you have" the survye needs to be checked.
 # walk_top_up
@@ -152,7 +174,7 @@ logic_output$df_c_type_phone_owned <- df_tool_data %>%
 # If they previously selected "yes" to having mobile internet coverage (Q56) and now replied "no", the survey needs to be checked.
 # mobile_internet == "yes" and internet_awareness == "no"
 
-logic_output$df_c_internet_awareness <- df_tool_data %>% 
+df_c_internet_awareness <- df_tool_data %>% 
   filter(mobile_internet == "yes", internet_awareness == "no") %>% 
   mutate(i.check.issue_id = "logic_c_internet_awareness",
          i.check.type = "change_response",
@@ -164,6 +186,10 @@ logic_output$df_c_internet_awareness <- df_tool_data %>%
          i.check.comment = "mobile_internet: yes but internet_awareness: no") %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
+
+if(exists("df_c_internet_awareness")){
+  logic_output$df_c_internet_awareness <- df_c_internet_awareness
+}
 
 # Do you currently use mobile internet (social media, apps, and websites like WhatsApp, Messenger, Facebook, <other locally relevant>, etc)?
 # can be constrained in the tool
@@ -205,7 +231,7 @@ logic_output$df_c_internet_awareness <- df_tool_data %>%
 
 # If in previous qn "why do you want to have  a mobile money account?" they answered "it is safer than keeping cash at home" and they now asnwered "the system is not safe i am concerned that my money will disappear", survey needs to be checked
 # reason_want_mm_acc/safer_than_home == 1 and reason_not_open_mm_acc/unsafe_system
-logic_output$df_c_reason_not_open_mm_acc <- df_tool_data %>% 
+df_c_reason_not_open_mm_acc <- df_tool_data %>% 
   filter(`reason_want_mm_acc/safer_than_home` == 1, `reason_not_open_mm_acc/unsafe_system` == 1) %>% 
   mutate(i.check.issue_id = "logic_c_reason_not_open_mm_acc",
          i.check.type = "remove_option",
@@ -218,9 +244,13 @@ logic_output$df_c_reason_not_open_mm_acc <- df_tool_data %>%
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
+if(exists("df_c_reason_not_open_mm_acc")){
+  logic_output$df_c_reason_not_open_mm_acc <- df_c_reason_not_open_mm_acc
+}
+
 # if in previous question 'why do you want to have a bank account? ' is "Yes, it will allow me to securely store my money" and they now answered "the system isnt safe i am concerned that my money will disappear", survey needs to be checked
 # reason_want_bank_acc/safe_storage and reason_not_open_bank_acc/unsafe_system
-logic_output$df_c_reason_not_open_bank_acc <- df_tool_data %>% 
+df_c_reason_not_open_bank_acc <- df_tool_data %>% 
   filter(`reason_want_bank_acc/safe_storage` == 1, `reason_not_open_bank_acc/unsafe_system` == 1) %>% 
   mutate(i.check.issue_id = "logic_c_reason_not_open_bank_acc",
          i.check.type = "remove_option",
@@ -233,9 +263,13 @@ logic_output$df_c_reason_not_open_bank_acc <- df_tool_data %>%
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
+if(exists("df_c_reason_not_open_bank_acc")){
+  logic_output$df_c_reason_not_open_bank_acc <- df_c_reason_not_open_bank_acc
+}
+
 # if in previous question 'Why do you want to have a pre-paid or smart card?' answered "it will allow me to securely store my money" and they now chose "the system is not safe i am concerned that my money will disappear", check survey
 # reason_want_card/safe_storage and reason_not_want_card/unsafe_system
-logic_output$df_c_reason_not_want_card <- df_tool_data %>% 
+df_c_reason_not_want_card <- df_tool_data %>% 
   filter(`reason_want_card/safe_storage` == 1, `reason_not_want_card/unsafe_system` == 1) %>% 
   mutate(i.check.issue_id = "logic_c_reason_not_want_card",
          i.check.type = "remove_option",
@@ -248,7 +282,9 @@ logic_output$df_c_reason_not_want_card <- df_tool_data %>%
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
-
+if(exists("df_c_reason_not_want_card")){
+  logic_output$df_c_reason_not_want_card <- df_c_reason_not_want_card
+}
 
 # spatial checks ----------------------------------------------------------
 
@@ -267,6 +303,10 @@ df_c_duplicate_pt_nos <- df_tool_data %>%
          i.check.comment = "point numbers are duplicated: check that its not a repeated survey") %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
+
+if(exists("df_c_duplicate_pt_nos")){
+  logic_output$df_c_duplicate_pt_nos <- df_c_duplicate_pt_nos
+}
 
 # pt id does not exist in sample
 # host community
@@ -288,6 +328,10 @@ df_c_pt_not_in_sample <- df_tool_data %>%
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
+if(exists("df_c_pt_not_in_sample")){
+  logic_output$df_c_pt_not_in_sample <- df_c_pt_not_in_sample
+}
+
 # threshold distance exceeded
 
 
@@ -297,3 +341,6 @@ df_c_pt_not_in_sample <- df_tool_data %>%
 # combine checks ----------------------------------------------------------
 
 df_combined_checks <- bind_rows(logic_output)
+
+# output the resulting data frame
+write_csv(x = df_combined_checks, file = paste0("outputs/logic_checks_",as_date(today()),"_", hour(now()) ,".csv"), na = "")
