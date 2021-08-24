@@ -34,11 +34,11 @@ df_grouped_choices <- df_choices %>%
 # extract parent question and join survey for extracting list_name
 df_data_parent_qns <- df_data_arranged %>% 
   mutate(
-    parent_qn = str_replace_all(name, "/.*", ""),
-    parent_qn = str_replace_all(parent_qn, "_other", "")
+    parent_qn = str_replace_all(other_name, "_other", "")
   ) %>% 
   left_join(df_survey %>% select(name, type), by = c("parent_qn"="name")) %>% 
-  separate(col = type, into = c("select_type", "list_name"), sep =" ", remove = TRUE, extra = "drop" )
+  separate(col = type, into = c("select_type", "list_name"), sep =" ", remove = TRUE, extra = "drop" ) %>% 
+  rename(name = parent_qn)
 
 # join other responses with choice options based on list_name
 
