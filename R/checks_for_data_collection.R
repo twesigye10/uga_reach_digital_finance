@@ -30,7 +30,7 @@ df_c_survey_time <-  df_tool_data %>%
            int.survey_time_interval < min_time_of_survey ~ "less_survey_time",
            int.survey_time_interval > max_time_of_survey ~ "more_survey_time",
            TRUE ~ "normal_survey_time" ),
-         i.check.type = "NA",
+         i.check.type = "remove_survey",
          i.check.name = "NA",
          i.check.current_value = "NA",
          i.check.value = "NA",
@@ -54,7 +54,7 @@ df_c_time_btn_survey <- df_tool_data %>%
          int.time_between_survey = round(int.time_between_survey,2)) %>%
   filter(int.time_between_survey !=0 & int.time_between_survey < min_time_btn_surveys) %>%
   mutate(i.check.issue_id = "less_time_btn_surveys",
-         i.check.type = "NA",
+         i.check.type = "remove_survey",
          i.check.name = "NA",
          i.check.current_value = "NA",
          i.check.value = "NA",
@@ -295,15 +295,15 @@ df_c_pt_not_in_sample <- df_tool_data %>%
 # df_c_survey_time, df_c_time_btn_survey, df_c_nationality, df_c_id_type, df_c_language, df_c_type_phone_owned, df_c_internet_awareness, df_c_reason_not_open_mm_acc, df_c_reason_not_open_bank_acc, df_c_reason_not_want_card, df_c_duplicate_pt_nos, df_c_pt_not_in_sample
 
 df_combined_checks <- rbind(df_c_survey_time, 
-                                # df_c_time_btn_survey, 
-                                df_c_nationality, 
-                                df_c_id_type, 
-                                df_c_language, 
-                                df_c_type_phone_owned, 
-                                df_c_internet_awareness, 
-                                df_c_reason_not_open_mm_acc, 
-                                df_c_reason_not_open_bank_acc, 
-                                df_c_reason_not_want_card, 
-                                df_c_duplicate_pt_nos#, 
-                                # df_c_pt_not_in_sample
-                                )
+                            # df_c_time_btn_survey, 
+                            df_c_nationality, 
+                            df_c_id_type, 
+                            df_c_language, 
+                            df_c_type_phone_owned, 
+                            df_c_internet_awareness, 
+                            df_c_reason_not_open_mm_acc, 
+                            df_c_reason_not_open_bank_acc, 
+                            df_c_reason_not_want_card, 
+                            df_c_duplicate_pt_nos#, 
+                            # df_c_pt_not_in_sample
+)
