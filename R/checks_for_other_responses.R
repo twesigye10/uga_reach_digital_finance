@@ -28,7 +28,8 @@ df_data_arranged <- df_other_response_data %>%
 # get choices to add to the _other responses extracted
 df_grouped_choices <- df_choices %>% 
   group_by(list_name) %>% 
-  summarise(choice_options = paste(name, collapse = " : "))
+  summarise(choice_options = paste(name, collapse = " : ")) %>% 
+  arrange(list_name)
 
 # extract parent question and join survey for extracting list_name
 df_data_parent_qns <- df_data_arranged %>% 
