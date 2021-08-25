@@ -341,7 +341,7 @@ sample_pt_nos <- df_sample_data %>%
 df_c_pt_not_in_sample <- df_tool_data %>% 
   mutate(unique_pt_number = paste0(status, "_", point_number )) %>% 
   filter(!unique_pt_number %in% sample_pt_nos) %>% 
-  mutate(i.check.issue_id = "pt_no_not_in_sample",
+  mutate(i.check.issue_id = "spatial_c_pt_no_not_in_sample",
          i.check.type = "change_response",
          i.check.name = "point_number",
          i.check.current_value = point_number,
@@ -388,7 +388,7 @@ for (pt_number in sample_pt_nos %>% head(5)){
 
 df_c_greater_thresh_distance <- df_data_with_distance %>% 
   filter(distance >= threshold_dist) %>% 
-  mutate(i.check.issue_id = "dist_to_sample_greater_than_threshold",
+  mutate(i.check.issue_id = "spatial_c_dist_to_sample_greater_than_threshold",
          i.check.type = "remove_survey",
          i.check.name = "point_number",
          i.check.current_value = point_number,
