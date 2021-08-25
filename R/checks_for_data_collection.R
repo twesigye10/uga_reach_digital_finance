@@ -400,6 +400,7 @@ if(length(sample_pt_nos_thresh) > 0){
     }
   }
   
+  # format the required data
   df_c_greater_thresh_distance <- df_data_with_distance %>% 
     filter(distance >= threshold_dist) %>% 
     mutate(i.check.issue_id = "spatial_c_dist_to_sample_greater_than_threshold",
