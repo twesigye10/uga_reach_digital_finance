@@ -334,8 +334,8 @@ if(exists("df_c_duplicate_pt_nos")){
 # pt id does not exist in sample
 
 sample_pt_nos <- df_sample_data %>% 
-  mutate(point_number = paste0(status, "_", Name)) %>% 
-  pull(point_number) %>% 
+  mutate(unique_pt_number = paste0(status, "_", Name)) %>% 
+  pull(unique_pt_number) %>% 
   unique()
 
 df_c_pt_not_in_sample <- df_tool_data %>% 
