@@ -359,6 +359,9 @@ if(exists("df_c_pt_not_in_sample")){
 }
 
 # threshold distance exceeded
+
+threshold_dist <- 150
+
 df_sample_data_thresh <- df_sample_data %>% 
   mutate(unique_pt_number = paste0(status, "_", Name))
 df_tool_data_thresh <- df_tool_data %>% 
@@ -383,7 +386,24 @@ for (pt_number in sample_pt_nos %>% head(5)){
   }
 }
 
+df_c_greater_thresh_distance <- df_data_with_distance %>% 
+  filter(distance >= threshold_dist) %>% 
+  mutate(i.check.issue_id = "dist_to_sample_greater_than_threshold",
+         i.check.type = "remove_survey",
+         i.check.name = "point_number",
+         i.check.current_value = point_number,
+         i.check.value = "NA",
+         i.check.checked_by = "Amos",
+         i.check.checked_date = as_date(today()),
+         i.check.comment = "{distance} m greater_than_threshold{threshold_dist}") %>% 
+  dplyr::select(starts_with("i.check"))%>% 
+  rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
+if(exists("df_c_greater_thresh_distance")){
+  if(nrow(df_c_greater_thresh_distance) > 0){
+    logic_output$df_c_greater_thresh_distance <- df_c_greater_thresh_distance
+  }
+}
 
 # combine checks ----------------------------------------------------------
 
