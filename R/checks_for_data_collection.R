@@ -15,6 +15,7 @@ df_tool_data <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_A
 df_survey <- readxl::read_excel("inputs/UGA2103_Digital_Finace_HH_Tool_June2021.xlsx", sheet = "survey")
 df_choices <- readxl::read_excel("inputs/UGA2103_Digital_Finace_HH_Tool_June2021.xlsx", sheet = "choices")
 
+df_sample_data <- sf::st_read("outputs", "dfa_settlement_host_samples", quiet = TRUE)
 
 # output holder -----------------------------------------------------------
 
