@@ -378,10 +378,11 @@ tool_data_unique_pts <- df_tool_data_thresh %>%
 
 sample_pt_nos_thresh <- sample_data_unique_pts[sample_data_unique_pts %in% tool_data_unique_pts]
 
-# tibble to hold the data
-df_data_with_distance <- tibble()
 
 if(length(sample_pt_nos_thresh) > 0){
+  
+  # tibble to hold the data
+  df_data_with_distance <- tibble()
   
   for (pt_number in sample_pt_nos_thresh){
     current_sample <- df_sample_data_thresh %>% 
