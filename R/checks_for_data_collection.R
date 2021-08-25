@@ -367,37 +367,50 @@ df_sample_data_thresh <- df_sample_data %>%
 df_tool_data_thresh <- df_tool_data %>% 
   mutate(unique_pt_number = paste0(status, "_", point_number))
 
+# sample_data_unique_pts
+sample_data_unique_pts <- df_sample_data_thresh %>%  
+  pull(unique_pt_number) %>% 
+  unique()
+# tool_data_unique_pts
+tool_data_unique_pts <- df_tool_data_thresh %>% pull(unique_pt_number) %>% unique()
+
+sample_pt_nos_thresh <- sample_data_unique_pts[sample_data_unique_pts %in% tool_data_unique_pts]
+
+# tibble to hold the data
 df_data_with_distance <- tibble()
 
-for (pt_number in sample_pt_nos %>% head(5)){
-  current_sample <- df_sample_data_thresh %>% 
-    filter(unique_pt_number == pt_number)
-  current_tool_data <- df_tool_data_thresh %>% 
-    filter(unique_pt_number == pt_number)
+if(length(sample_pt_nos_thresh) > 0){
   
-  if(nrow(current_tool_data) > 0){
-    current_sample_target_dist <- sf::st_distance(x = current_sample, y = current_tool_data, by_element = TRUE)
+  for (pt_number in sample_pt_nos_thresh){
+    current_sample <- df_sample_data_thresh %>% 
+      filter(unique_pt_number == pt_number)
+    current_tool_data <- df_tool_data_thresh %>% 
+      filter(unique_pt_number == pt_number)
     
-    current_data_with_dist <- current_tool_data %>% 
-      sf::st_drop_geometry() %>% 
-      mutate(distance = current_sample_target_dist)
-    
-    df_data_with_distance <- bind_rows(df_data_with_distance, current_data_with_dist)
+    if(nrow(current_tool_data) > 0){
+      current_sample_target_dist <- sf::st_distance(x = current_sample, y = current_tool_data, by_element = TRUE)
+      
+      current_data_with_dist <- current_tool_data %>% 
+        sf::st_drop_geometry() %>% 
+        mutate(distance = current_sample_target_dist)
+      
+      df_data_with_distance <- bind_rows(df_data_with_distance, current_data_with_dist)
+    }
   }
+  
+  df_c_greater_thresh_distance <- df_data_with_distance %>% 
+    filter(distance >= threshold_dist) %>% 
+    mutate(i.check.issue_id = "spatial_c_dist_to_sample_greater_than_threshold",
+           i.check.type = "remove_survey",
+           i.check.name = "point_number",
+           i.check.current_value = point_number,
+           i.check.value = "NA",
+           i.check.checked_by = "Amos",
+           i.check.checked_date = as_date(today()),
+           i.check.comment = "{distance} m greater_than_threshold{threshold_dist}") %>% 
+    dplyr::select(starts_with("i.check"))%>% 
+    rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 }
-
-df_c_greater_thresh_distance <- df_data_with_distance %>% 
-  filter(distance >= threshold_dist) %>% 
-  mutate(i.check.issue_id = "spatial_c_dist_to_sample_greater_than_threshold",
-         i.check.type = "remove_survey",
-         i.check.name = "point_number",
-         i.check.current_value = point_number,
-         i.check.value = "NA",
-         i.check.checked_by = "Amos",
-         i.check.checked_date = as_date(today()),
-         i.check.comment = "{distance} m greater_than_threshold{threshold_dist}") %>% 
-  dplyr::select(starts_with("i.check"))%>% 
-  rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
 if(exists("df_c_greater_thresh_distance")){
   if(nrow(df_c_greater_thresh_distance) > 0){
