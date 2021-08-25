@@ -332,22 +332,23 @@ if(exists("df_c_duplicate_pt_nos")){
 }
 
 # pt id does not exist in sample
-# host community
-# settlement
+
 sample_pt_nos <- df_sample_data %>% 
+  mutate(point_number = paste0(status, "_", Name)) %>% 
   pull(point_number) %>% 
   unique()
 
 df_c_pt_not_in_sample <- df_tool_data %>% 
-  filter(!point_number %in% sample_pt_nos) %>% 
+  mutate(unique_pt_number = paste0(status, "_", point_number )) %>% 
+  filter(!unique_pt_number %in% sample_pt_nos) %>% 
   mutate(i.check.issue_id = "pt_no_not_in_sample",
-         i.check.type = "NA",
+         i.check.type = "change_response",
          i.check.name = "point_number",
-         i.check.current_value = "NA",
+         i.check.current_value = point_number,
          i.check.value = "NA",
          i.check.checked_by = "Amos",
          i.check.checked_date = as_date(today()),
-         i.check.comment = "NA") %>% 
+         i.check.comment = "given point_number not in samples") %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
