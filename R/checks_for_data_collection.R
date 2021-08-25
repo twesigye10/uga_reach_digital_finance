@@ -359,8 +359,16 @@ if(exists("df_c_pt_not_in_sample")){
 }
 
 # threshold distance exceeded
+df_sample_data_thresh <- df_sample_data %>% 
+  mutate(unique_pt_number = paste0(status, "_", Name))
 
+df_tool_data_thresh <- df_tool_data %>% 
+  mutate(unique_pt_number = paste0(status, "_", point_number))
 
+for (pt_number in sample_pt_nos){
+  current_sample <- df_sample_data_thresh %>% 
+    
+}
 
 
 
