@@ -365,7 +365,8 @@ threshold_dist <- 150
 df_sample_data_thresh <- df_sample_data %>% 
   mutate(unique_pt_number = paste0(status, "_", Name))
 df_tool_data_thresh <- df_tool_data %>% 
-  mutate(unique_pt_number = paste0(status, "_", point_number))
+  mutate(unique_pt_number = paste0(status, "_", point_number)) %>% 
+  sf::st_as_sf(coords = c("_geopoint_longitude","_geopoint_latitude"), crs = 4326)
 
 # sample_data_unique_pts
 sample_data_unique_pts <- df_sample_data_thresh %>%  
@@ -388,7 +389,7 @@ if(length(sample_pt_nos_thresh) > 0){
     current_sample <- df_sample_data_thresh %>% 
       filter(unique_pt_number == pt_number)
     current_tool_data <- df_tool_data_thresh %>% 
-      filter(unique_pt_number == pt_number)
+      filter(unique_pt_number == pt_number) 
     
     if(nrow(current_tool_data) > 0){
       current_sample_target_dist <- sf::st_distance(x = current_sample, y = current_tool_data, by_element = TRUE)
