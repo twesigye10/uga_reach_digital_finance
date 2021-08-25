@@ -203,7 +203,7 @@ df_c_internet_awareness <- df_tool_data %>%
 if(exists("df_c_internet_awareness")){
   if(nrow(df_c_internet_awareness) > 0){
     logic_output$df_c_internet_awareness <- df_c_internet_awareness
-    }
+  }
 }
 
 # Do you currently use mobile internet (social media, apps, and websites like WhatsApp, Messenger, Facebook, <other locally relevant>, etc)?
@@ -372,7 +372,9 @@ sample_data_unique_pts <- df_sample_data_thresh %>%
   pull(unique_pt_number) %>% 
   unique()
 # tool_data_unique_pts
-tool_data_unique_pts <- df_tool_data_thresh %>% pull(unique_pt_number) %>% unique()
+tool_data_unique_pts <- df_tool_data_thresh %>% 
+  pull(unique_pt_number) %>% 
+  unique()
 
 sample_pt_nos_thresh <- sample_data_unique_pts[sample_data_unique_pts %in% tool_data_unique_pts]
 
