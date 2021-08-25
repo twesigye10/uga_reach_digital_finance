@@ -361,13 +361,26 @@ if(exists("df_c_pt_not_in_sample")){
 # threshold distance exceeded
 df_sample_data_thresh <- df_sample_data %>% 
   mutate(unique_pt_number = paste0(status, "_", Name))
-
 df_tool_data_thresh <- df_tool_data %>% 
   mutate(unique_pt_number = paste0(status, "_", point_number))
 
-for (pt_number in sample_pt_nos){
+df_data_with_distance <- tibble()
+
+for (pt_number in sample_pt_nos %>% head(5)){
   current_sample <- df_sample_data_thresh %>% 
+    filter(unique_pt_number == pt_number)
+  current_tool_data <- df_tool_data_thresh %>% 
+    filter(unique_pt_number == pt_number)
+  
+  if(nrow(current_tool_data) > 0){
+    current_sample_target_dist <- sf::st_distance(x = current_sample, y = current_tool_data, by_element = TRUE)
     
+    current_data_with_dist <- current_tool_data %>% 
+      sf::st_drop_geometry() %>% 
+      mutate(distance = current_sample_target_dist)
+    
+    df_data_with_distance <- bind_rows(df_data_with_distance, current_data_with_dist)
+  }
 }
 
 
