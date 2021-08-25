@@ -379,7 +379,6 @@ tool_data_unique_pts <- df_tool_data_thresh %>%
 
 sample_pt_nos_thresh <- sample_data_unique_pts[sample_data_unique_pts %in% tool_data_unique_pts]
 
-
 if(length(sample_pt_nos_thresh) > 0){
   
   # tibble to hold the data
