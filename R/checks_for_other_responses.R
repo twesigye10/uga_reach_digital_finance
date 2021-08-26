@@ -1,10 +1,4 @@
-library(tidyverse)
-library(lubridate)
-
-# read data 
-df_tool_data <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx")
-df_survey <- readxl::read_excel("inputs/UGA2103_Digital_Finace_HH_Tool_June2021.xlsx", sheet = "survey")
-df_choices <- readxl::read_excel("inputs/UGA2103_Digital_Finace_HH_Tool_June2021.xlsx", sheet = "choices")
+# extract others checks function
 
 extract_other_data <- function(input_tool_data, input_survey, input_choices) {
   
@@ -105,9 +99,3 @@ extract_other_data <- function(input_tool_data, input_survey, input_choices) {
            so_sm_choices)
 }
 
-# others data
-
-df_others_data <- extract_other_data(input_tool_data = df_tool_data, input_survey = df_survey, input_choices = df_choices)
-
-# output the resulting data frame
-write_csv(x = df_others_data, file = paste0("outputs/others_responses_",as_date(today()),"_", hour(now()) ,".csv"), na = "")
