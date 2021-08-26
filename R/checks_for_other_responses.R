@@ -25,7 +25,7 @@ extract_other_data <- function(input_tool_data, input_survey, input_choices) {
       filter(!is.na(other_text), !other_text %in% c(" ", "NA")) %>% 
       mutate( other_name = cln, 
               int.my_current_val_extract = ifelse(str_detect(current_value, "other\\b"), str_extract_all(string = current_value, pattern = "other\\b|[a-z]+._other\\b"), current_value),
-              value = NA,
+              value = "",
               parent_qn = current_parent_qn)
     df_other_response_data <- rbind(df_other_response_data, df_filtered_data)
   }
