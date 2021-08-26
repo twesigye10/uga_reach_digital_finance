@@ -471,7 +471,7 @@ if(length(sample_pt_nos_thresh) > 0){
       
       current_data_with_dist <- current_tool_data %>% 
         sf::st_drop_geometry() %>% 
-        mutate(distance = current_sample_target_dist)
+        mutate(distance = round(x = current_sample_target_dist, digits = 0))
       
       df_data_with_distance <- bind_rows(df_data_with_distance, current_data_with_dist)
     }
