@@ -66,7 +66,7 @@ if(exists("df_c_survey_time")){
 min_time_btn_surveys <- 5
 
 df_c_time_btn_survey <- df_tool_data %>%
-  group_by( today, enumerator_id) %>%
+  group_by(i.check.start_date, enumerator_id) %>%
   arrange(start, .by_group = TRUE) %>% 
   mutate(int.t_between_survey = (start - lag(end, default=first(start))),
          int.time_between_survey = make_difftime(int.t_between_survey, units = "mins"),
