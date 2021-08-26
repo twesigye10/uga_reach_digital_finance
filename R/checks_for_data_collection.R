@@ -36,21 +36,21 @@ df_c_survey_time <-  df_tool_data %>%
          
          i.check.type = "remove_survey",
          i.check.name = "point_number",
-         i.check.current_value = "NA",
-         i.check.value = "NA",
+         i.check.current_value = "",
+         i.check.value = "",
          i.check.issue_id = case_when(
            int.survey_time_interval < min_time_of_survey ~ "less_survey_time",
            int.survey_time_interval > max_time_of_survey ~ "more_survey_time",
            TRUE ~ "normal_survey_time" ),
          i.check.issue = glue("{int.survey_time_interval}min taken to do the survey"),
-         i.check.other_text = "NA",
-         i.check.checked_by = "NA",
+         i.check.other_text = "",
+         i.check.checked_by = "",
          i.check.checked_date = as_date(today()),
-         i.check.comment = "NA", 
-         i.check.reviewed = "NA",
-         i.check.adjust_log = "NA",
+         i.check.comment = "", 
+         i.check.reviewed = "",
+         i.check.adjust_log = "",
          i.check.uuid_cl = paste0(i.check.uuid, "_", i.check.type, "_", i.check.name),
-         i.check.so_sm_choices = "NA")%>% 
+         i.check.so_sm_choices = "")%>% 
   filter(i.check.issue_id %in% c("less_survey_time", "more_survey_time")) %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
@@ -74,18 +74,18 @@ df_c_time_btn_survey <- df_tool_data %>%
   filter(int.time_between_survey !=0 & int.time_between_survey < min_time_btn_surveys) %>%
   mutate(i.check.type = "remove_survey",
          i.check.name = "point_number",
-         i.check.current_value = "NA",
-         i.check.value = "NA",
+         i.check.current_value = "",
+         i.check.value = "",
          i.check.issue_id = "less_time_btn_surveys",
          i.check.issue = glue("{int.time_between_survey}min taken between surveys"),
-         i.check.other_text = "NA",
-         i.check.checked_by = "NA",
+         i.check.other_text = "",
+         i.check.checked_by = "",
          i.check.checked_date = as_date(today()),
-         i.check.comment = "NA", 
-         i.check.reviewed = "NA",
-         i.check.adjust_log = "NA",
+         i.check.comment = "", 
+         i.check.reviewed = "",
+         i.check.adjust_log = "",
          i.check.uuid_cl = paste0(i.check.uuid, "_", i.check.type, "_", i.check.name),
-         i.check.so_sm_choices = "NA") %>% 
+         i.check.so_sm_choices = "") %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
@@ -102,17 +102,17 @@ df_c_nationality <- df_tool_data %>%
   mutate(i.check.type = "change_response",
          i.check.name = "nationality",
          i.check.current_value = nationality,
-         i.check.value = "NA",
+         i.check.value = "",
          i.check.issue_id = "logic_c_nationality",
          i.check.issue = "nationality: ugandan but community_type: refugee",
-         i.check.other_text = "NA",
-         i.check.checked_by = "NA",
+         i.check.other_text = "",
+         i.check.checked_by = "",
          i.check.checked_date = as_date(today()),
-         i.check.comment = "NA", 
-         i.check.reviewed = "NA",
-         i.check.adjust_log = "NA",
+         i.check.comment = "", 
+         i.check.reviewed = "",
+         i.check.adjust_log = "",
          i.check.uuid_cl = paste0(i.check.uuid, "_", i.check.type, "_", i.check.name),
-         i.check.so_sm_choices = "NA") %>% 
+         i.check.so_sm_choices = "") %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
@@ -128,17 +128,17 @@ df_c_id_type <- df_tool_data %>%
   mutate(i.check.type = "change_response",
          i.check.name = "id_type",
          i.check.current_value = id_type,
-         i.check.value = "NA",
+         i.check.value = "",
          i.check.issue_id = "logic_c_status",
          i.check.issue = glue("status: host_community but refugee id_type: {id_type}"),
-         i.check.other_text = "NA",
-         i.check.checked_by = "NA",
+         i.check.other_text = "",
+         i.check.checked_by = "",
          i.check.checked_date = as_date(today()),
-         i.check.comment = "NA", 
-         i.check.reviewed = "NA",
-         i.check.adjust_log = "NA",
+         i.check.comment = "", 
+         i.check.reviewed = "",
+         i.check.adjust_log = "",
          i.check.uuid_cl = paste0(i.check.uuid, "_", i.check.type, "_", i.check.name),
-         i.check.so_sm_choices = "NA") %>% 
+         i.check.so_sm_choices = "") %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
@@ -153,18 +153,18 @@ df_c_language <- df_tool_data %>%
   mutate(i.check.type = "change_response",
          i.check.name = "main_language",
          i.check.current_value = main_language,
-         i.check.value = "NA",
+         i.check.value = "",
          i.check.issue_id = ifelse(str_detect(string = language_understand, pattern = main_language, negate = TRUE) , 
                                    "logic_c_main_language", "main_language_also_understood"),
          i.check.issue = glue("main_language: {main_language} not in understood languages: {language_understand}"),
-         i.check.other_text = "NA",
-         i.check.checked_by = "NA",
+         i.check.other_text = "",
+         i.check.checked_by = "",
          i.check.checked_date = as_date(today()),
-         i.check.comment = "NA", 
-         i.check.reviewed = "NA",
-         i.check.adjust_log = "NA",
+         i.check.comment = "", 
+         i.check.reviewed = "",
+         i.check.adjust_log = "",
          i.check.uuid_cl = paste0(i.check.uuid, "_", i.check.type, "_", i.check.name),
-         i.check.so_sm_choices = "NA") %>% 
+         i.check.so_sm_choices = "") %>% 
   filter(i.check.issue_id == "logic_c_main_language") %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
@@ -188,14 +188,14 @@ df_c_type_phone_owned <- df_tool_data %>%
          i.check.value = "none",
          i.check.issue_id = ifelse(int.type_phone_owned_count > 1 & `type_phone_owned/none` == 1, "logic_c_type_phone_owned", "expected_response"),
          i.check.issue = glue("none option selected with other options: {type_phone_owned}"),
-         i.check.other_text = "NA",
-         i.check.checked_by = "NA",
+         i.check.other_text = "",
+         i.check.checked_by = "",
          i.check.checked_date = as_date(today()),
-         i.check.comment = "NA", 
-         i.check.reviewed = "NA",
-         i.check.adjust_log = "NA",
+         i.check.comment = "", 
+         i.check.reviewed = "",
+         i.check.adjust_log = "",
          i.check.uuid_cl = paste0(i.check.uuid, "_", i.check.type, "_", i.check.name),
-         i.check.so_sm_choices = "NA") %>% 
+         i.check.so_sm_choices = "") %>% 
   filter(i.check.issue_id == "logic_c_type_phone_owned") %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
@@ -234,14 +234,14 @@ df_c_internet_awareness <- df_tool_data %>%
          i.check.value = NA,
          i.check.issue_id = "logic_c_internet_awareness",
          i.check.issue = "mobile_internet: yes but internet_awareness: no",
-         i.check.other_text = "NA",
-         i.check.checked_by = "NA",
+         i.check.other_text = "",
+         i.check.checked_by = "",
          i.check.checked_date = as_date(today()),
-         i.check.comment = "NA", 
-         i.check.reviewed = "NA",
-         i.check.adjust_log = "NA",
+         i.check.comment = "", 
+         i.check.reviewed = "",
+         i.check.adjust_log = "",
          i.check.uuid_cl = paste0(i.check.uuid, "_", i.check.type, "_", i.check.name),
-         i.check.so_sm_choices = "NA") %>% 
+         i.check.so_sm_choices = "") %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
@@ -299,14 +299,14 @@ df_c_reason_not_open_mm_acc <- df_tool_data %>%
          i.check.value = "unsafe_system",
          i.check.issue_id = "logic_c_reason_not_open_mm_acc",
          i.check.issue = "reason_want_mm_acc: safer_than_home but reason_not_open_mm_acc: unsafe_system",
-         i.check.other_text = "NA",
-         i.check.checked_by = "NA",
+         i.check.other_text = "",
+         i.check.checked_by = "",
          i.check.checked_date = as_date(today()),
-         i.check.comment = "NA", 
-         i.check.reviewed = "NA",
-         i.check.adjust_log = "NA",
+         i.check.comment = "", 
+         i.check.reviewed = "",
+         i.check.adjust_log = "",
          i.check.uuid_cl = paste0(i.check.uuid, "_", i.check.type, "_", i.check.name),
-         i.check.so_sm_choices = "NA") %>% 
+         i.check.so_sm_choices = "") %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
@@ -326,14 +326,14 @@ df_c_reason_not_open_bank_acc <- df_tool_data %>%
          i.check.value = "unsafe_system",
          i.check.issue_id = "logic_c_reason_not_open_bank_acc",
          i.check.issue = "reason_want_bank_acc: safer_than_home but reason_not_open_bank_acc: unsafe_system",
-         i.check.other_text = "NA",
-         i.check.checked_by = "NA",
+         i.check.other_text = "",
+         i.check.checked_by = "",
          i.check.checked_date = as_date(today()),
-         i.check.comment = "NA", 
-         i.check.reviewed = "NA",
-         i.check.adjust_log = "NA",
+         i.check.comment = "", 
+         i.check.reviewed = "",
+         i.check.adjust_log = "",
          i.check.uuid_cl = paste0(i.check.uuid, "_", i.check.type, "_", i.check.name),
-         i.check.so_sm_choices = "NA") %>% 
+         i.check.so_sm_choices = "") %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
@@ -353,14 +353,14 @@ df_c_reason_not_want_card <- df_tool_data %>%
          i.check.value = "unsafe_system",
          i.check.issue_id = "logic_c_reason_not_want_card",
          i.check.issue = "reason_want_card: safer_than_home but reason_not_want_card: unsafe_system",
-         i.check.other_text = "NA",
-         i.check.checked_by = "NA",
+         i.check.other_text = "",
+         i.check.checked_by = "",
          i.check.checked_date = as_date(today()),
-         i.check.comment = "NA", 
-         i.check.reviewed = "NA",
-         i.check.adjust_log = "NA",
+         i.check.comment = "", 
+         i.check.reviewed = "",
+         i.check.adjust_log = "",
          i.check.uuid_cl = paste0(i.check.uuid, "_", i.check.type, "_", i.check.name),
-         i.check.so_sm_choices = "NA") %>% 
+         i.check.so_sm_choices = "") %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
@@ -380,17 +380,17 @@ df_c_duplicate_pt_nos <- df_tool_data %>%
   mutate(i.check.type = "change_response",
          i.check.name = "point_number",
          i.check.current_value = point_number,
-         i.check.value = "NA",
+         i.check.value = "",
          i.check.issue_id = "spatial_c_duplicate_pt_no",
          i.check.issue = glue("point_number: {point_number} is duplicated: check that its not a repeated survey"),
-         i.check.other_text = "NA",
-         i.check.checked_by = "NA",
+         i.check.other_text = "",
+         i.check.checked_by = "",
          i.check.checked_date = as_date(today()),
-         i.check.comment = "NA", 
-         i.check.reviewed = "NA",
-         i.check.adjust_log = "NA",
+         i.check.comment = "", 
+         i.check.reviewed = "",
+         i.check.adjust_log = "",
          i.check.uuid_cl = paste0(i.check.uuid, "_", i.check.type, "_", i.check.name),
-         i.check.so_sm_choices = "NA") %>% 
+         i.check.so_sm_choices = "") %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
@@ -413,17 +413,17 @@ df_c_pt_not_in_sample <- df_tool_data %>%
   mutate(i.check.type = "change_response",
          i.check.name = "point_number",
          i.check.current_value = point_number,
-         i.check.value = "NA",
+         i.check.value = "",
          i.check.issue_id = "spatial_c_pt_no_not_in_sample",
          i.check.issue = "point_number: {point_number} not in samples",
-         i.check.other_text = "NA",
-         i.check.checked_by = "NA",
+         i.check.other_text = "",
+         i.check.checked_by = "",
          i.check.checked_date = as_date(today()),
-         i.check.comment = "NA", 
-         i.check.reviewed = "NA",
-         i.check.adjust_log = "NA",
+         i.check.comment = "", 
+         i.check.reviewed = "",
+         i.check.adjust_log = "",
          i.check.uuid_cl = paste0(i.check.uuid, "_", i.check.type, "_", i.check.name),
-         i.check.so_sm_choices = "NA") %>% 
+         i.check.so_sm_choices = "") %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
@@ -482,17 +482,17 @@ if(length(sample_pt_nos_thresh) > 0){
     mutate(i.check.type = "remove_survey",
            i.check.name = "point_number",
            i.check.current_value = point_number,
-           i.check.value = "NA",
+           i.check.value = "",
            i.check.issue_id = "spatial_c_dist_to_sample_greater_than_threshold",
            i.check.issue = "{distance} m greater_than_threshold{threshold_dist}",
-           i.check.other_text = "NA",
-           i.check.checked_by = "NA",
+           i.check.other_text = "",
+           i.check.checked_by = "",
            i.check.checked_date = as_date(today()),
-           i.check.comment = "NA", 
-           i.check.reviewed = "NA",
-           i.check.adjust_log = "NA",
+           i.check.comment = "", 
+           i.check.reviewed = "",
+           i.check.adjust_log = "",
            i.check.uuid_cl = paste0(i.check.uuid, "_", i.check.type, "_", i.check.name),
-           i.check.so_sm_choices = "NA") %>% 
+           i.check.so_sm_choices = "") %>% 
     dplyr::select(starts_with("i.check"))%>% 
     rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 }
