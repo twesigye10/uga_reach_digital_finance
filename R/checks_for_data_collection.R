@@ -415,7 +415,7 @@ df_c_pt_not_in_sample <- df_tool_data %>%
          i.check.current_value = point_number,
          i.check.value = "",
          i.check.issue_id = "spatial_c_pt_no_not_in_sample",
-         i.check.issue = "point_number: {point_number} not in samples",
+         i.check.issue = glue("point_number: {point_number} not in samples"),
          i.check.other_text = "",
          i.check.checked_by = "",
          i.check.checked_date = as_date(today()),
