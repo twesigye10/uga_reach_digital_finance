@@ -517,4 +517,4 @@ df_others_data <- extract_other_data(input_tool_data = df_tool_data, input_surve
 df_combined_checks <- bind_rows(df_logic_checks, df_others_data)
 
 # output the resulting data frame
-write_csv(x = df_combined_checks, file = paste0("outputs/logic__and_others_checks_",as_date(today()),"_", hour(now()) ,".csv"), na = "")
+write_csv(x = df_combined_checks, file = paste0("outputs/", butteR::date_file_prefix(), "_combined_logic_spatial_and_others_checks.csv"), na = "")
