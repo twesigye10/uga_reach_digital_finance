@@ -16,10 +16,16 @@ extract_other_data <- function(input_tool_data, input_survey, input_choices) {
   df_other_response_data <- data.frame()
   
   for (cln in others_colnames) {
+    
+    current_parent_qn = str_replace_all(string = cln, pattern = "_other", replacement = "")
+    
     df_filtered_data <- df_data %>% 
-      select(uuid, start_date, enumerator_id, district_name, point_number, other_text = cln) %>% 
+      select(-contains("/")) %>% 
+      select(uuid, start_date, enumerator_id, district_name, point_number, other_text = cln, current_value = current_parent_qn) %>% 
       filter(!is.na(other_text), !other_text %in% c(" ", "NA")) %>% 
-      mutate( other_name = cln, value = NA)
+      mutate( other_name = cln, 
+              value = NA,
+              parent_qn = current_parent_qn)
     df_other_response_data <- rbind(df_other_response_data, df_filtered_data)
   }
   
@@ -35,9 +41,6 @@ extract_other_data <- function(input_tool_data, input_survey, input_choices) {
   
   # extract parent question and join survey for extracting list_name
   df_data_parent_qns <- df_data_arranged %>% 
-    mutate(
-      parent_qn = str_replace_all(other_name, "_other", "")
-    ) %>% 
     left_join(input_survey %>% select(name, type), by = c("parent_qn"="name")) %>% 
     separate(col = type, into = c("select_type", "list_name"), sep =" ", remove = TRUE, extra = "drop" ) %>% 
     rename(name = parent_qn)
