@@ -53,12 +53,12 @@ extract_other_data <- function(input_tool_data, input_survey, input_choices) {
     left_join(df_grouped_choices, by = "list_name") %>% 
     mutate(current_value = "other", 
            issue_id = "other_checks",
-           issue = "NA",
-           checked_by = "NA",
+           issue = "",
+           checked_by = "",
            checked_date = as_date(today()),
-           comment = "NA",
-           reviewed = "NA",
-           adjust_log = "NA"
+           comment = "",
+           reviewed = "",
+           adjust_log = ""
            )
   
   # care for select_one and select_multiple (change_response, add_option, remove_option)
