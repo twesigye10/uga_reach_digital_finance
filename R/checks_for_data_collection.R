@@ -1,8 +1,9 @@
-# logical checks
+# script: logical and others checks
 
 library(tidyverse)
 library(lubridate)
 library(glue)
+source("R/checks_for_other_responses.R")
 
 # read data 
 df_tool_data <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx") %>% 
@@ -505,7 +506,15 @@ if(exists("df_c_greater_thresh_distance")){
 
 # combine checks ----------------------------------------------------------
 
-df_combined_checks <- bind_rows(logic_output)
+df_logic_checks <- bind_rows(logic_output)
+
+# others checks
+
+df_others_data <- extract_other_data(input_tool_data = df_tool_data, input_survey = df_survey, input_choices = df_choices)
+
+
+# combine logic and others checks
+df_combined_checks <- bind_rows(df_logic_checks, df_others_data)
 
 # output the resulting data frame
-write_csv(x = df_combined_checks, file = paste0("outputs/logic_checks_",as_date(today()),"_", hour(now()) ,".csv"), na = "")
+write_csv(x = df_combined_checks, file = paste0("outputs/logic__and_others_checks_",as_date(today()),"_", hour(now()) ,".csv"), na = "")
