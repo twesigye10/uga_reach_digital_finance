@@ -11,7 +11,7 @@ df_tool_data <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_A
          i.check.enumerator_id = enumerator_id,
          i.check.district_name = district_name,
          i.check.point_number = point_number) %>% 
-  filter(consent=="yes", today > as_date("2021-08-18")) %>% 
+  filter(consent=="yes", start_date > as_date("2021-08-18")) %>% 
   mutate(across(contains("/"), .fns = ~as.numeric(.x)))
 
 df_survey <- readxl::read_excel("inputs/UGA2103_Digital_Finace_HH_Tool_June2021.xlsx", sheet = "survey")
@@ -33,17 +33,24 @@ max_time_of_survey <- 120
 df_c_survey_time <-  df_tool_data %>% 
   mutate(int.survey_time_interval = difftime(end,start, units = "mins"),
          int.survey_time_interval = round(int.survey_time_interval,2),
+         
+         i.check.type = "remove_survey",
+         i.check.name = "point_number",
+         i.check.current_value = "NA",
+         i.check.value = "NA",
          i.check.issue_id = case_when(
            int.survey_time_interval < min_time_of_survey ~ "less_survey_time",
            int.survey_time_interval > max_time_of_survey ~ "more_survey_time",
            TRUE ~ "normal_survey_time" ),
-         i.check.type = "remove_survey",
-         i.check.name = "NA",
-         i.check.current_value = "NA",
-         i.check.value = "NA",
-         i.check.checked_by = "Mathias",
+         i.check.issue = glue("{int.survey_time_interval}min taken to do the survey"),
+         i.check.other_text = "NA",
+         i.check.checked_by = "NA",
          i.check.checked_date = as_date(today()),
-         i.check.comment = "NA")%>% 
+         i.check.comment = "NA", 
+         i.check.reviewed = "NA",
+         i.check.adjust_log = "NA",
+         i.check.uuid_cl = paste0(i.check.uuid, "_", i.check.type, "_", i.check.name),
+         i.check.so_sm_choices = "NA")%>% 
   filter(i.check.issue_id %in% c("less_survey_time", "more_survey_time")) %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
@@ -65,14 +72,20 @@ df_c_time_btn_survey <- df_tool_data %>%
          int.time_between_survey = make_difftime(int.t_between_survey, units = "mins"),
          int.time_between_survey = round(int.time_between_survey,2)) %>%
   filter(int.time_between_survey !=0 & int.time_between_survey < min_time_btn_surveys) %>%
-  mutate(i.check.issue_id = "less_time_btn_surveys",
-         i.check.type = "remove_survey",
-         i.check.name = "NA",
+  mutate(i.check.type = "remove_survey",
+         i.check.name = "point_number",
          i.check.current_value = "NA",
          i.check.value = "NA",
-         i.check.checked_by = "Mathias",
+         i.check.issue_id = "less_time_btn_surveys",
+         i.check.issue = glue("{int.time_between_survey}min taken between surveys"),
+         i.check.other_text = "NA",
+         i.check.checked_by = "NA",
          i.check.checked_date = as_date(today()),
-         i.check.comment = "NA" ) %>% 
+         i.check.comment = "NA", 
+         i.check.reviewed = "NA",
+         i.check.adjust_log = "NA",
+         i.check.uuid_cl = paste0(i.check.uuid, "_", i.check.type, "_", i.check.name),
+         i.check.so_sm_choices = "NA") %>% 
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
