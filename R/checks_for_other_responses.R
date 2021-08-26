@@ -49,15 +49,15 @@ extract_other_data <- function(input_tool_data, input_survey, input_choices) {
   # join other responses with choice options based on list_name
   df_join_other_response_with_choices <- df_data_parent_qns %>% 
     left_join(df_grouped_choices, by = "list_name") %>% 
-    mutate(current_value = "other", 
-           issue_id = "other_checks",
+    mutate(issue_id = "other_checks",
            issue = "",
            checked_by = "",
            checked_date = as_date(today()),
            comment = "",
            reviewed = "",
            adjust_log = ""
-           )
+           ) %>% 
+    filter(str_detect(string = current_value, pattern = "other\\b|[a-z]+._other\\b"))
   
   # care for select_one and select_multiple (change_response, add_option, remove_option)
   output <- list()
@@ -74,7 +74,7 @@ extract_other_data <- function(input_tool_data, input_survey, input_choices) {
     mutate(type = "add_option")
   select_mu_remove_option <- select_mu_data %>% 
     mutate(type = "remove_option",
-           value = int.my_current_val_extract)
+           value = as.character(int.my_current_val_extract))
   
   output$select_multiple <- bind_rows(select_mu_add_option, select_mu_remove_option) %>% 
     arrange(uuid, start_date, enumerator_id, name)
