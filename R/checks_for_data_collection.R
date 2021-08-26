@@ -7,8 +7,10 @@ library(glue)
 # read data 
 df_tool_data <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx") %>% 
   mutate(i.check.uuid = `_uuid`,
-         i.check.today = today,
-         i.check.enumerator_id = enumerator_id) %>% 
+         i.check.start_date = as_date(start),
+         i.check.enumerator_id = enumerator_id,
+         i.check.district_name = district_name,
+         i.check.point_number = point_number) %>% 
   filter(consent=="yes", today > as_date("2021-08-18")) %>% 
   mutate(across(contains("/"), .fns = ~as.numeric(.x)))
 
