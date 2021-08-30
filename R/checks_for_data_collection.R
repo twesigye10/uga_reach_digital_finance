@@ -478,7 +478,7 @@ if(length(sample_pt_nos_thresh) > 0){
   
   # format the required data
   df_c_greater_thresh_distance <- df_data_with_distance %>% 
-    filter(distance >= threshold_dist) %>% 
+    filter(as.numeric(distance) >= threshold_dist) %>% 
     mutate(i.check.type = "remove_survey",
            i.check.name = "point_number",
            i.check.current_value = point_number,
