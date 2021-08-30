@@ -252,9 +252,6 @@ if(exists("df_c_internet_awareness")){
   }
 }
 
-# Do you currently use mobile internet (social media, apps, and websites like WhatsApp, Messenger, Facebook, <other locally relevant>, etc)?
-# can be constrained in the tool
-
 # # If respondents who previously said they DO NOT have access to a feature phone or smart phone are now selecting uses for their phones that can only be done online (e.g. social media, access to information online etc.), survey needs to be checked
 # # mobile_phone_use
 # df_c_mobile_phone_use <- df_tool_data %>% 
