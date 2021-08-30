@@ -28,7 +28,7 @@ logic_output <- list()
 
 # Time interval for the survey
 
-min_time_of_survey <- 10
+min_time_of_survey <- 30
 max_time_of_survey <- 120
 
 df_c_survey_time <-  df_tool_data %>% 
