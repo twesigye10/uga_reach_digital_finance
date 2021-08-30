@@ -73,7 +73,7 @@ df_c_time_btn_survey <- df_tool_data %>%
   arrange(start, .by_group = TRUE) %>% 
   mutate(int.t_between_survey = (start - lag(end, default=first(start))),
          int.time_between_survey = make_difftime(int.t_between_survey, units = "mins"),
-         int.time_between_survey = round(int.time_between_survey,2)) %>%
+         int.time_between_survey = ceiling(int.time_between_survey)) %>%
   filter(int.time_between_survey !=0 & int.time_between_survey < min_time_btn_surveys) %>%
   mutate(i.check.type = "remove_survey",
          i.check.name = "point_number",
