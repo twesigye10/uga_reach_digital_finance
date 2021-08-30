@@ -436,7 +436,9 @@ if(exists("df_c_pt_not_in_sample")){
 threshold_dist <- 150
 
 df_sample_data_thresh <- df_sample_data %>% 
-  mutate(unique_pt_number = paste0(status, "_", Name))
+  mutate(unique_pt_number = paste0(status, "_", Name)) %>% 
+  sf::st_transform(4326)
+
 df_tool_data_thresh <- df_tool_data %>% 
   mutate(unique_pt_number = paste0(status, "_", point_number)) %>% 
   sf::st_as_sf(coords = c("_geopoint_longitude","_geopoint_latitude"), crs = 4326)
