@@ -35,7 +35,7 @@ max_time_of_survey <- 120
 
 df_c_survey_time <-  df_tool_data %>% 
   mutate(int.survey_time_interval = difftime(end, start, units = "mins"),
-         int.survey_time_interval = round(int.survey_time_interval,2),
+         int.survey_time_interval = ceiling(int.survey_time_interval),
          
          i.check.type = "remove_survey",
          i.check.name = "point_number",
