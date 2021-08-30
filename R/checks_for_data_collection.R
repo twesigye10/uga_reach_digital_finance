@@ -11,7 +11,9 @@ df_tool_data <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_A
          i.check.start_date = as_date(start),
          i.check.enumerator_id = enumerator_id,
          i.check.district_name = district_name,
-         i.check.point_number = point_number) %>% 
+         i.check.point_number = point_number,
+         start = as_datetime(start),
+         end = as_datetime(end)) %>% 
   filter(consent == "yes", i.check.start_date > as_date("2021-08-29"), i.check.point_number != "13m." ) %>% 
   mutate(across(contains("/"), .fns = ~as.numeric(.x)))
 
@@ -32,7 +34,7 @@ min_time_of_survey <- 30
 max_time_of_survey <- 120
 
 df_c_survey_time <-  df_tool_data %>% 
-  mutate(int.survey_time_interval = difftime(end,start, units = "mins"),
+  mutate(int.survey_time_interval = difftime(end, start, units = "mins"),
          int.survey_time_interval = round(int.survey_time_interval,2),
          
          i.check.type = "remove_survey",
