@@ -69,12 +69,13 @@ if(exists("df_c_survey_time")){
 min_time_btn_surveys <- 5
 
 df_c_time_btn_survey <- df_tool_data %>%
-  group_by(i.check.start_date, enumerator_id) %>%
-  arrange(start, .by_group = TRUE) %>% 
+  group_by(i.check.start_date, i.check.enumerator_id) %>%
+  filter(n()>1) %>% 
+  arrange(start, .by_group = TRUE) %>%
   mutate(int.t_between_survey = (start - lag(end, default=first(start))),
          int.time_between_survey = make_difftime(int.t_between_survey, units = "mins"),
          int.time_between_survey = ceiling(int.time_between_survey)) %>%
-  filter(int.time_between_survey !=0 & int.time_between_survey < min_time_btn_surveys) %>%
+  filter(int.time_between_survey != 0 & int.time_between_survey < min_time_btn_surveys) %>%
   mutate(i.check.type = "remove_survey",
          i.check.name = "point_number",
          i.check.current_value = "",
