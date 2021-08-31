@@ -34,7 +34,7 @@ min_time_of_survey <- 30
 max_time_of_survey <- 120
 
 df_c_survey_time <-  df_tool_data %>% 
-  mutate(int.survey_time_interval = difftime(end, start, units = "mins"),
+  mutate(int.survey_time_interval = lubridate::time_length(end - start, unit = "min"),
          int.survey_time_interval = ceiling(int.survey_time_interval),
          
          i.check.type = "remove_survey",
