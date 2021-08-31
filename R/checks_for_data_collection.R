@@ -372,11 +372,16 @@ if(exists("df_c_reason_not_want_card")){
 
 # spatial checks ----------------------------------------------------------
 
+sample_pt_nos <- df_sample_data %>% 
+  mutate(unique_pt_number = paste0(status, "_", Name)) %>% 
+  pull(unique_pt_number) %>% 
+  unique()
+
 # duplicate point numbers
 df_c_duplicate_pt_nos <- df_tool_data %>% 
-  group_by(district_name, sub_county_name, status, point_number) %>% 
-  mutate(int.number_of_points = n()) %>% 
-  filter(int.number_of_points > 1) %>% 
+  mutate(unique_pt_number = paste0(status, "_", point_number )) %>% 
+  group_by(i.check.district_name, status, i.check.point_number) %>% 
+  filter(n() > 1, unique_pt_number %in% sample_pt_nos) %>% 
   mutate(i.check.type = "change_response",
          i.check.name = "point_number",
          i.check.current_value = point_number,
@@ -391,6 +396,7 @@ df_c_duplicate_pt_nos <- df_tool_data %>%
          i.check.adjust_log = "",
          i.check.uuid_cl = paste0(i.check.uuid, "_", i.check.type, "_", i.check.name),
          i.check.so_sm_choices = "") %>% 
+  ungroup() %>%
   dplyr::select(starts_with("i.check"))%>% 
   rename_with(~str_replace(string = .x, pattern = "i.check.", replacement = ""))
 
@@ -401,11 +407,6 @@ if(exists("df_c_duplicate_pt_nos")){
 }
 
 # pt id does not exist in sample
-
-sample_pt_nos <- df_sample_data %>% 
-  mutate(unique_pt_number = paste0(status, "_", Name)) %>% 
-  pull(unique_pt_number) %>% 
-  unique()
 
 df_c_pt_not_in_sample <- df_tool_data %>% 
   mutate(unique_pt_number = paste0(status, "_", point_number )) %>% 
