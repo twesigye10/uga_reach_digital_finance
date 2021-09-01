@@ -487,7 +487,7 @@ if(length(sample_pt_nos_thresh) > 0){
            i.check.current_value = point_number,
            i.check.value = "",
            i.check.issue_id = "spatial_c_dist_to_sample_greater_than_threshold",
-           i.check.issue = "{distance} m greater_than_threshold{threshold_dist}",
+           i.check.issue = glue("{distance} m greater_than_threshold{threshold_dist}"),
            i.check.other_text = "",
            i.check.checked_by = "",
            i.check.checked_date = as_date(today()),
