@@ -40,11 +40,11 @@ dt_set_options<- function(x){
 ```
 
 
-There are **`r nrow(df_tool_data)`** total number of surveys done todate **`r Sys.time()`**. With (settlements: **`r nrow(df_tool_data %>% filter(status == "refugee"))`** surveys and host community: **`r nrow(df_tool_data %>% filter(status == "host_community"))`** surveys).
+There are **`r nrow(df_tool_data)`** total number of surveys done todate **`r Sys.time()`**.
 
 ## Progress
 
-Settlements interviews summary
+Settlements interviews summary for  **`r df_tool_data %>% filter(status == "refugee") %>% nrow()`** surveys
 ```{r}
 df_tool_data %>% 
   filter(status == "refugee") %>% 
@@ -55,7 +55,7 @@ df_tool_data %>%
 
 ```
 
-Host community interviews summary
+Host community interviews summary for **`r df_tool_data %>% filter(status == "host_community") %>% nrow()`** surveys
 ```{r}
 df_tool_data %>% 
   filter(status == "host_community") %>% 

@@ -180,17 +180,27 @@ pre code {
 </div>
 
 
-<p>There are <strong>527</strong> total number of surveys done todate <strong>2021-09-06 11:17:27</strong>. With (settlements: <strong>509</strong> surveys and host community: <strong>18</strong> surveys).</p>
+<p>There are <strong>527</strong> total number of surveys done todate <strong>2021-09-06 11:34:51</strong>.</p>
 <div id="progress" class="section level2">
 <h2>Progress</h2>
-<p>Total Interviews By Strata</p>
+<p>Settlements interviews summary for <strong>509</strong> surveys</p>
 <pre class="r"><code>df_tool_data %&gt;% 
-  count(status, district_name) %&gt;% 
+  filter(status == &quot;refugee&quot;) %&gt;% 
+  count(district_name, settlement_name) %&gt;% 
   rename(number_of_surveys = n) %&gt;% 
   arrange(district_name) %&gt;% 
   dt_set_options</code></pre>
-<div id="htmlwidget-f0d9b5e4ae34515d2dd6" style="width:100%;height:auto;" class="datatables html-widget"></div>
-<script type="application/json" data-for="htmlwidget-f0d9b5e4ae34515d2dd6">{"x":{"filter":"none","data":[["1","2","3","4","5","6"],["host_community","refugee","host_community","refugee","refugee","refugee"],["isingiro","isingiro","kiryandongo","kiryandongo","madi_okollo","terego"],[4,185,14,182,139,3]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>status<\/th>\n      <th>district_name<\/th>\n      <th>number_of_surveys<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"autoWidth":false,"dom":"t","columnDefs":[{"className":"dt-right","targets":3},{"orderable":false,"targets":0}],"order":[],"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-8de0007aa06a59bb04be" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-8de0007aa06a59bb04be">{"x":{"filter":"none","data":[["1","2","3","4"],["isingiro","kiryandongo","madi_okollo","terego"],["nakivale","kiryandongo","rhino","imvepi"],[185,182,139,3]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>district_name<\/th>\n      <th>settlement_name<\/th>\n      <th>number_of_surveys<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"autoWidth":false,"dom":"t","columnDefs":[{"className":"dt-right","targets":3},{"orderable":false,"targets":0}],"order":[],"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+<p>Host community interviews summary for <strong>18</strong> surveys</p>
+<pre class="r"><code>df_tool_data %&gt;% 
+  filter(status == &quot;host_community&quot;) %&gt;% 
+  count(district_name, sub_county_name) %&gt;% 
+  rename(number_of_surveys = n) %&gt;% 
+  arrange(district_name) %&gt;% 
+  dt_set_options</code></pre>
+<div id="htmlwidget-0383860a0b2097199bfe" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0383860a0b2097199bfe">{"x":{"filter":"none","data":[["1","2","3","4","5"],["isingiro","isingiro","isingiro","kiryandongo","kiryandongo"],["isingiro town council","kashumba","rushasha","bweyale town council","mutunda"],[1,2,1,9,5]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>district_name<\/th>\n      <th>sub_county_name<\/th>\n      <th>number_of_surveys<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"autoWidth":false,"dom":"t","columnDefs":[{"className":"dt-right","targets":3},{"orderable":false,"targets":0}],"order":[],"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
 </div>
 
 
