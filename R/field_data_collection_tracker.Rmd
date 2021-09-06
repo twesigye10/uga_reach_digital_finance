@@ -43,7 +43,7 @@ dt_set_options<- function(x){
     options = list(
       autoWidth=F,
       dom= 't',
-     list(list(width = '20%', targets = list(1,2,3)))
+     list(list(width = '20%', targets = list(1,2,3,4,5)))
      )
     )
   
@@ -58,11 +58,23 @@ There are **`r nrow(df_tool_data)`** total number of surveys done todate **`r Sy
 
 Settlements interviews summary for  **`r df_tool_data %>% filter(status == "refugee") %>% nrow()`** surveys
 ```{r}
+df_refugee_samp_per_settlement <- df_settlement_samples_required %>% 
+  group_by(settlement_name) %>% 
+  summarise(required_samples = sum(smpl_sz, na.rm = TRUE))
+
+df_cl_surveys_for_deletion <- df_cl_log %>% 
+  filter(status == "refugee", type == "remove_survey", reviewed == 1, adjust_log != "delete_log") %>% 
+  group_by(settlement_name) %>% 
+  summarise(surveys_for_deletion = n())
+
 df_tool_data %>% 
   filter(status == "refugee") %>% 
-  count(district_name, settlement_name) %>% 
-  rename(number_of_surveys = n) %>% 
+  group_by(district_name, settlement_name) %>% 
+  summarise(number_of_surveys = n()) %>% 
   arrange(district_name) %>% 
+  left_join(df_refugee_samp_per_settlement, by = "settlement_name") %>% 
+  left_join(df_cl_surveys_for_deletion, by = "settlement_name") %>% 
+  mutate(remaining_surveys = required_samples - (number_of_surveys - surveys_for_deletion) ) %>% 
   dt_set_options
 
 ```
