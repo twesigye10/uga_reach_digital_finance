@@ -2,6 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+R/.html
 inputs/*
 outputs/*
 support_files/*
