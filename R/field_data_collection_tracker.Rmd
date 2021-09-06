@@ -1,0 +1,33 @@
+---
+title: "Data tracking for field data collection"
+author: "Anthony Twesigye"
+date: "03/09/2021"
+output: 
+html_document:
+  code_folding: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r , warning = F, message = F}
+library(tidyverse)
+library(lubridate)
+library(glue)
+
+# read data 
+df_tool_data <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx") %>% 
+  mutate(uuid = `_uuid`,
+         start_date = as_date(start),
+         start = as_datetime(start),
+         end = as_datetime(end)) %>% 
+  filter(consent == "yes", start_date > as_date("2021-08-29"), point_number != "13m." )
+
+df_cl_log <- read_csv(file = "inputs/combined_logic_spatial_and_others_checks.csv")
+
+df_cl_log_reviewed
+
+```
+
+There are **`r nrow(df_tool_data)`** total number of surveys done todate **`r Sys.time()`**. With **`r nrow(df_tool_data$status == "refugee")`** surveys done in settlements and **`r nrow(df_tool_data$status == "host_community")`** surveys done in host community.
