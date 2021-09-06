@@ -8,26 +8,62 @@ html_document:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-```{r , warning = F, message = F}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+# read packages
 library(tidyverse)
 library(lubridate)
 library(glue)
 
 # read data 
-df_tool_data <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx") %>% 
+df_tool_data <- readxl::read_excel("../inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx") %>% 
   mutate(uuid = `_uuid`,
          start_date = as_date(start),
          start = as_datetime(start),
          end = as_datetime(end)) %>% 
   filter(consent == "yes", start_date > as_date("2021-08-29"), point_number != "13m." )
 
-df_cl_log <- read_csv(file = "inputs/combined_logic_spatial_and_others_checks.csv")
+df_cl_log <- read_csv(file = "../inputs/combined_logic_spatial_and_others_checks.csv")
 
-df_cl_log_reviewed
+# df_cl_log_reviewed
+
+dt_set_options<- function(x){
+    DT::datatable(x,
+    options = list(
+      autoWidth=F,
+      dom= 't',
+     list(list(width = '20%', targets = list(1,2,3)))
+     )
+    )
+  
+}
 
 ```
 
-There are **`r nrow(df_tool_data)`** total number of surveys done todate **`r Sys.time()`**. With **`r nrow(df_tool_data$status == "refugee")`** surveys done in settlements and **`r nrow(df_tool_data$status == "host_community")`** surveys done in host community.
+
+There are **`r nrow(df_tool_data)`** total number of surveys done todate **`r Sys.time()`**. With (settlements: **`r nrow(df_tool_data %>% filter(status == "refugee"))`** surveys and host community: **`r nrow(df_tool_data %>% filter(status == "host_community"))`** surveys).
+
+## Progress
+
+Settlements interviews summary
+```{r}
+df_tool_data %>% 
+  filter(status == "refugee") %>% 
+  count(district_name, settlement_name) %>% 
+  rename(number_of_surveys = n) %>% 
+  arrange(district_name) %>% 
+  dt_set_options
+
+```
+
+Host community interviews summary
+```{r}
+df_tool_data %>% 
+  filter(status == "host_community") %>% 
+  count(district_name, sub_county_name) %>% 
+  rename(number_of_surveys = n) %>% 
+  arrange(district_name) %>% 
+  dt_set_options
+
+```
+
+
