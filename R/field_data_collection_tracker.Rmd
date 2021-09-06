@@ -46,7 +46,6 @@ dt_set_options<- function(x){
      list(list(width = '20%', targets = list(1,2,3,4,5)))
      )
     )
-  
 }
 
 ```
