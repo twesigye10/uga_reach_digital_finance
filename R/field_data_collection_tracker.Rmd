@@ -56,6 +56,7 @@ There are **`r nrow(df_tool_data)`** total number of surveys done todate **`r Sy
 ## Progress on data collection
 
 Settlements interviews summary for  **`r df_tool_data %>% filter(status == "refugee") %>% nrow()`** surveys
+
 ```{r, echo = FALSE}
 df_refugee_samp_per_settlement <- df_settlement_samples_required %>% 
   group_by(settlement_name) %>% 
@@ -78,11 +79,12 @@ df_tool_data %>%
   mutate(int.surveys_and_deletion = ifelse(is.na(surveys_for_deletion), number_of_surveys, number_of_surveys - surveys_for_deletion),
     remaining_surveys = required_samples - int.surveys_and_deletion ) %>% 
   select(-int.surveys_and_deletion) %>% 
-  dt_set_options
+  dt_set_options()
 
 ```
 
 Host community interviews summary for **`r df_tool_data %>% filter(status == "host_community") %>% nrow()`** surveys
+
 ```{r, echo = FALSE}
 df_host_samp_per_sub_county <- df_host_samples_required %>% 
   group_by(sub_county_name) %>% 
@@ -105,14 +107,17 @@ df_tool_data %>%
   mutate(int.surveys_and_deletion = ifelse(is.na(surveys_for_deletion), number_of_surveys, number_of_surveys - surveys_for_deletion),
          remaining_surveys = required_samples - int.surveys_and_deletion ) %>% 
   select(-int.surveys_and_deletion) %>% 
-  dt_set_options
+  dt_set_options()
 
 ```
+
 Daily enumerator performance
-```{r}
+
+```{r, echo = FALSE}
 df_tool_data %>% 
-  group_by(start_date, enumerator_id, district_name) %>% 
-  summarise(number_of_interviews_done = n())
+  group_by(district_name, start_date, enumerator_id) %>% 
+  summarise(number_of_interviews_done = n()) %>% 
+  dt_set_options()
 ```
 
 ## Looking into the cleaning log
