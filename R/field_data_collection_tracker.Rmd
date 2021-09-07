@@ -121,7 +121,7 @@ df_tool_data %>%
 
 ## Looking into the cleaning log
 
-Number of issues by issue_id
+### Number of issues by issue_id
 
 ```{r, echo = FALSE}
 df_cl_log %>% 
@@ -129,7 +129,7 @@ df_cl_log %>%
   summarise(number_of_issues_by_issue_id = n()) %>%
   DT::datatable()
 ```
-Number of issues by enumerator
+### Number of issues by enumerator
 
 ```{r, echo = FALSE}
 df_cl_log %>% 
@@ -138,7 +138,7 @@ df_cl_log %>%
   DT::datatable()
 ```
 
-Number of issues by enumerator and issue_id
+### Number of issues by enumerator and issue_id
 
 ```{r, echo = FALSE}
 df_cl_log %>% 
@@ -147,7 +147,7 @@ df_cl_log %>%
   DT::datatable()
 ```
 
-Enumerators with surveys for deletion
+### Enumerators with surveys for deletion
 
 ```{r, echo = FALSE}
 df_cl_log %>% 
