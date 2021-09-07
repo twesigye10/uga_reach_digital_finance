@@ -123,4 +123,39 @@ df_tool_data %>%
 
 ## Looking into the cleaning log
 
+Number of issues by issue_id
+
+```{r, echo = FALSE}
+df_cl_log %>% 
+  group_by(issue_id) %>% 
+  summarise(number_of_issues_by_issue_id = n()) %>%
+  DT::datatable()
+```
+Number of issues by enumerator
+
+```{r, echo = FALSE}
+df_cl_log %>% 
+  group_by(enumerator_id) %>% 
+  summarise(number_of_issues_by_enumerator_id = n()) %>%
+  DT::datatable()
+```
+
+Number of issues by enumerator and issue_id
+
+```{r, echo = FALSE}
+df_cl_log %>% 
+  group_by(enumerator_id, issue_id) %>% 
+  summarise(number_of_issues_by_enumerator_and_issue_id = n()) %>%
+  DT::datatable()
+```
+
+Enumerators with surveys for deletion
+
+```{r, echo = FALSE}
+df_cl_log %>% 
+  filter(type == "remove_survey") %>% 
+  group_by(enumerator_id) %>% 
+  summarise(number_of_surveys_for_deletion_by_enumerator = n()) %>%
+  DT::datatable()
+```
 
