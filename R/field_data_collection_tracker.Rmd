@@ -56,7 +56,7 @@ There are **`r nrow(df_tool_data)`** total number of surveys done todate **`r Sy
 ## Progress on data collection
 
 Settlements interviews summary for  **`r df_tool_data %>% filter(status == "refugee") %>% nrow()`** surveys
-```{r}
+```{r, echo = FALSE}
 df_refugee_samp_per_settlement <- df_settlement_samples_required %>% 
   group_by(settlement_name) %>% 
   summarise(required_samples = sum(smpl_sz, na.rm = TRUE))
@@ -83,7 +83,7 @@ df_tool_data %>%
 ```
 
 Host community interviews summary for **`r df_tool_data %>% filter(status == "host_community") %>% nrow()`** surveys
-```{r}
+```{r, echo = FALSE}
 df_host_samp_per_sub_county <- df_host_samples_required %>% 
   group_by(sub_county_name) %>% 
   summarise(required_samples = sum(smpl_sz, na.rm = TRUE))
@@ -108,5 +108,6 @@ df_tool_data %>%
   dt_set_options
 
 ```
+## Looking into the cleaning log
 
 
