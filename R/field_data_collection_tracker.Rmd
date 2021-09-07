@@ -65,6 +65,7 @@ df_cl_surveys_for_deletion <- df_cl_log %>%
   # filter(status == "refugee", type == "remove_survey", reviewed == 1, adjust_log != "delete_log") %>% 
   filter(status == "refugee", type == "remove_survey") %>% 
   group_by(settlement_name) %>% 
+  distinct(uuid) %>%
   summarise(surveys_for_deletion = n())
 
 df_tool_data %>% 
@@ -91,6 +92,7 @@ df_cl_surveys_for_deletion <- df_cl_log %>%
   # filter(status == "refugee", type == "remove_survey", reviewed == 1, adjust_log != "delete_log") %>% 
   filter(status == "host_community", type == "remove_survey") %>% 
   group_by(sub_county_name) %>% 
+  distinct(uuid) %>%
   summarise(surveys_for_deletion = n())
 
 df_tool_data %>% 
