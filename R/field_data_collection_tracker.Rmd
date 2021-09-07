@@ -52,11 +52,11 @@ dt_set_options<- function(x){
 ```
 
 
-There are **`r nrow(df_tool_data)`** total number of surveys done as of **`r df_days_for_data_collection[length(df_days_for_data_collection)]`**.
+>There are **`r nrow(df_tool_data)`** total number of surveys done as of **`r df_days_for_data_collection[length(df_days_for_data_collection)]`**.
 
 ## Progress on data collection
 
-Settlements interviews summary for  **`r df_tool_data %>% filter(status == "refugee") %>% nrow()`** surveys
+### Settlements interviews summary for  **`r df_tool_data %>% filter(status == "refugee") %>% nrow()`** surveys
 
 ```{r, echo = FALSE}
 df_refugee_samp_per_settlement <- df_settlement_samples_required %>% 
@@ -84,7 +84,7 @@ df_tool_data %>%
 
 ```
 
-Host community interviews summary for **`r df_tool_data %>% filter(status == "host_community") %>% nrow()`** surveys
+### Host community interviews summary for **`r df_tool_data %>% filter(status == "host_community") %>% nrow()`** surveys
 
 ```{r, echo = FALSE}
 df_host_samp_per_sub_county <- df_host_samples_required %>% 
@@ -112,7 +112,7 @@ df_tool_data %>%
 
 ```
 
-Daily enumerator performance
+### Daily enumerator performance
 
 ```{r, echo = FALSE}
 df_tool_data %>% 
