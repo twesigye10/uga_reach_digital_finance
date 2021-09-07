@@ -1,5 +1,5 @@
 ---
-title: "Data tracking for field data collection"
+title: "Tracker for field data collection"
 author: "Anthony Twesigye"
 date: "03/09/2021"
 output: 
@@ -53,8 +53,6 @@ dt_set_options<- function(x){
 
 
 >There are **`r nrow(df_tool_data)`** total number of surveys done as of **`r df_days_for_data_collection[length(df_days_for_data_collection)]`**.
-
-## Progress on data collection
 
 ### Settlements interviews summary for  **`r df_tool_data %>% filter(status == "refugee") %>% nrow()`** surveys
 
