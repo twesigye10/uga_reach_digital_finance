@@ -108,6 +108,13 @@ df_tool_data %>%
   dt_set_options
 
 ```
+Daily enumerator performance
+```{r}
+df_tool_data %>% 
+  group_by(start_date, enumerator_id, district_name) %>% 
+  summarise(number_of_interviews_done = n())
+```
+
 ## Looking into the cleaning log
 
 
