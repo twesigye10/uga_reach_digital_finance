@@ -15,10 +15,10 @@ library(lubridate)
 library(glue)
 
 # read data 
-df_settlement_samples_required <- readxl::read_excel("../support_files/samples_settlement_definition.xlsx") %>% 
+df_settlement_samples_required <- readxl::read_excel("../inputs/samples_settlement_definition.xlsx") %>% 
   mutate(settlement_name = str_replace(string = settlement_name, pattern = "_ii$", replacement = "_II")) %>% 
   select(settlement_name, smpl_sz)
-df_host_samples_required <- readxl::read_excel("../support_files/samples_host_sub_definition.xlsx")%>% 
+df_host_samples_required <- readxl::read_excel("../inputs/samples_host_sub_definition.xlsx")%>% 
   select(sub_county_name, smpl_sz)
 
 df_tool_data <- readxl::read_excel("../inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx") %>% 
