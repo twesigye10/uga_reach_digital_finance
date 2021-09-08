@@ -64,7 +64,6 @@ df_refugee_samp_per_settlement <- df_settlement_samples_required %>%
 
 df_cl_surveys_for_deletion <- df_cl_log %>% 
   filter(status == "refugee", type == "remove_survey", reviewed == 1, adjust_log != "delete_log") %>%
-  # filter(status == "refugee", type == "remove_survey") %>% 
   group_by(settlement_name) %>% 
   distinct(uuid) %>%
   summarise(surveys_for_deletion = n())
@@ -77,7 +76,7 @@ df_tool_data %>%
   left_join(df_refugee_samp_per_settlement, by = "settlement_name") %>% 
   left_join(df_cl_surveys_for_deletion, by = "settlement_name") %>% 
   mutate(int.surveys_and_deletion = ifelse(is.na(surveys_for_deletion), number_of_surveys, number_of_surveys - surveys_for_deletion),
-    remaining_surveys = required_samples - int.surveys_and_deletion ) %>% 
+         remaining_surveys = required_samples - int.surveys_and_deletion ) %>% 
   select(-int.surveys_and_deletion) %>% 
   DT::datatable()
 
@@ -91,8 +90,7 @@ df_host_samp_per_sub_county <- df_host_samples_required %>%
   summarise(required_samples = sum(smpl_sz, na.rm = TRUE))
 
 df_cl_surveys_for_deletion <- df_cl_log %>% 
-  filter(status == "refugee", type == "remove_survey", reviewed == 1, adjust_log != "delete_log") %>%
-  # filter(status == "host_community", type == "remove_survey") %>% 
+  filter(status == "host_community", type == "remove_survey", reviewed == 1, adjust_log != "delete_log") %>%
   group_by(sub_county_name) %>% 
   distinct(uuid) %>%
   summarise(surveys_for_deletion = n())
