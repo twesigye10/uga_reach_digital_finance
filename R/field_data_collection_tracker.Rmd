@@ -41,13 +41,22 @@ df_cl_log <- read_csv(file = "../inputs/combined_logic_spatial_and_others_checks
 df_days_for_data_collection <- df_tool_data %>% select(start_date) %>% unique() %>% arrange(start_date) %>% pull()
 
 dt_set_options<- function(x){
-    DT::datatable(x,
-    options = list(
-      autoWidth=F,
-      dom= 't',
-     list(list(width = '20%', targets = list(1,2,3,4,5)))
-     )
-    )
+  DT::datatable(x,
+                options = list(
+                  autoWidth=F,
+                  dom= 't',
+                  list(list(width = '20%', targets = list(1,2,3,4,5)))
+                )
+  )
+}
+
+dt_with_modified_options<- function(x){
+  DT::datatable(x,
+                options = list(
+                  columnDefs = list(list(className = 'dt-center', targets = 5)),
+                  pageLength = 20
+                )
+                )
 }
 
 ```
