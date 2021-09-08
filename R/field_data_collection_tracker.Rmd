@@ -79,7 +79,7 @@ df_tool_data %>%
   mutate(int.surveys_and_deletion = ifelse(is.na(surveys_for_deletion), number_of_surveys, number_of_surveys - surveys_for_deletion),
     remaining_surveys = required_samples - int.surveys_and_deletion ) %>% 
   select(-int.surveys_and_deletion) %>% 
-  dt_set_options()
+  DT::datatable()
 
 ```
 
@@ -107,7 +107,7 @@ df_tool_data %>%
   mutate(int.surveys_and_deletion = ifelse(is.na(surveys_for_deletion), number_of_surveys, number_of_surveys - surveys_for_deletion),
          remaining_surveys = required_samples - int.surveys_and_deletion ) %>% 
   select(-int.surveys_and_deletion) %>% 
-  dt_set_options()
+  DT::datatable()
 
 ```
 
