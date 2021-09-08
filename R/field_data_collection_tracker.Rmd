@@ -50,7 +50,7 @@ dt_set_options<- function(x){
   )
 }
 
-dt_with_modified_options<- function(x){
+dt_with_modified_options <- function(x){
   DT::datatable(x,
                 options = list(
                   columnDefs = list(list(className = 'dt-center', targets = 5)),
@@ -87,7 +87,7 @@ df_tool_data %>%
   mutate(int.surveys_and_deletion = ifelse(is.na(surveys_for_deletion), number_of_surveys, number_of_surveys - surveys_for_deletion),
          remaining_surveys = required_samples - int.surveys_and_deletion ) %>% 
   select(-int.surveys_and_deletion) %>% 
-  DT::datatable()
+  dt_with_modified_options()
 
 ```
 
