@@ -54,7 +54,7 @@ dt_with_modified_options <- function(x){
   DT::datatable(x,
                 rownames = FALSE,
                 options = list(
-                  columnDefs = list(list(className = 'dt-center', targets = 5)),
+                  columnDefs = list(list(className = 'dt-center', targets = list(1,2))),
                   pageLength = 20
                 )
                 )
@@ -115,7 +115,7 @@ df_tool_data %>%
   mutate(int.surveys_and_deletion = ifelse(is.na(surveys_for_deletion), number_of_surveys, number_of_surveys - surveys_for_deletion),
          remaining_surveys = required_samples - int.surveys_and_deletion ) %>% 
   select(-int.surveys_and_deletion) %>% 
-  DT::datatable()
+  dt_with_modified_options()
 
 ```
 
@@ -125,7 +125,7 @@ df_tool_data %>%
 df_tool_data %>% 
   group_by(district_name, start_date, enumerator_id) %>% 
   summarise(number_of_interviews_done = n()) %>% 
-  DT::datatable()
+  dt_with_modified_options()
 ```
 
 ## Looking into the cleaning log
