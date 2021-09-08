@@ -34,6 +34,7 @@ df_data_support_cl_log <- df_tool_data %>%
   select(uuid, status,sub_county_name,	settlement_name, latitude,	longitude )
 
 df_cl_log <- read_csv(file = "../inputs/combined_logic_spatial_and_others_checks.csv") %>% 
+  mutate(adjust_log = ifelse(is.na(adjust_log), "apply_suggested_change", adjust_log)) %>% 
   left_join(df_data_support_cl_log, by = "uuid")
 
 # df_cl_log_reviewed
