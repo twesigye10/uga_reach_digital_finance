@@ -52,6 +52,7 @@ dt_set_options<- function(x){
 
 dt_with_modified_options <- function(x){
   DT::datatable(x,
+                rownames = FALSE,
                 options = list(
                   columnDefs = list(list(className = 'dt-center', targets = 5)),
                   pageLength = 20
