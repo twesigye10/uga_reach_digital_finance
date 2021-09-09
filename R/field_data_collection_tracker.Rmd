@@ -13,6 +13,7 @@ knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
 library(tidyverse)
 library(lubridate)
 library(glue)
+library(leaflet)
 
 # read data 
 df_settlement_samples_required <- readxl::read_excel("../inputs/samples_settlement_definition.xlsx") %>% 
@@ -57,7 +58,7 @@ dt_with_modified_options <- function(x){
                   columnDefs = list(list(className = 'dt-center', targets = list(1,2))),
                   pageLength = 20
                 )
-                )
+  )
 }
 
 dt_options_fewcols <- function(x){
@@ -66,7 +67,7 @@ dt_options_fewcols <- function(x){
                 options = list(
                   pageLength = 20
                 )
-                )
+  )
 }
 
 ```
@@ -173,5 +174,22 @@ df_cl_log %>%
   group_by(enumerator_id) %>% 
   summarise(number_of_surveys_for_deletion_by_enumerator = n()) %>%
   dt_options_fewcols()
+```
+
+### Map of surveys for deletion
+
+```{r, echo = FALSE}
+df_cl_log %>% 
+  filter(type == "remove_survey", reviewed == 1, adjust_log != "delete_log") %>% 
+  leaflet() %>% 
+  addTiles() %>%
+  addCircleMarkers(~longitude,
+                   ~latitude,
+                   popup=~issue_id,
+                   radius = 10,
+                   color = "red",
+                   stroke = FALSE, fillOpacity = 0.9,
+                   label = ~found_issue,
+                   clusterOptions = markerClusterOptions())
 ```
 
