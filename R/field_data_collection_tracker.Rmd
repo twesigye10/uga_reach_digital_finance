@@ -4,7 +4,6 @@ author: "Anthony Twesigye"
 date: "03/09/2021"
 output: 
   html_document:
-    code_folding: hide
     toc: true
     toc_float:
       collapsed: false
