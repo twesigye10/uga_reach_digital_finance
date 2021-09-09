@@ -59,7 +59,11 @@ dt_with_modified_options <- function(x){
                 rownames = FALSE,
                 options = list(
                   columnDefs = list(list(className = 'dt-center', targets = list(1,2))),
-                  pageLength = 20
+                  pageLength = 20,
+                  initComplete = JS(
+                    "function(settings, json) {",
+                    "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});",
+                    "}")
                 )
   )
 }
@@ -68,7 +72,11 @@ dt_options_fewcols <- function(x){
   DT::datatable(x,
                 rownames = FALSE,
                 options = list(
-                  pageLength = 20
+                  pageLength = 20,
+                  initComplete = JS(
+                    "function(settings, json) {",
+                    "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});",
+                    "}")
                 )
   )
 }
