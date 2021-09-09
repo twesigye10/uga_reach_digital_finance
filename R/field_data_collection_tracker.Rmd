@@ -62,7 +62,7 @@ dt_with_modified_options <- function(x){
                   pageLength = 20,
                   initComplete = JS(
                     "function(settings, json) {",
-                    "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});",
+                    "$(this.api().table().header()).css({'background-color': '#333', 'color': '#fff'});",
                     "}")
                 )
   )
@@ -75,7 +75,7 @@ dt_options_fewcols <- function(x){
                   pageLength = 20,
                   initComplete = JS(
                     "function(settings, json) {",
-                    "$(this.api().table().header()).css({'background-color': '#000', 'color': '#fff'});",
+                    "$(this.api().table().header()).css({'background-color': '#333', 'color': '#fff'});",
                     "}")
                 )
   )
