@@ -185,8 +185,9 @@ labels_pts <- ~sprintf(
   "<strong>Status and Name: %s</strong><br/>
       Point Number :  <strong>%s</strong><br/>
       Issue ID :  <strong>%s</strong><br/>
+      Issue :  <strong>%s</strong><br/>
       Enumerator ID :  <strong>%s</strong>",
-  int.status, point_number, issue_id, enumerator_id
+  int.status, point_number, issue_id, issue, enumerator_id
 ) %>% 
   lapply(htmltools::HTML)
 
