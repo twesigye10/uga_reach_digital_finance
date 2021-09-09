@@ -64,7 +64,6 @@ dt_options_fewcols <- function(x){
   DT::datatable(x,
                 rownames = FALSE,
                 options = list(
-                  columnDefs = list(list(className = 'dt-center', targets = list(1,2))),
                   pageLength = 20
                 )
                 )
