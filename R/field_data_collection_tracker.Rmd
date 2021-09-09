@@ -179,17 +179,30 @@ df_cl_log %>%
 ### Map of surveys for deletion
 
 ```{r, echo = FALSE}
+
+# popup
+labels_pts <- ~sprintf(
+  "<strong>Status and Name: %s</strong><br/>
+      Point Number :  <strong>%s</strong><br/>
+      Issue ID :  <strong>%s</strong><br/>
+      Enumerator ID :  <strong>%s</strong>",
+  int.status, point_number, issue_id, enumerator_id
+) %>% 
+  lapply(htmltools::HTML)
+
 df_cl_log %>% 
   filter(type == "remove_survey", reviewed == 1, adjust_log != "delete_log") %>% 
+  mutate(int.status = ifelse(status == "refugee", 
+                             glue("{status}_{settlement_name}"), glue("{status}_{sub_county_name}"))) %>% 
   leaflet() %>% 
   addTiles() %>%
   addCircleMarkers(~longitude,
                    ~latitude,
-                   popup=~issue_id,
+                   popup = labels_pts,
                    radius = 10,
                    color = "red",
                    stroke = FALSE, fillOpacity = 0.9,
-                   label = ~found_issue,
+                   label = labels_pts,
                    clusterOptions = markerClusterOptions())
 ```
 
