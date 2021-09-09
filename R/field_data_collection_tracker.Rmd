@@ -145,7 +145,7 @@ df_tool_data %>%
 df_cl_log %>% 
   group_by(issue_id) %>% 
   summarise(number_of_issues_by_issue_id = n()) %>%
-  DT::datatable()
+  dt_options_fewcols()
 ```
 ### Number of issues by enumerator
 
@@ -153,7 +153,7 @@ df_cl_log %>%
 df_cl_log %>% 
   group_by(enumerator_id) %>% 
   summarise(number_of_issues_by_enumerator_id = n()) %>%
-  DT::datatable()
+  dt_options_fewcols()
 ```
 
 ### Number of issues by enumerator and issue_id
@@ -162,7 +162,7 @@ df_cl_log %>%
 df_cl_log %>% 
   group_by(enumerator_id, issue_id) %>% 
   summarise(number_of_issues_by_enumerator_and_issue_id = n()) %>%
-  DT::datatable()
+  dt_options_fewcols()
 ```
 
 ### Enumerators with surveys for deletion
@@ -172,6 +172,6 @@ df_cl_log %>%
   filter(type == "remove_survey", reviewed == 1, adjust_log != "delete_log") %>% 
   group_by(enumerator_id) %>% 
   summarise(number_of_surveys_for_deletion_by_enumerator = n()) %>%
-  DT::datatable()
+  dt_options_fewcols()
 ```
 
