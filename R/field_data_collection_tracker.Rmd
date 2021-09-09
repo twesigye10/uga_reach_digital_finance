@@ -178,8 +178,7 @@ df_cl_log %>%
 
 ### Map of surveys for deletion
 
-```{r, echo = FALSE}
-
+```{r, echo = FALSE, out.width="100%"}
 # popup
 labels_pts <- ~sprintf(
   "<strong>Status and Name: %s</strong><br/>
