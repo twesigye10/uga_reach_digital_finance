@@ -14,7 +14,7 @@ df_tool_data <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_A
          i.check.point_number = point_number,
          start = as_datetime(start),
          end = as_datetime(end)) %>% 
-  filter(consent == "yes", i.check.start_date > as_date("2021-08-29"), i.check.point_number != "13m." ) %>% 
+  filter(consent == "yes", i.check.start_date > as_date("2021-08-29"), i.check.point_number != "13m.", i.check.start_date != as_date("2021-09-09")) %>% 
   mutate(across(contains("/"), .fns = ~as.numeric(.x)))
 
 df_survey <- readxl::read_excel("inputs/UGA2103_Digital_Finace_HH_Tool_June2021.xlsx", sheet = "survey")
