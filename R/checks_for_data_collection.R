@@ -15,7 +15,13 @@ df_tool_data <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_A
          start = as_datetime(start),
          end = as_datetime(end)) %>% 
   filter(consent == "yes", i.check.start_date > as_date("2021-08-29"), i.check.point_number != "13m.", 
-         !i.check.start_date %in% c(as_date("2021-09-08"), as_date("2021-09-09"))) %>% 
+         !i.check.start_date %in% c(as_date("2021-09-08"), as_date("2021-09-09"), 
+                                    as_date("2021-09-21")),
+         !str_detect(string = point_number, pattern = fixed('test', ignore_case = TRUE)),
+         !i.check.uuid %in% c("27b0ffe2-8d47-4897-b402-1928fd23cfb3",
+                              "40d216de-76db-42b7-9105-aea1ce234489",
+                              "f2f648df-55d6-4b9d-93ca-aa87c3bc30c7")
+         ) %>% 
   mutate(across(contains("/"), .fns = ~as.numeric(.x)))
 
 df_survey <- readxl::read_excel("inputs/UGA2103_Digital_Finace_HH_Tool_June2021.xlsx", sheet = "survey")
