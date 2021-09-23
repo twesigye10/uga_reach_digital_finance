@@ -20,7 +20,10 @@ df_tool_data <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_A
          !str_detect(string = point_number, pattern = fixed('test', ignore_case = TRUE)),
          !i.check.uuid %in% c("27b0ffe2-8d47-4897-b402-1928fd23cfb3",
                               "40d216de-76db-42b7-9105-aea1ce234489",
-                              "f2f648df-55d6-4b9d-93ca-aa87c3bc30c7")
+                              "f2f648df-55d6-4b9d-93ca-aa87c3bc30c7",
+                              "4167b891-b1ff-46b1-856b-532dd28e7a1e",
+                              "d7bde578-cdc2-4d77-b31b-a15c4cec9d38"
+                              )
          ) %>% 
   mutate(across(contains("/"), .fns = ~as.numeric(.x)))
 
