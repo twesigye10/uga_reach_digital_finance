@@ -118,6 +118,23 @@ dt_options_fewcols <- function(x){
   )
 }
 
+
+dt_enum_performance_options <- function(x){
+  DT::datatable(x,
+                rownames = FALSE,
+                filter = 'top',
+                options = list(
+                  columnDefs = list(list(className = 'dt-center', targets = list(1,2))),
+                  pageLength = 50,
+                  initComplete = JS(
+                    "function(settings, json) {",
+                    "$(this.api().table().header()).css({'background-color': '#333', 'color': '#fff'});",
+                    "}"),
+                  order = list(list(1, 'desc'))
+                )
+  )
+}
+
 ```
 
 ## Summary on the surveys done
