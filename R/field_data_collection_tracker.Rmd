@@ -52,7 +52,14 @@ df_cl_log <- read_csv(file = "../inputs/combined_logic_spatial_and_others_checks
   mutate(adjust_log = ifelse(is.na(adjust_log), "apply_suggested_change", adjust_log)) %>% 
   left_join(df_data_support_cl_log, by = "uuid")
 
-# df_cl_log_reviewed
+cl_log_change_response <- df_cl_log %>% 
+  filter(type == "change_response", 
+         !is.na(value),
+         reviewed == 1, 
+         adjust_log != "delete_log", 
+         !issue_id %in% c("other_checks", "logic_c_main_language",  "logic_c_internet_awareness") ) %>% 
+  select(uuid, name, value)
+
 df_days_for_data_collection <- df_tool_data %>% select(start_date) %>% unique() %>% arrange(start_date) %>% pull()
 
 dt_set_options<- function(x){
