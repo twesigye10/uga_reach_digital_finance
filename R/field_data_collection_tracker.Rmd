@@ -130,7 +130,7 @@ dt_enum_performance_options <- function(x){
                     "function(settings, json) {",
                     "$(this.api().table().header()).css({'background-color': '#333', 'color': '#fff'});",
                     "}"),
-                  order = list(list(1, 'desc'))
+                  order = list(list(1, 'desc'), list(0, 'asc'), list(3, 'desc'))
                 )
   )
 }
