@@ -44,14 +44,17 @@ df_tool_data <- readxl::read_excel("../inputs/UGA2103_Financial_Service_Provider
                               "f2f648df-55d6-4b9d-93ca-aa87c3bc30c7",
                               "4167b891-b1ff-46b1-856b-532dd28e7a1e",
                               "d7bde578-cdc2-4d77-b31b-a15c4cec9d38"))
+# days that contain data
+df_days_for_data_collection <- df_tool_data %>% select(start_date) %>% unique() %>% arrange(start_date) %>% pull()
 
 df_data_support_cl_log <- df_tool_data %>% 
   select(uuid, status,sub_county_name,	settlement_name, latitude,	longitude )
-
+# cleaning log handling
 df_cl_log <- read_csv(file = "../inputs/combined_logic_spatial_and_others_checks.csv") %>% 
   mutate(adjust_log = ifelse(is.na(adjust_log), "apply_suggested_change", adjust_log)) %>% 
   left_join(df_data_support_cl_log, by = "uuid")
 
+# change_response logs that affect stats in the data collection progress
 cl_log_change_response <- df_cl_log %>% 
   filter(type == "change_response", 
          !is.na(value),
@@ -77,7 +80,7 @@ for (current_uuid in uuids_chg_response) {
   df_updated_tool_data <- df_current_updated
 }
 
-df_days_for_data_collection <- df_tool_data %>% select(start_date) %>% unique() %>% arrange(start_date) %>% pull()
+
 
 dt_set_options<- function(x){
   DT::datatable(x,
