@@ -201,7 +201,7 @@ df_updated_tool_data %>%
 df_updated_tool_data %>% 
   group_by(district_name, start_date, enumerator_id) %>% 
   summarise(number_of_interviews_done = n()) %>% 
-  dt_with_modified_options()
+  dt_enum_performance_options()
 ```
 
 ## Looking into the cleaning log
