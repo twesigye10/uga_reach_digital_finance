@@ -8,7 +8,7 @@ output:
     toc_float:
       collapsed: false
       smooth_scroll: false
-knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_file = paste0(dirname(inputFile), '/field_data_collection_tracker_', butteR::date_file_prefix(),'.html')) })
+knit: (function(inputFile, encoding) { rmarkdown::render(inputFile, encoding = encoding, output_file = paste0(dirname(inputFile), '/field_data_collection_tracker_', stringr::str_replace_all(Sys.Date(), pattern = "-", replacement = "_"),'.html')) })
 ---
 
 ```{r setup, include=FALSE}
