@@ -21,8 +21,16 @@ library(leaflet)
 
 # read data 
 df_settlement_samples_required <- readxl::read_excel("../inputs/samples_settlement_definition.xlsx") %>% 
-  mutate(settlement_name = str_replace(string = settlement_name, pattern = "_ii$", replacement = "_II")) %>% 
+  mutate(settlement_name = str_replace(string = settlement_name, pattern = "_ii$", replacement = "_II"),
+         settlement_name = ifelse(settlement_name == "adjumani", str_to_lower(Name_Zn), settlement_name),
+         settlement_name= case_when(settlement_name == "alere" ~ "alere ii",
+                                    settlement_name == "ayilo ii" ~ "ayiloii",
+                                    settlement_name == "mirieyi" ~ "mireyi",
+                                    settlement_name == "mungula 2" ~ "mungula ii",
+                                    settlement_name == "pagirinya" ~ "pagrinya",
+                                    TRUE ~ settlement_name)) %>% 
   select(settlement_name, smpl_sz)
+
 df_host_samples_required <- readxl::read_excel("../inputs/samples_host_sub_definition.xlsx")%>% 
   select(sub_county_name, smpl_sz)
 
@@ -37,13 +45,13 @@ df_tool_data <- readxl::read_excel("../inputs/UGA2103_Financial_Service_Provider
          start_date > as_date("2021-08-29"), 
          point_number != "13m.", 
          !start_date %in% c(as_date("2021-09-08"), as_date("2021-09-09"), 
-                                    as_date("2021-09-21")),
+                            as_date("2021-09-21")),
          !str_detect(string = point_number, pattern = fixed('test', ignore_case = TRUE)),
          !uuid %in% c("27b0ffe2-8d47-4897-b402-1928fd23cfb3",
-                              "40d216de-76db-42b7-9105-aea1ce234489",
-                              "f2f648df-55d6-4b9d-93ca-aa87c3bc30c7",
-                              "4167b891-b1ff-46b1-856b-532dd28e7a1e",
-                              "d7bde578-cdc2-4d77-b31b-a15c4cec9d38"))
+                      "40d216de-76db-42b7-9105-aea1ce234489",
+                      "f2f648df-55d6-4b9d-93ca-aa87c3bc30c7",
+                      "4167b891-b1ff-46b1-856b-532dd28e7a1e",
+                      "d7bde578-cdc2-4d77-b31b-a15c4cec9d38"))
 # days that contain data
 df_days_for_data_collection <- df_tool_data %>% select(start_date) %>% unique() %>% arrange(start_date) %>% pull()
 
