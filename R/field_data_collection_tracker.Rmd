@@ -89,6 +89,11 @@ for (current_uuid in uuids_chg_response) {
   df_updated_tool_data <- df_current_updated
 }
 
+# enumerator performance data
+df_enum_performance <- df_updated_tool_data %>% 
+  mutate(int.survey_time_interval = lubridate::time_length(end - start, unit = "min"),
+         int.survey_time_interval = ceiling(int.survey_time_interval)) 
+
 # change some options in the table
 dt_set_options<- function(x){
   DT::datatable(x,
@@ -206,10 +211,11 @@ df_updated_tool_data %>%
 
 ### Daily enumerator performance
 
+The average survey time for all the data is: **`r round(mean(df_enum_performance$int.survey_time_interval), 0)`** Minutes
+
 ```{r, echo = FALSE}
-df_updated_tool_data %>% 
-  mutate(int.survey_time_interval = lubridate::time_length(end - start, unit = "min"),
-         int.survey_time_interval = ceiling(int.survey_time_interval)) %>% 
+
+df_enum_performance %>% 
   group_by(district_name, start_date, enumerator_id) %>% 
   summarise(number_of_interviews_done = n(), `average_survey_time(minutes)` = round(mean(int.survey_time_interval, na.rm = TRUE), 0)) %>% 
   dt_enum_performance_options()
