@@ -208,8 +208,10 @@ df_updated_tool_data %>%
 
 ```{r, echo = FALSE}
 df_updated_tool_data %>% 
+  mutate(int.survey_time_interval = lubridate::time_length(end - start, unit = "min"),
+         int.survey_time_interval = ceiling(int.survey_time_interval)) %>% 
   group_by(district_name, start_date, enumerator_id) %>% 
-  summarise(number_of_interviews_done = n()) %>% 
+  summarise(number_of_interviews_done = n(), `average_survey_time(minutes)` = round(mean(int.survey_time_interval, na.rm = TRUE), 0)) %>% 
   dt_enum_performance_options()
 ```
 
