@@ -82,6 +82,7 @@ for (current_uuid in uuids_chg_response) {
     filter(uuid == current_uuid) %>% 
     mutate(value = ifelse(name == "enumerator_id", as.numeric(value), value)) %>% 
     pivot_wider(names_from = "name", values_from = "value", uuid)
+  print(current_uuid_data)
   # process current updates
   df_current_updated <- df_updated_tool_data %>% 
     rows_update(y = current_uuid_data, by = "uuid")
