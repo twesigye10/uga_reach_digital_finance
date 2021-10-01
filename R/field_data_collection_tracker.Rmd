@@ -276,6 +276,19 @@ labels_pts <- ~sprintf(
 
 df_cl_log %>% 
   filter(type == "remove_survey", reviewed == 1, adjust_log != "delete_log") %>% 
+  group_by(uuid, status, sub_county_name, settlement_name, latitude, longitude) %>% 
+  summarise(start_date = paste(start_date, collapse = " : "),
+            enumerator_id = paste(enumerator_id, collapse = " : "),
+            district_name = paste(district_name, collapse = " : "),
+            point_number = paste(point_number, collapse = " : "),
+            type = paste(type, collapse = " : "),
+            name = paste(name, collapse = " : "),
+            current_value = paste(current_value, collapse = " : "),
+            value = paste(value, collapse = " : "),
+            issue_id = paste(issue_id, collapse = " : "),
+            issue = paste(issue, collapse = " : ")
+  ) %>% 
+  unique() %>% 
   mutate(int.status = ifelse(status == "refugee", 
                              glue("{status}_{settlement_name}"), glue("{status}_{sub_county_name}"))) %>% 
   leaflet() %>% 
