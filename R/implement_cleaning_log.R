@@ -22,7 +22,7 @@ df_grouped_choices<- df_choices %>%
   group_by(list_name) %>% 
   summarise(choice_options = paste(name, collapse = " : "))
 # get new name and ad_option pairs to add to the choices sheet
-new_vars_ren <- df_cleaning_log %>% 
+new_vars <- df_cleaning_log %>% 
   filter(type %in% c("change_response", "add_option")) %>% 
   left_join(df_survey, by = "name") %>% 
   filter(str_detect(string = type.y, pattern = "select_one|select one|select_multiple|select multiple")) %>% 
