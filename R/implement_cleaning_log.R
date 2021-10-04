@@ -38,4 +38,7 @@ kbo <- kobold::kobold(survey = df_survey,
                       data = df_raw_data, 
                       cleaning = df_cleaning_log)
 
+# modified choices for the survey tool --------------------------------------
+df_choises_modified <- butteR:::xlsform_add_choices(kobold = kbo, new_choices = new_vars)
+
 
