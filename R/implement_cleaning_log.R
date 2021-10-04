@@ -51,7 +51,15 @@ df_survey_sm <- df_survey %>%
 new_vars_sm <- new_vars %>% 
   left_join(df_survey_sm, by = "name") %>% 
   filter(q_type=="sm") %>% 
-  mutate(new_cols=paste0(name,"/",choice))
+  mutate(new_cols=paste0(name,"/",choice)) %>% 
+  filter(!new_cols %in% c("bank_acc_help_desk/bank_agent", 
+                          "card_feedback/yes_agents",
+                          "cash_feedback/yes_agents",
+                          "mm_feedback/police",
+                          "mm_feedback/yes_agents",
+                          "mm_limitations/conmen",
+                          "reason_want_cash_aid/other_sys_unsafe",
+                          "use_mm_acc_for/keep_money_safest")) # ignore choice options_removed_from_survey
 
 # add new columns to the raw data -----------------------------------------
 
