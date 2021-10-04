@@ -5,8 +5,11 @@ library(lubridate)
 
 # read data
 df_cleaning_log <- read_csv("inputs/combined_logic_spatial_and_others_checks.csv") %>% 
+  mutate(adjust_log = ifelse(is.na(adjust_log), "apply_suggested_change", adjust_log)) %>%
+  filter(adjust_log != "delete_log") %>% 
   mutate(sheet = NA, index = NA, relevant = NA) %>% 
   select(uuid, type, name, value, issue_id, sheet, index, relevant, issue)
+
 df_raw_data <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx")
 
 df_survey <- readxl::read_excel("inputs/UGA2103_Digital_Finace_HH_Tool_June2021.xlsx", sheet = "survey") 
