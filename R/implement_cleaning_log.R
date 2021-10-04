@@ -59,7 +59,7 @@ new_vars_sm <- new_vars %>%
                           "mm_feedback/yes_agents",
                           "mm_limitations/conmen",
                           "reason_want_cash_aid/other_sys_unsafe",
-                          "use_mm_acc_for/keep_money_safest")) # ignore choice options_removed_from_survey
+                          "use_mm_acc_for/keep_money_safest")) # ignore choice options removed from survey but still in the cleaning log
 
 # add new columns to the raw data -----------------------------------------
 
