@@ -65,4 +65,8 @@ kbo_modified <- kobold::kobold(survey = df_survey %>% filter(name %in% colnames(
                                cleaning = df_cleaning_log )
 kbo_cleaned <- kobold::kobold_cleaner(kbo_modified)
 
+# handling added responses after starting data collection -----------------
+
+df_final_cleaned_data <- kbo_cleaned$data %>% 
+  mutate(across(.cols = contains("/"), .fns = ~ifelse(is.na(.), FALSE, .)))
 
