@@ -22,7 +22,7 @@ df_grouped_choices<- df_choices %>%
   group_by(list_name) %>% 
   summarise(choice_options = paste(name, collapse = " : "))
 # get new name and ad_option pairs to add to the choices sheet
-new_vars <- df_cleaning_log %>% 
+new_vars_ren <- df_cleaning_log %>% 
   filter(type %in% c("change_response", "add_option")) %>% 
   left_join(df_survey, by = "name") %>% 
   filter(str_detect(string = type.y, pattern = "select_one|select one|select_multiple|select multiple")) %>% 
@@ -31,6 +31,14 @@ new_vars <- df_cleaning_log %>%
   filter(!str_detect(string = choice_options, pattern = value ) ) %>%
   rename(choice = value ) %>%
   select(name, choice) %>%
+  filter(!paste0(name,"/",choice) %in% c("bank_acc_help_desk/bank_agent", 
+                          "card_feedback/yes_agents",
+                          "cash_feedback/yes_agents",
+                          "mm_feedback/police",
+                          "mm_feedback/yes_agents",
+                          "mm_limitations/conmen",
+                          "reason_want_cash_aid/other_sys_unsafe",
+                          "use_mm_acc_for/keep_money_safest")) %>% # ignore choice options removed from survey but still in the cleaning log
   distinct() %>% # to make sure there are no duplicates
   arrange(name)
 
@@ -53,17 +61,9 @@ df_survey_sm <- df_survey %>%
 # construct new columns for select multiple
 new_vars_sm <- new_vars %>% 
   left_join(df_survey_sm, by = "name") %>% 
-  filter(q_type=="sm") %>% 
-  mutate(new_cols=paste0(name,"/",choice)) %>% 
-  filter(!new_cols %in% c("bank_acc_help_desk/bank_agent", 
-                          "card_feedback/yes_agents",
-                          "cash_feedback/yes_agents",
-                          "mm_feedback/police",
-                          "mm_feedback/yes_agents",
-                          "mm_limitations/conmen",
-                          "reason_want_cash_aid/other_sys_unsafe",
-                          "use_mm_acc_for/keep_money_safest")) # ignore choice options removed from survey but still in the cleaning log
-
+  filter(q_type == "sm") %>% 
+  mutate(new_cols = paste0(name,"/",choice))
+  
 # add new columns to the raw data -----------------------------------------
 
 df_raw_data_modified <- df_raw_data %>% 
