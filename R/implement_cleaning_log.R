@@ -30,3 +30,12 @@ new_vars <- df_cleaning_log %>%
   select(name, choice) %>%
   distinct() %>% # to make sure there are no duplicates
   arrange(name)
+
+# create kobold object ----------------------------------------------------
+
+kbo <- kobold::kobold(survey = df_survey, 
+                      choices = df_choices, 
+                      data = df_raw_data, 
+                      cleaning = df_cleaning_log)
+
+
