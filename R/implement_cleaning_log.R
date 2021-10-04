@@ -70,3 +70,6 @@ kbo_cleaned <- kobold::kobold_cleaner(kbo_modified)
 df_final_cleaned_data <- kbo_cleaned$data %>% 
   mutate(across(.cols = contains("/"), .fns = ~ifelse(is.na(.), FALSE, .)))
 
+# write final modified data -----------------------------------------------------
+
+write_csv(df_final_cleaned_data, file = paste0("outputs/", butteR::date_file_prefix(), "_clean_data.csv"))
