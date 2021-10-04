@@ -6,7 +6,7 @@ library(lubridate)
 # read data
 df_cleaning_log <- read_csv("inputs/combined_logic_spatial_and_others_checks.csv") %>% 
   mutate(adjust_log = ifelse(is.na(adjust_log), "apply_suggested_change", adjust_log)) %>%
-  filter(adjust_log != "delete_log") %>% 
+  filter(adjust_log != "delete_log", !is.na(value)) %>% 
   mutate(sheet = NA, index = NA, relevant = NA) %>% 
   select(uuid, type, name, value, issue_id, sheet, index, relevant, issue)
 
