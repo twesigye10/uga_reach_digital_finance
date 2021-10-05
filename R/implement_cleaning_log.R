@@ -11,7 +11,11 @@ df_cleaning_log <- read_csv("inputs/combined_logic_spatial_and_others_checks.csv
   select(uuid, type, name, value, issue_id, sheet, index, relevant, issue)
 
 df_raw_data <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx") %>% 
-  select(-`id_type_refugee/school_ID`)
+  mutate(current_receive_cash = str_replace(string = current_receive_cash, pattern = "SCI", replacement = "sci"),
+         current_receive_cash = str_replace(string = current_receive_cash, pattern = "WTI", replacement = "wti"),
+         `current_receive_cash/sci` = ifelse(!is.na(`current_receive_cash/SCI`), `current_receive_cash/SCI`, `current_receive_cash/sci`),
+         `current_receive_cash/wti` = ifelse(!is.na(`current_receive_cash/WTI`), `current_receive_cash/WTI`, `current_receive_cash/wti`)) %>% 
+  select(-c(`id_type_refugee/school_ID`, `current_receive_cash/SCI`, `current_receive_cash/WTI`))
 
 df_survey <- readxl::read_excel("inputs/UGA2103_Digital_Finace_HH_Tool_June2021.xlsx", sheet = "survey") 
 df_choices <- readxl::read_excel("inputs/UGA2103_Digital_Finace_HH_Tool_June2021.xlsx", sheet = "choices") 
