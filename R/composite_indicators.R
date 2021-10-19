@@ -27,3 +27,22 @@ df_tool_data <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_A
          `current_receive_cash/sci` = ifelse(`current_receive_cash/SCI` == 1 & is.na(`current_receive_cash/sci`), `current_receive_cash/SCI`, `current_receive_cash/sci`),
          `current_receive_cash/wti` = ifelse(`current_receive_cash/WTI` == 1 & is.na(`current_receive_cash/wti`), `current_receive_cash/WTI`, `current_receive_cash/wti`)) %>% 
   select(-c(`id_type_refugee/school_ID`, `current_receive_cash/SCI`, `current_receive_cash/WTI`))
+
+settlement_regroup <- tibble::tribble(
+  ~settlement,      ~region,
+  "adjumani",  "west nile",
+  "bidibidi",  "west nile",
+  "imvepi",  "west nile",
+  "kiryandongo",  "west nile",
+  "kyaka II", "south west",
+  "kyangwali", "south west",
+  "lobule",  "west nile",
+  "nakivale", "south west",
+  "oruchinga", "south west",
+  "palabek",  "west nile",
+  "palorinya",  "west nile",
+  "rhino",  "west nile",
+  "rwamwanja", "south west"
+)
+
+region_lookup <- setNames(object = settlement_regroup$region, nm = settlement_regroup$settlement)
