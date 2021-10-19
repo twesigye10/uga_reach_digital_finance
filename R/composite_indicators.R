@@ -56,5 +56,32 @@ create_composite_indicators_dfa <- function(input_df) {
                                     TRUE ~ "num_phones_greater_5"
       ),
       i.network_type_number = str_count(string = language_understand, pattern = "[a-z]+.\\b")
-    )
+    ) %>% 
+    select(-starts_with("int."))
 }
+
+df_updated_data <- create_composite_indicators_dfa(df_tool_data)
+
+df_updated_data %>% 
+  tabyl(i.refugee_settlement) 
+
+df_updated_data %>% 
+  tabyl(i.region)
+
+df_updated_data %>% 
+  tabyl(i.respondent_age) 
+
+df_updated_data %>% 
+  tabyl(i.disability)  
+
+df_updated_data %>% 
+  tabyl(i.education_level)
+
+df_updated_data %>% 
+  tabyl(i.language_understand_number)
+
+df_updated_data %>% 
+  tabyl(i.phones_owned_hh)
+
+df_updated_data %>% 
+  tabyl(i.network_type_number)
