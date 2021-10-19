@@ -37,7 +37,7 @@ create_composite_indicators_dfa <- function(input_df) {
     mutate(
       i.refugee_settlement = ifelse(district_name == "adjumani" & status == "refugee", "adjumani", settlement_name),
       i.region = ifelse(district_name %in% c("isingiro", "kamwenge", "kikuube", "kyegegwa"), "South west", "West nile"),
-      i.respondent_age = ifelse(respondent_age < 60 ~ "age_btn_18-59", "age_greater_59"),
+      i.respondent_age = ifelse(respondent_age < 60, "age_btn_18-59", "age_greater_59"),
       int.disability = glue::glue(vulnerability_see, vulnerability_hear, vulnerability_walk, vulnerability_concentrate, vulnerability_communicate, .sep = " "),
       i.disability = ifelse(str_detect(string = int.disability, pattern = "yes_a_lot_of_difficulty|cannot_do_at_all"), "yes_disability", "no_disability"),
       i.education_level = case_when(hh_member_education %in% c("complete_prof_degree", "complete_university") ~ "Higher",
