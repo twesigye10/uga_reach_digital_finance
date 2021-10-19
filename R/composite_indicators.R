@@ -1,6 +1,7 @@
 # using the cleaning log to clean the data
 
 library(tidyverse)
+library(janitor)
 library(lubridate)
 
 # read data
@@ -28,21 +29,28 @@ df_tool_data <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_A
          `current_receive_cash/wti` = ifelse(`current_receive_cash/WTI` == 1 & is.na(`current_receive_cash/wti`), `current_receive_cash/WTI`, `current_receive_cash/wti`)) %>% 
   select(-c(`id_type_refugee/school_ID`, `current_receive_cash/SCI`, `current_receive_cash/WTI`))
 
-settlement_regroup <- tibble::tribble(
-  ~settlement,      ~region,
-  "adjumani",  "west nile",
-  "bidibidi",  "west nile",
-  "imvepi",  "west nile",
-  "kiryandongo",  "west nile",
-  "kyaka II", "south west",
-  "kyangwali", "south west",
-  "lobule",  "west nile",
-  "nakivale", "south west",
-  "oruchinga", "south west",
-  "palabek",  "west nile",
-  "palorinya",  "west nile",
-  "rhino",  "west nile",
-  "rwamwanja", "south west"
-)
 
-region_lookup <- setNames(object = settlement_regroup$region, nm = settlement_regroup$settlement)
+df_tool_data %>% 
+  mutate(
+    i.refugee_settlement = ifelse(district_name == "adjumani" & status == "refugee", "adjumani", settlement_name),
+    i.region = ifelse(district_name %in% c("isingiro", "kamwenge", "kikuube", "kyegegwa"), "South west", "West nile"),
+    i.respondent_age = ifelse(respondent_age < 60 ~ "age_btn_18-59", "age_greater_59"),
+    int.disability = glue::glue(vulnerability_see, vulnerability_hear, vulnerability_walk, vulnerability_concentrate, vulnerability_communicate, .sep = " "),
+    i.disability = ifelse(str_detect(string = int.disability, pattern = "yes_a_lot_of_difficulty|cannot_do_at_all"), "yes_disability", "no_disability"),
+    i.education_level = case_when(hh_member_education %in% c("complete_prof_degree", "complete_university") ~ "Higher",
+                                  hh_member_education %in% c("incomplete_secondary", "complete_primary", "incomplete_primary") ~ "Low",
+                                  hh_member_education %in% c("incomplete_prof_degree", "incomplete_university", "complete_voc_train", "complete_secondary", "incomplte_voc_train") ~ "Middle",
+                                  hh_member_education %in% c("no_formal_educ") ~ "None",
+                                  TRUE ~ Other
+                                  ),
+    i.language_understand_number = str_count(string = language_understand, pattern = "[a-z]+.\\b"),
+    i.phones_owned_hh = case_when(no_phones_hh_owns == 0 ~ "num_phones_0",
+                                  no_phones_hh_owns == 1 ~ "num_phones_1",
+                                  no_phones_hh_owns == 2 ~ "num_phones_2",
+                                  no_phones_hh_owns == 3 ~ "num_phones_3",
+                                  no_phones_hh_owns == 4 ~ "num_phones_4",
+                                  no_phones_hh_owns == 5 ~ "num_phones_5",
+                                  TRUE ~ "num_phones_greater_5"
+                                  ),
+    i.network_type_number = str_count(string = language_understand, pattern = "[a-z]+.\\b")
+    )
