@@ -9,7 +9,7 @@ make_refugee_weight_table<- function(input_df_ref, input_refugee_pop){
     group_by(strata) %>% 
     summarise(
       sample_strata=  n()
-    )%>% 
+    ) %>% 
     mutate(
       sample_global= sum(sample_strata)) %>% 
     left_join(refugee_pop) %>% 
@@ -28,7 +28,7 @@ make_host_weight_table<- function(input_df_host, input_host_pop){
     group_by(strata) %>% 
     summarise(
       sample_strata=  n()
-    )%>% 
+    ) %>% 
     mutate(
       sample_global= sum(sample_strata)) %>% 
     left_join(host_pop) %>% 
