@@ -24,8 +24,14 @@ df_host_pop<- read_csv("inputs/host_population.csv")
 # make composite indicator ------------------------------------------------
 
 df_with_composites <- create_composite_indicators_dfa(input_df = df_cleaned) %>% 
-  mutate(strata = case_when(status == "refugee" ~ settlement_name,
-                            status == "host_community" ~ i.region,
+  mutate(strata = case_when(status == "refugee" ~ paste0(settlement_name, "_refugee"),
+                            status == "host_community" ~ paste0(i.region,"_host"),
                             TRUE ~ status
                             ))
+# split data into host and refugee
+
+df_refugee<-df_with_composites %>% 
+  filter(status=="refugee")
+df_host<-df_with_composites %>% 
+  filter(status=="host_community")
 
