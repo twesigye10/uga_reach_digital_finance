@@ -3,6 +3,8 @@
 library(tidyverse)
 library(lubridate)
 
+source("R/composite_indicators.R")
+
 # read data
 df_cleaning_log <- read_csv("inputs/combined_logic_spatial_and_others_checks.csv") %>% 
   mutate(adjust_log = ifelse(is.na(adjust_log), "apply_suggested_change", adjust_log)) %>%
@@ -106,3 +108,10 @@ df_final_cleaned_data <- kbo_cleaned$data %>%
 # write final modified data -----------------------------------------------------
 
 write_csv(df_final_cleaned_data, file = paste0("outputs/", butteR::date_file_prefix(), "_clean_data.csv"))
+
+# output data with composite indicators
+
+df_with_composites <- create_composite_indicators_dfa(input_df = df_final_cleaned_data)
+
+write_csv(df_with_composites, file = paste0("outputs/", butteR::date_file_prefix(), "_clean_data_with_composite_indicators.csv"))
+
