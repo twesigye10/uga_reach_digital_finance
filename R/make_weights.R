@@ -1,4 +1,4 @@
-# weights script
+# refugee weights ---------------------------------------------------------
 
 make_refugee_weight_table<- function(input_df_ref, input_refugee_pop){
   refugee_pop <- input_refugee_pop %>% 
@@ -19,6 +19,8 @@ make_refugee_weight_table<- function(input_df_ref, input_refugee_pop){
     )
 }
 
+# host weights ------------------------------------------------------------
+
 make_host_weight_table<- function(input_df_host, input_host_pop){
   host_pop <- input_host_pop %>% 
     mutate(strata = paste0(strata, "_host"),
@@ -37,3 +39,18 @@ make_host_weight_table<- function(input_df_host, input_host_pop){
            weights = (pop_strata/pop_global)/(sample_strata/sample_global)
     )
 }
+
+# overall weights --------------------------------------------------------
+
+make_combined_weight_table <- function(input_df, input_ref_weight_table,
+                                       input_host_weight_table) {
+  weight_tables <- list(input_ref_weight_table, input_host_weight_table)
+  
+  weight_table <- map_dfr(weight_tables, function(x)x %>% 
+                            select(pop_group = strata, sample_strata, pop_strata)) %>% 
+    mutate(pop_global = sum(pop_strata),
+           sample_global = sum(sample_strata),
+           weights = (pop_strata/pop_global)/(sample_strata/sample_global)
+    )
+}
+
