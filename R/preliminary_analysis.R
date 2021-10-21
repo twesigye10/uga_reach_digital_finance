@@ -55,3 +55,7 @@ df_host_with_weights <- df_host %>%
 combined_weight_table <- make_combined_weight_table(input_df = df_with_composites,
                                                     input_ref_weight_table = ref_weight_table, 
                                                     input_host_weight_table = host_weight_table)
+
+df_with_combined_weights <- df_with_composites %>% 
+  mutate(pop_group = strata) %>% 
+  left_join(combined_weight_table, by = "pop_group")
