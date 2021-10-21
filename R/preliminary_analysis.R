@@ -9,7 +9,7 @@ source("R/make_weights.R")
 
 # load data ---------------------------------------------------------------
 
-df_cleaned <- read_csv("outputs/20211005_clean_data.csv")
+df_cleaned <- read_csv("outputs/20211021_clean_data.csv")
 
 dap <- read_csv("inputs/r_dap.csv") %>% 
   janitor::clean_names()
@@ -59,3 +59,6 @@ combined_weight_table <- make_combined_weight_table(input_df = df_with_composite
 df_with_combined_weights <- df_with_composites %>% 
   mutate(pop_group = strata) %>% 
   left_join(combined_weight_table, by = "pop_group")
+
+# set up design objects ---------------------------------------------------
+
