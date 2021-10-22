@@ -11,7 +11,7 @@ source("R/make_weights.R")
 
 df_cleaned <- read_csv("outputs/20211022_clean_data.csv")
 
-dap <- read_csv("inputs/r_dap.csv") %>% 
+dap <- read_csv("outputs/r_dap.csv") %>% 
   janitor::clean_names()
 
 start<- Sys.time() 
