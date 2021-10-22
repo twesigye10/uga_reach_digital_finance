@@ -79,14 +79,16 @@ refugee_variables_no_subsets <- dap_refugee %>%
   pull(variable)
 
 outputs$ref_region <- butteR::survey_collapse(df = ref_svy,
-                          vars_to_analyze = refugee_variables_no_subsets, 
+                          vars_to_analyze = refugee_variables_no_subsets %>% unique(), 
                           disag = "i.region") %>% 
   mutate(population = "refugee")
+write_csv(x = outputs$ref_region, file = paste0("outputs/", butteR::date_file_prefix(), "_ref_region_analysis_long_format.csv"),na="")
 
 # refugee overall, no additional subset
 outputs$ref_overall <- butteR::survey_collapse(df = ref_svy,
-                          vars_to_analyze = refugee_variables_no_subsets) %>% 
+                          vars_to_analyze = refugee_variables_no_subsets %>% unique()) %>% 
   mutate(population = "refugee")
+write_csv(x = outputs$ref_overall, file = paste0("outputs/", butteR::date_file_prefix(), "_ref_overall_analysis_long_format.csv"),na="")
 
 #  subsets
 dap_refugee_subset1 <- dap %>% 
@@ -96,7 +98,7 @@ dap_refugee_subset1 <- dap %>%
 dap_refugee_subset_split <- dap_refugee_subset1 %>% 
   split(.$subset_1)
 
-ref_overall_subset1<-list()
+ref_overall_subset1 <-list()
 
 for(i in seq_along(dap_refugee_subset_split)){ 
   print(i)
@@ -111,6 +113,7 @@ for(i in seq_along(dap_refugee_subset_split)){
 
 outputs$ref_overall_subset1 <- bind_rows(ref_overall_subset1) %>% 
   mutate(population = "refugee")
+write_csv(x = outputs$ref_overall_subset1, file = paste0("outputs/", butteR::date_file_prefix(), "_ref_overall_subset1_analysis_long_format.csv"),na="")
 
 # refugee overall by region & subset 1
 ref_region_subset1 <- list()
@@ -127,6 +130,8 @@ for(i in seq_along(dap_refugee_subset_split)){
 }
 outputs$ref_region_subset1 <- bind_rows(ref_region_subset1) %>% 
   mutate(population = "refugee")
+write_csv(x = outputs$ref_region_subset1, file = paste0("outputs/", butteR::date_file_prefix(), "_ref_region_subset1_analysis_long_format.csv"),na="")
+
 
 # host -----------------------------------------------------------------
 
@@ -135,7 +140,7 @@ dap_host <- dap %>%
 
 # no subsets
 host_variables_no_subsets <- dap_host %>% 
-  pull(variable)
+  pull(variable) %>% unique()
 
 # host by region, no additional subsets
 outputs$host_region <- butteR::survey_collapse(df = host_svy,
@@ -193,7 +198,7 @@ outputs$host_subset1 <- bind_rows(host_region_subset1) %>%
 # refugee and host combined ----------------------------------------------------
 
 combined_variables_no_subset <- dap %>% 
-  pull(variable)
+  pull(variable) %>% unique()
 
 # no subset
 
@@ -221,7 +226,7 @@ for(i in seq_along(dap_combined_subset_split)){
   subset_temp <-dap_combined_subset_split[[i]]
   subset_value <- unique(subset_temp$subset_1)
   vars_temp <- subset_temp %>% pull(variable)
-  combined_overall_subset1[[subset_value]] <- butteR::survey_collapse(df = refhostsvy,
+  combined_overall_subset1[[subset_value]] <- butteR::survey_collapse(df = ref_host_svy,
                                                                      vars_to_analyze = vars_temp ,
                                                                      disag = c( subset_value) 
   )
@@ -244,6 +249,8 @@ for(i in seq_along(dap_combined_subset_split)){
 }
 outputs$combined_region_subset1 <- bind_rows(combined_region_subset1) %>% 
   mutate(population = "combined")
+
+write_csv(x = outputs$combined_region_subset1, file = paste0("outputs/", butteR::date_file_prefix(), "_ref_host_combined_analysis_long_format.csv"),na="")
 
 # merge analysis
 full_analysis_long <- bind_rows(outputs)
