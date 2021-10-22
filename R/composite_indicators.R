@@ -35,7 +35,9 @@ df_tool_data <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_A
 create_composite_indicators_dfa <- function(input_df) {
   input_df %>% 
     mutate(
-      i.refugee_settlement = ifelse(district_name == "adjumani" & status == "refugee", "adjumani", settlement_name),
+      i.refugee_settlement = case_when(district_name == "adjumani" & status == "refugee"~ "adjumani", 
+                                       settlement_name == "rhino" ~ "rhino_camp",
+                                       TRUE ~ settlement_name),
       i.region = ifelse(district_name %in% c("isingiro", "kamwenge", "kikuube", "kyegegwa"), "south_west", "west_nile"),
       i.respondent_age = ifelse(respondent_age < 60, "age_btn_18_59", "age_greater_59"),
       int.disability = paste(vulnerability_see, vulnerability_hear, vulnerability_walk, vulnerability_concentrate, vulnerability_communicate),
