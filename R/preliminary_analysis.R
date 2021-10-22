@@ -9,7 +9,7 @@ source("R/make_weights.R")
 
 # load data ---------------------------------------------------------------
 
-df_cleaned <- read_csv("outputs/20211021_clean_data.csv")
+df_cleaned <- read_csv("outputs/20211022_clean_data.csv")
 
 dap <- read_csv("inputs/r_dap.csv") %>% 
   janitor::clean_names()
@@ -66,4 +66,73 @@ ref_svy <- as_survey(.data = df_ref_with_weights, strata = strata, weights = wei
 host_svy <- as_survey(.data = df_host_with_weights, strata = strata, weights = weights )
 ref_host_svy <- as_survey(.data = df_with_combined_weights, strata = strata, weights = weights )
 
-# split daps for different analyses ---------------------------------------
+# different analyses ---------------------------------------
+outputs<-list()
+
+# refugee -----------------------------------------------------------------
+
+# no subsets
+dap_refugee <- dap %>% 
+  filter(split %in% c("all", "refugee_only"))
+
+refugee_variables_no_subsets <- dap_refugee %>% 
+  pull(variable)
+
+outputs$ref_region <- butteR::survey_collapse(df = ref_svy,
+                          vars_to_analyze = refugee_variables_no_subsets, 
+                          disag="i.region") %>% 
+  mutate(population="refugee")
+
+# refugee overall, no additional subset
+outputs$ref_overall <- butteR::survey_collapse(df = ref_svy,
+                          vars_to_analyze = refugee_variables_no_subsets, ) %>% 
+  mutate(population="refugee")
+
+#  subsets
+dap_refugee_subset1 <- dap %>% 
+  filter( split %in%  c("all","refugee_only"), !is.na(subset_1))
+
+# refugee overall, subset 1
+dap_refugee_subset_split <- dap_refugee_subset1 %>% 
+  split(.$subset_1)
+
+ref_overall_subset1<-list()
+
+for(i in seq_along(dap_refugee_subset_split)){ #seq_along(dap_single_subset_split)){
+  print(i)
+  subset_temp<-dap_refugee_subset_split[[i]]
+  subset_value<- unique(subset_temp$subset_1)
+  vars_temp<- subset_temp %>% pull(variable)
+  ref_overall_subset1[[subset_value]]<- butteR::survey_collapse(df = refsvy,
+                                                                vars_to_analyze =vars_temp ,
+                                                                disag = c( subset_value) 
+  )
+}
+
+outputs$ref_overall_subset1<- bind_rows(ref_overall_subset1) %>% 
+  mutate(population= "refugee")
+
+# refugee overall by district & subset 1
+ref_region_subset1 <- list()
+
+for(i in seq_along(dap_refugee_subset_split)){ #seq_along(dap_single_subset_split)){
+  print(i)
+  subset_temp <-dap_refugee_subset_split[[i]]
+  subset_value <- unique(subset_temp$subset_1)
+  vars_temp <- subset_temp %>% pull(variable)
+  ref_region_subset1[[subset_value]] <- butteR::survey_collapse(df = refsvy,
+                                                                 vars_to_analyze = vars_temp ,
+                                                                 disag = c( "i.region", subset_value) 
+  )
+  
+}
+outputs$ref_region_subset1<- bind_rows(ref_region_subset1) %>% 
+  mutate(population = "refugee")
+
+# host -----------------------------------------------------------------
+
+dap_host
+
+# refugee and host -----------------------------------------------------------------
+
+dap_refugee
