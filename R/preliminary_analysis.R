@@ -24,7 +24,7 @@ df_host_pop <- read_csv("inputs/host_population.csv")
 # make composite indicator ------------------------------------------------
 
 df_with_composites <- create_composite_indicators_dfa(input_df = df_cleaned) %>% 
-  mutate(strata = case_when(status == "refugee" ~ paste0(settlement_name, "_refugee"),
+  mutate(strata = case_when(status == "refugee" ~ paste0(i.refugee_settlement, "_refugee"),
                             status == "host_community" ~ paste0(i.region,"_host"),
                             TRUE ~ status
   ))
@@ -62,3 +62,8 @@ df_with_combined_weights <- df_with_composites %>%
 
 # set up design objects ---------------------------------------------------
 
+ref_svy <- as_survey(.data = df_ref_with_weights, strata = strata, weights = weights )
+host_svy <- as_survey(.data = df_host_with_weights, strata = strata, weights = weights )
+ref_host_svy <- as_survey(.data = df_with_combined_weights, strata = strata, weights = weights )
+
+# split daps for different analyses ---------------------------------------
