@@ -12,7 +12,9 @@ df_cleaning_log <- read_csv("inputs/combined_logic_spatial_and_others_checks.csv
   mutate(sheet = NA, index = NA, relevant = NA) %>% 
   select(uuid, type, name, value, issue_id, sheet, index, relevant, issue)
 
-df_raw_data <- readxl::read_excel("inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx") %>% 
+nms <- names(readxl::read_excel(path = "inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx", n_max = 0))
+ct <- ifelse(str_detect(string = nms, pattern = "_other$"), "text", "guess")
+df_raw_data <- readxl::read_excel(path = "inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx", col_types = ct) %>% 
   filter(consent == "yes", 
          as_date(start) > as_date("2021-08-29"), 
          point_number != "13m.", 
