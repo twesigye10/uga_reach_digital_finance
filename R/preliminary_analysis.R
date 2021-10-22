@@ -192,3 +192,69 @@ for(i in seq_along(dap_host_subset_split)){
 outputs$host_subset1<- bind_rows(host_region_subset1) %>% 
   mutate(population="host")
 
+# refugee and host combined -----------------------------------------------------------------
+
+combined_variables_no_subset <- dap %>% 
+  pull(variable)
+
+# no subset
+
+# combined pops  by region, no additional subsets
+outputs$combined_pops_region <-
+  butteR::survey_collapse(df = ref_host_svy,
+                          vars_to_analyze = combined_variables_no_subset, 
+                          disag="i.region") %>% 
+  mutate(population="combined")
+
+# combined pops overall, no additional subset
+outputs$combined_pops_overall <- 
+  butteR::survey_collapse(df = ref_host_svy,
+                          vars_to_analyze = combined_variables_no_subset, 
+  ) %>% 
+  mutate(population="combined")
+
+# subset
+dap_combined_subset_split <- dap %>% 
+  filter(!is.na(subset_1)) %>% 
+  split(.$subset_1)
+
+# overall single subset
+combined_overall_subset1 <-list()
+
+for(i in seq_along(dap_combined_subset_split)){
+  print(i)
+  subset_temp <-dap_combined_subset_split[[i]]
+  subset_value <- unique(subset_temp$subset_1)
+  vars_temp <- subset_temp %>% pull(variable)
+  combined_overall_subset1[[subset_value]] <- butteR::survey_collapse(df = refhostsvy,
+                                                                     vars_to_analyze =vars_temp ,
+                                                                     disag = c( subset_value) 
+  )
+}
+outputs$combined_overall_subset1<- bind_rows(combined_overall_subset1) %>% 
+  mutate(population="combined")
+
+# host region, subset 1
+combined_region_subset1<-list()
+
+for(i in seq_along(dap_combined_subset_split)){
+  print(i)
+  subset_temp <-dap_combined_subset_split[[i]]
+  subset_value <- unique(subset_temp$subset_1)
+  vars_temp <- subset_temp %>% pull(variable)
+  combined_region_subset1[[subset_value]] <- butteR::survey_collapse(df = ref_host_svy,
+                                                                      vars_to_analyze = vars_temp ,
+                                                                      disag = c("district_name", subset_value) 
+  )
+}
+outputs$combined_region_subset1 <- bind_rows(combined_region_subset1) %>% 
+  mutate(population="combined")
+
+# merge analysis
+full_analysis_long <- bind_rows(outputs)
+end<- Sys.time()
+end-start
+
+full_analysis_long %>%
+  write_csv(paste0(butteR::date_file_prefix(),"_full_analysis_long_format.csv"),na="")
+
