@@ -251,5 +251,5 @@ end<- Sys.time()
 end-start
 
 full_analysis_long %>%
-  write_csv(paste0(butteR::date_file_prefix(),"_full_analysis_long_format.csv"),na="")
+  write_csv(paste0("outputs/", butteR::date_file_prefix(), "_full_analysis_long_format.csv"),na="")
 
