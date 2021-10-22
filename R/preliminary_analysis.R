@@ -76,17 +76,17 @@ dap_refugee <- dap %>%
 
 # no subsets
 refugee_variables_no_subsets <- dap_refugee %>% 
-  pull(variable)
+  pull(variable) %>% unique()
 
 outputs$ref_region <- butteR::survey_collapse(df = ref_svy,
-                          vars_to_analyze = refugee_variables_no_subsets %>% unique(), 
+                          vars_to_analyze = refugee_variables_no_subsets, 
                           disag = "i.region") %>% 
   mutate(population = "refugee")
 write_csv(x = outputs$ref_region, file = paste0("outputs/", butteR::date_file_prefix(), "_ref_region_analysis_long_format.csv"),na="")
 
 # refugee overall, no additional subset
 outputs$ref_overall <- butteR::survey_collapse(df = ref_svy,
-                          vars_to_analyze = refugee_variables_no_subsets %>% unique()) %>% 
+                          vars_to_analyze = refugee_variables_no_subsets) %>% 
   mutate(population = "refugee")
 write_csv(x = outputs$ref_overall, file = paste0("outputs/", butteR::date_file_prefix(), "_ref_overall_analysis_long_format.csv"),na="")
 
