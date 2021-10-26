@@ -25,7 +25,7 @@ create_composite_indicators_dfa <- function(input_df) {
                                     no_phones_hh_owns == 5 ~ "num_phones_5",
                                     TRUE ~ "num_phones_greater_5"
       ),
-      i.network_type_number = str_count(string = language_understand, pattern = "[a-z]+.\\b")
+      i.network_type_number = str_count(string = network_type, pattern = "[a-z]+.\\b")
     ) %>% 
     select(-starts_with("int."))
 }
