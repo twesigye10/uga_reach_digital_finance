@@ -9,8 +9,7 @@ source("R/make_weights.R")
 
 # load data ---------------------------------------------------------------
 
-df_cleaned <- read_csv("outputs/20211029_clean_data.csv") %>% 
-  select(-c(`id_type_refugee/unhcr_refugee_id`, `id_type_refugee/opm_attestation_card`))
+df_cleaned <- read_csv("outputs/20211029_clean_data.csv")
 
 dap <- read_csv("outputs/r_dap.csv") %>% 
   janitor::clean_names()
