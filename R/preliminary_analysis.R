@@ -201,6 +201,7 @@ write_csv(x = outputs$host_region_subset1, file = paste0("outputs/", butteR::dat
 # refugee and host combined ----------------------------------------------------
 
 combined_variables_no_subset <- dap %>% 
+  filter(split %in% c("all"))
   pull(variable) %>% unique()
 
 # no subset
