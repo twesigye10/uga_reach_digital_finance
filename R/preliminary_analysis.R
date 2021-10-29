@@ -9,7 +9,8 @@ source("R/make_weights.R")
 
 # load data ---------------------------------------------------------------
 
-df_cleaned <- read_csv("outputs/20211022_clean_data.csv")
+df_cleaned <- read_csv("outputs/20211029_clean_data.csv") %>% 
+  select(-c(`id_type_refugee/unhcr_refugee_id`, `id_type_refugee/opm_attestation_card`))
 
 dap <- read_csv("outputs/r_dap.csv") %>% 
   janitor::clean_names()
@@ -201,7 +202,7 @@ write_csv(x = outputs$host_region_subset1, file = paste0("outputs/", butteR::dat
 # refugee and host combined ----------------------------------------------------
 
 combined_variables_no_subset <- dap %>% 
-  filter(split %in% c("all"))
+  filter(split %in% c("all")) %>% 
   pull(variable) %>% unique()
 
 # no subset
@@ -221,7 +222,7 @@ write_csv(x = outputs$combined_pops_overall, file = paste0("outputs/", butteR::d
 
 # subset
 dap_combined_subset_split <- dap %>% 
-  filter(!is.na(subset_1)) %>% 
+  filter(split %in% c("all"), !is.na(subset_1)) %>% 
   split(.$subset_1)
 
 # overall single subset
