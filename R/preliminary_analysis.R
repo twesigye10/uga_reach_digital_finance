@@ -9,7 +9,7 @@ source("R/make_weights.R")
 
 # load data ---------------------------------------------------------------
 
-df_cleaned <- read_csv("outputs/20211029_clean_data.csv")
+df_cleaned <- read_csv("outputs/20211030_clean_data.csv")
 
 dap <- read_csv("outputs/r_dap.csv") %>% 
   janitor::clean_names()
