@@ -16,7 +16,7 @@ data_nms <- names(readxl::read_excel(path = "inputs/UGA2103_Financial_Service_Pr
 c_types <- ifelse(str_detect(string = data_nms, pattern = "_other$"), "text", "guess")
 
 df_raw_data <- readxl::read_excel(path = "inputs/UGA2103_Financial_Service_Providers_Assessment_HH_Tool_June2021.xlsx", col_types = c_types) %>% 
-  filter(consent == "yes", 
+  filter(consent == "yes", respondent_age >= 18,
          as_date(start) > as_date("2021-08-29"), 
          point_number != "13m.", 
          !as_date(start) %in% c(as_date("2021-09-08"), as_date("2021-09-09"), 
