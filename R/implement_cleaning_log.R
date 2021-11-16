@@ -121,4 +121,3 @@ write_csv(df_final_cleaned_data, file = paste0("outputs/", butteR::date_file_pre
 df_with_composites <- create_composite_indicators_dfa(input_df = df_final_cleaned_data)
 
 write_csv(df_with_composites, file = paste0("outputs/", butteR::date_file_prefix(), "_clean_data_with_composite_indicators.csv"))
-
