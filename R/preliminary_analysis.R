@@ -259,7 +259,9 @@ outputs$combined_region_subset1 <- bind_rows(combined_region_subset1) %>%
 
 write_csv(x = outputs$combined_region_subset1, file = paste0("outputs/", butteR::date_file_prefix(), "_combined_region_subset1_analysis_long_format.csv"),na="")
 
-# merge analysis
+
+# merge analysis ----------------------------------------------------------
+
 full_analysis_long <- bind_rows(outputs)
 end<- Sys.time()
 end-start
