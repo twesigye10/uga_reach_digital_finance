@@ -110,7 +110,6 @@ kbo_cleaned <- kobold::kobold_cleaner(kbo_modified)
 # handling added responses after starting data collection -----------------
 
 df_final_cleaned_data <- kbo_cleaned$data %>% 
-  mutate(across(.cols = contains("/"), .fns = ~ifelse(is.na(.), FALSE, .))) %>%
   select(-c(`id_type_refugee/unhcr_refugee_id`, `id_type_refugee/opm_attestation_card`))
 
 # write final modified data -----------------------------------------------------
