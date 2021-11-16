@@ -36,8 +36,11 @@ df_raw_data <- readxl::read_excel(path = "inputs/UGA2103_Financial_Service_Provi
                          "d8936d35-7e1c-48d9-bafa-b25e758c05eb" )) %>% 
   mutate(current_receive_cash = reduce2(.x = c("\\bSCI\\b", "\\bWTI\\b"), .y = c("sci", "wti"), .init = current_receive_cash, .f = str_replace),
          `current_receive_cash/sci` = ifelse(`current_receive_cash/SCI` == 1 & is.na(`current_receive_cash/sci`), `current_receive_cash/SCI`, `current_receive_cash/sci`),
-         `current_receive_cash/wti` = ifelse(`current_receive_cash/WTI` == 1 & is.na(`current_receive_cash/wti`), `current_receive_cash/WTI`, `current_receive_cash/wti`)) %>% 
-  select(-c(`id_type_refugee/school_ID`, `current_receive_cash/SCI`, `current_receive_cash/WTI`), -c(`id_type`, `id_type_other`), -contains("id_type/")) %>% 
+         `current_receive_cash/wti` = ifelse(`current_receive_cash/WTI` == 1 & is.na(`current_receive_cash/wti`), `current_receive_cash/WTI`, `current_receive_cash/wti`),
+         `current_receive_cash/wti` = ifelse(`current_receive_cash/WTI` == 1 & is.na(`current_receive_cash/wti`), `current_receive_cash/WTI`, `current_receive_cash/wti`),
+         bank_acc_help_desk = ifelse(str_detect(string = bank_acc_help_desk, pattern = "bank_with_ac"), str_replace(string = bank_acc_help_desk, pattern = "bank_with_ac", replacement = "bank_with_acc"), bank_acc_help_desk),
+         `bank_acc_help_desk/bank_with_acc` = ifelse(!is.na(`bank_acc_help_desk/bank_with_ac`) & is.na(`bank_acc_help_desk/bank_with_acc`), `bank_acc_help_desk/bank_with_ac`, `bank_acc_help_desk/bank_with_acc`)) %>% 
+  select(-c(`id_type_refugee/school_ID`, `current_receive_cash/SCI`, `current_receive_cash/WTI`, `bank_acc_help_desk/bank_with_ac`), -c(`id_type`, `id_type_other`), -contains("id_type/")) %>% 
   mutate(across(.cols = everything(), .fns = ~ifelse(str_detect(string = ., pattern = fixed(pattern = "N/A", ignore_case = TRUE)), "NA", .)))
 
 df_survey <- readxl::read_excel("inputs/UGA2103_Digital_Finace_HH_Tool_June2021.xlsx", sheet = "survey") 
@@ -107,7 +110,7 @@ kbo_cleaned <- kobold::kobold_cleaner(kbo_modified)
 # handling added responses after starting data collection -----------------
 
 df_final_cleaned_data <- kbo_cleaned$data %>% 
-  mutate(across(.cols = contains("/"), .fns = ~ifelse(is.na(.), FALSE, .))) %>% 
+  mutate(across(.cols = contains("/"), .fns = ~ifelse(is.na(.), FALSE, .))) %>%
   select(-c(`id_type_refugee/unhcr_refugee_id`, `id_type_refugee/opm_attestation_card`))
 
 # write final modified data -----------------------------------------------------
