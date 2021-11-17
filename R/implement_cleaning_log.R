@@ -116,26 +116,26 @@ df_handle_pii <- kbo_cleaned$data %>%
   select(-c(`id_type_refugee/unhcr_refugee_id`, `id_type_refugee/opm_attestation_card`)) %>% 
   mutate(across(any_of(vars_to_remove_from_data), .fns = ~na_if(., .)))
 
-# handling added responses after starting data collection -----------------
+# handling added responses after starting data collection and added responses in the cleaning process-----------------
 
-df_cleaned_choices_during_data_collection <- df_handle_pii %>% 
-  mutate(
-    across(
-      contains("/"), 
-      .fns = ~case_when(is.na(.) & !is.na(!!sym(str_replace(string = cur_column(), pattern = "/.+", replacement = ""))) ~ FALSE,
-                         TRUE ~ .)
-    )
-  )
-# handling added responses in the cleaning process -----------------
-df_final_cleaned_data <- df_cleaned_choices_during_data_collection %>% 
-  mutate(
-    across(
-      contains("/"), 
-      .fns = ~ifelse(is.na(!!sym(str_replace_all(string = cur_column(), pattern = "/\\w+", replacement = ""))),
-                     na_if(., .), .)
-    )
-  )
+sm_colnames <-  df_handle_pii %>% 
+  select(contains("/")) %>% 
+  colnames() %>% 
+  str_replace_all(pattern = "/.+", replacement = "") %>% 
+  unique()
 
+df_handle_sm_data <- df_handle_pii
+
+for (cur_sm_col in sm_colnames) {
+  df_updated_data <- df_handle_sm_data %>% 
+    mutate(
+      across(contains(paste0(cur_sm_col, "/")), .fns = ~ifelse(!is.na(!!sym(cur_sm_col)) & is.na(.) , FALSE, .)),
+      across(contains(paste0(cur_sm_col, "/")), .fns = ~ifelse(is.na(!!sym(cur_sm_col)), NA, .))
+    )
+  df_handle_sm_data <- df_updated_data
+}
+
+df_final_cleaned_data <- df_handle_sm_data
 
 # write final modified data -----------------------------------------------------
 
