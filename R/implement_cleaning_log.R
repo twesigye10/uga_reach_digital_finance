@@ -5,6 +5,9 @@ library(lubridate)
 
 source("R/composite_indicators.R")
 
+# blank some variables that may be used to traceback respondents
+vars_to_remove_from_data <- c("deviceid", "respondent_telephone", "geopoint", "_geopoint_latitude",  "_geopoint_longitude", "_geopoint_altitude",  "_geopoint_precision")
+
 # read data
 df_cleaning_log <- read_csv("inputs/combined_logic_spatial_and_others_checks.csv") %>% 
   mutate(adjust_log = ifelse(is.na(adjust_log), "apply_suggested_change", adjust_log)) %>%
@@ -111,7 +114,8 @@ kbo_cleaned <- kobold::kobold_cleaner(kbo_modified)
 
 df_final_cleaned_data <- kbo_cleaned$data %>% 
   select(-c(`id_type_refugee/unhcr_refugee_id`, `id_type_refugee/opm_attestation_card`)) %>% 
-  mutate(across(contains("/"), .fns = ~ifelse(is.na(.) & !is.na(!!sym(str_replace(string = cur_column(), pattern = "/\\w+", replacement = ""))), FALSE, .)))
+  mutate(across(contains("/"), .fns = ~ifelse(is.na(.) & !is.na(!!sym(str_replace(string = cur_column(), pattern = "/\\w+", replacement = ""))), FALSE, .))) %>% 
+  mutate(across(any_of(vars_to_remove_from_data), .fns = ~na_if(., !is.na(.))))
   
 
 # write final modified data -----------------------------------------------------
