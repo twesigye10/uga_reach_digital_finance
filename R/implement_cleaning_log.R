@@ -122,8 +122,8 @@ df_cleaned_choices_during_data_collection <- df_handle_pii %>%
   mutate(
     across(
       contains("/"), 
-      .fns = ~ifelse(is.na(.) & !is.na(!!sym(str_replace_all(string = cur_column(), pattern = "/\\w+", replacement = ""))),
-                     FALSE, .)
+      .fns = ~case_when(is.na(.) & !is.na(!!sym(str_replace(string = cur_column(), pattern = "/.+", replacement = ""))) ~ FALSE,
+                         TRUE ~ .)
     )
   )
 # handling added responses in the cleaning process -----------------
