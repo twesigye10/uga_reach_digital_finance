@@ -110,13 +110,17 @@ kbo_modified <- kobold::kobold(survey = df_survey %>% filter(name %in% colnames(
                                cleaning = df_cleaning_log )
 kbo_cleaned <- kobold::kobold_cleaner(kbo_modified)
 
+# handling Personally Identifiable Information(PII) -----------------
+
+df_handle_pii <- kbo_cleaned$data %>% 
+  select(-c(`id_type_refugee/unhcr_refugee_id`, `id_type_refugee/opm_attestation_card`)) %>% 
+  mutate(across(any_of(vars_to_remove_from_data), .fns = ~na_if(., .)))
+
 # handling added responses after starting data collection -----------------
 
-df_final_cleaned_data <- kbo_cleaned$data %>% 
-  select(-c(`id_type_refugee/unhcr_refugee_id`, `id_type_refugee/opm_attestation_card`)) %>% 
-  mutate(across(contains("/"), .fns = ~ifelse(is.na(.) & !is.na(!!sym(str_replace(string = cur_column(), pattern = "/\\w+", replacement = ""))), FALSE, .))) %>% 
-  mutate(across(any_of(vars_to_remove_from_data), .fns = ~na_if(., !is.na(.))))
-  
+df_final_cleaned_data <- df_handle_pii %>% 
+  dplyr::mutate(across(contains("/"), .fns = ~ifelse(is.na(.) & !is.na(!!sym(str_replace(string = dplyr::cur_column(), pattern = "/\\w+", replacement = ""))), FALSE, .)))
+
 
 # write final modified data -----------------------------------------------------
 
