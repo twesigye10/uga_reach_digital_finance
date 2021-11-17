@@ -118,8 +118,23 @@ df_handle_pii <- kbo_cleaned$data %>%
 
 # handling added responses after starting data collection -----------------
 
-df_final_cleaned_data <- df_handle_pii %>% 
-  dplyr::mutate(across(contains("/"), .fns = ~ifelse(is.na(.) & !is.na(!!sym(str_replace(string = dplyr::cur_column(), pattern = "/\\w+", replacement = ""))), FALSE, .)))
+df_cleaned_choices_during_data_collection <- df_handle_pii %>% 
+  mutate(
+    across(
+      contains("/"), 
+      .fns = ~ifelse(is.na(.) & !is.na(!!sym(str_replace_all(string = cur_column(), pattern = "/\\w+", replacement = ""))),
+                     FALSE, .)
+    )
+  )
+# handling added responses in the cleaning process -----------------
+df_final_cleaned_data <- df_cleaned_choices_during_data_collection %>% 
+  mutate(
+    across(
+      contains("/"), 
+      .fns = ~ifelse(is.na(!!sym(str_replace_all(string = cur_column(), pattern = "/\\w+", replacement = ""))),
+                     na_if(., .), .)
+    )
+  )
 
 
 # write final modified data -----------------------------------------------------
