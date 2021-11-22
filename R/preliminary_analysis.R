@@ -82,13 +82,13 @@ outputs$ref_region <- butteR::survey_collapse(df = ref_svy,
                           vars_to_analyze = refugee_variables_no_subsets, 
                           disag = "i.region") %>% 
   mutate(population = "refugee")
-write_csv(x = outputs$ref_region, file = paste0("outputs/", butteR::date_file_prefix(), "_ref_region_analysis_long_format.csv"),na="")
+# write_csv(x = outputs$ref_region, file = paste0("outputs/", butteR::date_file_prefix(), "_ref_region_analysis_long_format.csv"),na="")
 
 # refugee overall, no additional subset
 outputs$ref_overall <- butteR::survey_collapse(df = ref_svy,
                           vars_to_analyze = refugee_variables_no_subsets) %>% 
   mutate(population = "refugee")
-write_csv(x = outputs$ref_overall, file = paste0("outputs/", butteR::date_file_prefix(), "_ref_overall_analysis_long_format.csv"),na="")
+# write_csv(x = outputs$ref_overall, file = paste0("outputs/", butteR::date_file_prefix(), "_ref_overall_analysis_long_format.csv"),na="")
 
 #  subsets
 dap_refugee_subset1 <- dap %>% 
@@ -113,7 +113,7 @@ for(i in seq_along(dap_refugee_subset_split)){
 
 outputs$ref_overall_subset1 <- bind_rows(ref_overall_subset1) %>% 
   mutate(population = "refugee")
-write_csv(x = outputs$ref_overall_subset1, file = paste0("outputs/", butteR::date_file_prefix(), "_ref_overall_subset1_analysis_long_format.csv"),na="")
+# write_csv(x = outputs$ref_overall_subset1, file = paste0("outputs/", butteR::date_file_prefix(), "_ref_overall_subset1_analysis_long_format.csv"),na="")
 
 # refugee overall by region & subset 1
 ref_region_subset1 <- list()
@@ -130,7 +130,7 @@ for(i in seq_along(dap_refugee_subset_split)){
 }
 outputs$ref_region_subset1 <- bind_rows(ref_region_subset1) %>% 
   mutate(population = "refugee")
-write_csv(x = outputs$ref_region_subset1, file = paste0("outputs/", butteR::date_file_prefix(), "_ref_region_subset1_analysis_long_format.csv"),na="")
+# write_csv(x = outputs$ref_region_subset1, file = paste0("outputs/", butteR::date_file_prefix(), "_ref_region_subset1_analysis_long_format.csv"),na="")
 
 
 # host -----------------------------------------------------------------
@@ -147,13 +147,13 @@ outputs$host_region <- butteR::survey_collapse(df = host_svy,
                           vars_to_analyze = host_variables_no_subsets, 
                           disag = "i.region") %>% 
   mutate(population = "host")
-write_csv(x = outputs$host_region, file = paste0("outputs/", butteR::date_file_prefix(), "_host_region_analysis_long_format.csv"),na="")
+# write_csv(x = outputs$host_region, file = paste0("outputs/", butteR::date_file_prefix(), "_host_region_analysis_long_format.csv"),na="")
 
 # host overall, no additional subset
 outputs$host_overall <- butteR::survey_collapse(df = host_svy,
                           vars_to_analyze = host_variables_no_subsets ) %>% 
   mutate(population = "host")
-write_csv(x = outputs$host_overall, file = paste0("outputs/", butteR::date_file_prefix(), "_host_overall_analysis_long_format.csv"),na="")
+# write_csv(x = outputs$host_overall, file = paste0("outputs/", butteR::date_file_prefix(), "_host_overall_analysis_long_format.csv"),na="")
 
 # subsets
 dap_host_subset1 <- dap %>% 
@@ -179,7 +179,7 @@ for(i in seq_along(dap_host_subset_split)){
 
 outputs$host_subset1 <- bind_rows(host_overall_subset1) %>% 
   mutate(population = "host")
-write_csv(x = outputs$host_subset1, file = paste0("outputs/", butteR::date_file_prefix(), "_host_subset1_analysis_long_format.csv"),na="")
+# write_csv(x = outputs$host_subset1, file = paste0("outputs/", butteR::date_file_prefix(), "_host_subset1_analysis_long_format.csv"),na="")
 
 # host region, subset 1
 
@@ -196,7 +196,7 @@ for(i in seq_along(dap_host_subset_split)){
 }
 outputs$host_region_subset1 <- bind_rows(host_region_subset1) %>% 
   mutate(population = "host")
-write_csv(x = outputs$host_region_subset1, file = paste0("outputs/", butteR::date_file_prefix(), "_host_region_subset1_analysis_long_format.csv"),na="")
+# write_csv(x = outputs$host_region_subset1, file = paste0("outputs/", butteR::date_file_prefix(), "_host_region_subset1_analysis_long_format.csv"),na="")
 
 
 # merge analysis ----------------------------------------------------------
